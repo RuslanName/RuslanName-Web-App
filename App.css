@@ -11,8 +11,8 @@ body {
 
 button {
     padding: 10px 15px;
-    background: var(--tg-theme-bg-color);
-    color: var(--tg-button-text-color);
+    background: #007BFF; /* Замените на любой цвет */
+    color: #FFFFFF; /* Замените на любой цвет */
     border: none;
     outline: none;
     cursor: pointer;

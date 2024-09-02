@@ -8,3 +8,12 @@ body {
     background: var(--tg-theme-bg-color);
     color: var(--tg-theme-text-color);
 }
+
+button {
+    padding: 10px, 15px;
+    background: var(--tg-theme-bg-color);
+        color: var(--tg-button-text-color);
+        border: none;
+        outline: none;
+        cursor: pointer;
+}

@@ -50,16 +50,42 @@
         button:hover {
             opacity: 0.9;
         }
+
+        button:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
 <div id="main">
     <h1>Авторизация</h1>
+    <input type="text" placeholder="Введите имя" id="firstName">
+    <input type="text" placeholder="Введите фамилию" id="lastName">
     <input type="text" placeholder="Введите номер телефона" id="phone">
-    <button id="login">Войти</button>
+    <button id="login" disabled>Войти</button>
 </div>
 <script>
-    document.getElementById('login').addEventListener('click', function () {
+    const firstName = document.getElementById('firstName');
+    const lastName = document.getElementById('lastName');
+    const phone = document.getElementById('phone');
+    const loginButton = document.getElementById('login');
+
+    // Функция для проверки, заполнены ли все поля
+    function checkFields() {
+        if (firstName.value.trim() !== '' && lastName.value.trim() !== '' && phone.value.trim() !== '') {
+            loginButton.disabled = false;
+        } else {
+            loginButton.disabled = true;
+        }
+    }
+
+    // Добавляем обработчики событий для всех полей
+    firstName.addEventListener('input', checkFields);
+    lastName.addEventListener('input', checkFields);
+    phone.addEventListener('input', checkFields);
+
+    loginButton.addEventListener('click', function () {
         // Предположим, авторизация успешна
         location.href = 'shop.html';
     });

@@ -19,7 +19,7 @@
         }
 
         #main {
-            max-width: 600px;
+            max-width: 1200px;
             padding: 20px;
             border-radius: 10px;
             background-color: var(--tg-theme-secondary-bg-color);
@@ -30,6 +30,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 10px; /* Отступ между товарами */
+            justify-content: space-between;
         }
 
         .product {
@@ -39,6 +40,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
+            box-sizing: border-box;
         }
 
         .product img {
@@ -57,6 +59,10 @@
             font-size: 16px;
             margin: 5px 0;
             width: 100%;
+        }
+
+        .product button:hover {
+            opacity: 0.8;
         }
 
         .cart-controls {
@@ -90,6 +96,7 @@
             justify-content: center;
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
         }
 
         footer button {
@@ -124,7 +131,7 @@
             </div>
         </div>
 
-        <!-- Здесь можно добавить другие товары в аналогичном формате -->
+        <!-- Пример второго товара -->
         <div class="product" id="product2">
             <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 2">
             <p>Цена: <span id="price2">1500</span> руб.</p>

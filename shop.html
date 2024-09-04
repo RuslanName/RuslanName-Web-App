@@ -29,13 +29,12 @@
         .product-grid {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 10px;
+            gap: 10px; /* Отступ между товарами */
         }
 
         .product {
             flex: 0 1 calc(50% - 10px); /* Два товара в ряд с отступом */
-            background-color: var(--tg-theme-bg-color);
+            background-color: var(--tg-theme-secondary-bg-color);
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -62,13 +61,12 @@
 
         .cart-controls {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             margin-top: 10px;
         }
 
         .cart-controls button {
-            flex: 1;
             padding: 10px;
             font-size: 16px;
             background-color: var(--tg-theme-button-color);
@@ -80,17 +78,16 @@
 
         .cart-controls span {
             font-size: 16px;
-            flex: 1;
-            text-align: center;
+            margin: 0 10px;
         }
 
         footer {
             position: fixed;
             bottom: 0;
             width: 100%;
+            background-color: var(--tg-theme-secondary-bg-color); /* Убран прозрачный фон */
             display: flex;
             justify-content: center;
-            background-color: var(--tg-theme-secondary-bg-color); /* Убрана прозрачность */
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
         }

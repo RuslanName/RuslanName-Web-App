@@ -23,13 +23,23 @@
             padding: 20px;
             border-radius: 10px;
             background-color: var(--tg-theme-secondary-bg-color);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin-bottom: 20px;
+            margin-bottom: 60px; /* Увеличено расстояние до футера */
+        }
+
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
         }
 
         .product {
-            margin-bottom: 20px;
+            flex: 0 1 48%; /* Два товара в ряд */
+            background-color: var(--tg-theme-bg-color);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
+            margin-bottom: 10px;
         }
 
         .product img {
@@ -47,10 +57,30 @@
             cursor: pointer;
             font-size: 16px;
             margin: 5px;
+            width: 100%;
         }
 
         .product button:disabled {
             background-color: gray;
+        }
+
+        .cart-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .cart-controls button {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .cart-controls span {
+            font-size: 16px;
+            flex: 1;
+            text-align: center;
         }
 
         footer {
@@ -59,7 +89,7 @@
             width: 100%;
             display: flex;
             justify-content: center;
-            background-color: var(--tg-theme-secondary-bg-color);
+            background-color: var(--tg-theme-secondary-bg-color); /* Убрана прозрачность */
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
         }
@@ -68,6 +98,12 @@
             flex: 1;
             margin: 0 10px;
             padding: 10px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -76,20 +112,33 @@
 <p>Здесь вы можете выбрать товары и добавить их в корзину.</p>
 
 <div id="main">
-    <!-- Пример товара -->
-    <div class="product" id="product1">
-        <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 1">
-        <p>Цена: <span id="price1">1000</span> руб.</p>
-        <p id="quantity1">Количество: 10</p>
-        <button id="add1" onclick="addToCart('product1')">Добавить</button>
-        <div id="cart-controls1" style="display:none;">
-            <button onclick="updateCart('product1', -1)">-</button>
-            <span id="cart-quantity1">0</span>
-            <button onclick="updateCart('product1', 1)">+</button>
+    <div class="product-grid">
+        <!-- Пример товара -->
+        <div class="product" id="product1">
+            <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 1">
+            <p>Цена: <span id="price1">1000</span> руб.</p>
+            <p id="quantity1">Количество: 10</p>
+            <button id="add1" onclick="addToCart('product1')">Добавить</button>
+            <div id="cart-controls1" class="cart-controls" style="display:none;">
+                <button onclick="updateCart('product1', -1)">-</button>
+                <span id="cart-quantity1">0</span>
+                <button onclick="updateCart('product1', 1)">+</button>
+            </div>
+        </div>
+
+        <!-- Здесь можно добавить другие товары в аналогичном формате -->
+        <div class="product" id="product2">
+            <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 2">
+            <p>Цена: <span id="price2">1500</span> руб.</p>
+            <p id="quantity2">Количество: 5</p>
+            <button id="add2" onclick="addToCart('product2')">Добавить</button>
+            <div id="cart-controls2" class="cart-controls" style="display:none;">
+                <button onclick="updateCart('product2', -1)">-</button>
+                <span id="cart-quantity2">0</span>
+                <button onclick="updateCart('product2', 1)">+</button>
+            </div>
         </div>
     </div>
-
-    <!-- Здесь можно добавить другие товары в аналогичном формате -->
 </div>
 
 <footer>
@@ -98,19 +147,29 @@
 </footer>
 
 <script>
-    // Функция для добавления товара в корзину
     function addToCart(productId) {
         document.getElementById(`add${productId}`).style.display = 'none';
-        document.getElementById(`cart-controls${productId}`).style.display = 'block';
+        document.getElementById(`cart-controls${productId}`).style.display = 'flex';
         updateCart(productId, 1);
     }
 
-    // Функция для обновления количества товаров в корзине
     function updateCart(productId, change) {
-        let quantity = parseInt(document.getElementById(`cart-quantity${productId}`).textContent);
-        let totalQuantity = parseInt(document.getElementById(`quantity${productId}`).textContent.split(': ')[1]);
-        if (quantity + change >= 0 && quantity + change <= totalQuantity) {
-            document.getElementById(`cart-quantity${productId}`).textContent = quantity + change;
+        const quantityElement = document.getElementById(`cart-quantity${productId}`);
+        const totalQuantityElement = document.getElementById(`quantity${productId}`);
+        
+        let quantity = parseInt(quantityElement.textContent);
+        const totalQuantity = parseInt(totalQuantityElement.textContent.split(': ')[1]);
+
+        quantity += change;
+
+        if (quantity >= 0 && quantity <= totalQuantity) {
+            quantityElement.textContent = quantity;
+        }
+
+        // Если количество в корзине 0, показываем кнопку "Добавить"
+        if (quantity === 0) {
+            document.getElementById(`cart-controls${productId}`).style.display = 'none';
+            document.getElementById(`add${productId}`).style.display = 'block';
         }
     }
 </script>

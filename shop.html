@@ -2,20 +2,70 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Магазин</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        #main {
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: var(--tg-theme-secondary-bg-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Онлайн магазин</h1>
-    <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Магазин">
-    <p>Здесь вы можете выбрать товары и добавить их в корзину.</p>
-    <button id="buy">Купить</button>
-
-    <footer>
+<div id="main">
+    <h1>Магазин</h1>
+    <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product Image">
+    <p>Здесь представлены товары нашего магазина.</p>
+    <div class="button-group">
         <button onclick="location.href='cart.html'">Корзина</button>
         <button onclick="location.href='orders.html'">Заказы</button>
-    </footer>
+    </div>
+</div>
 </body>
 </html>
 

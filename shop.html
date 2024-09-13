@@ -29,12 +29,12 @@
         .product-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px; /* Отступ между товарами */
+            gap: 10px;
             justify-content: space-between;
         }
 
         .product {
-            flex: 0 1 calc(50% - 10px); /* Два товара в ряд с отступом */
+            flex: 0 1 calc(50% - 10px);
             background-color: var(--tg-theme-secondary-bg-color);
             padding: 10px;
             border-radius: 10px;
@@ -91,7 +91,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-secondary-bg-color); /* Убран прозрачный фон */
+            background-color: var(--tg-theme-secondary-bg-color);
             display: flex;
             justify-content: center;
             padding: 10px;
@@ -113,12 +113,9 @@
     </style>
 </head>
 <body>
-<h1>Онлайн магазин</h1>
-<p>Здесь вы можете выбрать товары и добавить их в корзину.</p>
-
 <div id="main">
     <div class="product-grid">
-        <!-- Пример товара -->
+        <!-- Пример первого товара -->
         <div class="product" id="product1">
             <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 1">
             <p>Цена: <span id="price1">1000</span> руб.</p>
@@ -141,6 +138,19 @@
                 <button onclick="updateCart('2', -1)">-</button>
                 <span id="cart-quantity2">0</span>
                 <button onclick="updateCart('2', 1)">+</button>
+            </div>
+        </div>
+
+        <!-- Пример третьего товара -->
+        <div class="product" id="product3">
+            <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 3">
+            <p>Цена: <span id="price3">2000</span> руб.</p>
+            <p id="quantity3">Количество: 8</p>
+            <button id="add3" onclick="addToCart('3')">Добавить</button>
+            <div id="cart-controls3" class="cart-controls" style="display:none;">
+                <button onclick="updateCart('3', -1)">-</button>
+                <span id="cart-quantity3">0</span>
+                <button onclick="updateCart('3', 1)">+</button>
             </div>
         </div>
     </div>

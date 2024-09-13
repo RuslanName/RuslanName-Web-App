@@ -91,13 +91,24 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-secondary-bg-color); /* Прозрачность убрана */
+            background-color: var(--tg-theme-secondary-bg-color); /* Установка непрозрачного фона */
             display: flex;
             justify-content: center;
             padding: 10px;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); /* Тень для разделения футера */
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); /* Тень для отделения */
             box-sizing: border-box;
-            z-index: 1000; /* Футер будет всегда поверх товаров */
+            z-index: 1000;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-color: var(--tg-theme-secondary-bg-color); /* Установка фона */
+            z-index: -1; /* Фон будет под кнопками */
         }
 
         footer button {

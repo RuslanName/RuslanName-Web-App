@@ -55,9 +55,21 @@
     <h1>Ваши заказы</h1>
     <p>У вас пока нет заказов.</p>
     <div class="button-group">
-        <button onclick="location.href='index.html'">Магазин</button>
+        <button onclick="goToShop()">Магазин</button>
         <button onclick="location.href='cart.html'">Корзина</button>
     </div>
 </div>
 </body>
+
+    <script>
+    function goToShop() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        
+        if (isAuthenticated === 'true') {
+            window.location.href = 'index.html'; // Перенаправляем на страницу магазина
+        } else {
+            window.location.href = 'auth.html'; // Перенаправляем на страницу авторизации
+        }
+    }
+</script>
 </html>

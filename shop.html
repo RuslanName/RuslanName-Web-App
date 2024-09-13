@@ -10,7 +10,7 @@
             --tg-theme-bg-color: #ffffff;
             --tg-theme-text-color: #000000;
             --tg-theme-secondary-bg-color: #f5f5f5;
-            --tg-theme-button-color: #6200ee;
+            --tg-theme-button-color: #0088cc; /* Цвет кнопок как у Telegram */
             --tg-button-text-color: #ffffff;
             --tg-theme-footer-bg-color: #f5f5f5;
             --tg-theme-footer-text-color: #000000;
@@ -122,31 +122,9 @@
             cursor: pointer;
             font-size: 16px;
         }
-
-        /* Стили для темной темы */
-        body.dark-theme {
-            --tg-theme-bg-color: #121212;
-            --tg-theme-text-color: #ffffff;
-            --tg-theme-secondary-bg-color: #1e1e1e;
-            --tg-theme-button-color: #6200ee;
-            --tg-button-text-color: #ffffff;
-            --tg-theme-footer-bg-color: #1e1e1e;
-            --tg-theme-footer-text-color: #ffffff;
-        }
-
-        /* Стили для светлой темы */
-        body.light-theme {
-            --tg-theme-bg-color: #ffffff;
-            --tg-theme-text-color: #000000;
-            --tg-theme-secondary-bg-color: #f5f5f5;
-            --tg-theme-button-color: #6200ee;
-            --tg-button-text-color: #ffffff;
-            --tg-theme-footer-bg-color: #f5f5f5;
-            --tg-theme-footer-text-color: #000000;
-        }
     </style>
 </head>
-<body class="light-theme">
+<body>
 <div id="main">
     <div class="product-grid">
         <!-- Первый товар -->
@@ -223,23 +201,6 @@
             document.getElementById(`add${productId}`).style.display = 'block';
         }
     }
-
-    // Функция для переключения темы
-    function toggleTheme() {
-        const currentTheme = document.body.classList.contains('dark-theme') ? 'dark-theme' : 'light-theme';
-        const newTheme = currentTheme === 'dark-theme' ? 'light-theme' : 'dark-theme';
-        document.body.classList.remove(currentTheme);
-        document.body.classList.add(newTheme);
-    }
-
-    // Пример вызова функции для переключения темы
-    document.addEventListener('DOMContentLoaded', () => {
-        // Добавьте кнопку для переключения темы
-        const themeToggleButton = document.createElement('button');
-        themeToggleButton.textContent = 'Переключить тему';
-        themeToggleButton.onclick = toggleTheme;
-        document.body.appendChild(themeToggleButton);
-    });
 </script>
 </body>
 </html>

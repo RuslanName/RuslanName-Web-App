@@ -38,11 +38,15 @@
         }
         
         #auth {
-            flex: 1; /* Динамическое заполнение пространства */
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            min-height: 400px; /* Добавьте минимальную высоту */
+            width: 100%; /* Растяжение по ширине */
+            padding: 20px;
+            background-color: var(--tg-theme-secondary-bg-color);
         }
 
         input {
@@ -226,16 +230,20 @@
     const shopSection = document.getElementById('shop');
 
     // Функция для проверки полей
+    const phonePattern = /^\d{10}$/; // Уже существующий шаблон
+    
     function checkFields() {
-        const phonePattern = /^\d{10}$/;
-        if (firstName.value.trim() !== '' &&
-            lastName.value.trim() !== '' &&
-            phonePattern.test(phone.value.trim())) {
+        const isFirstNameValid = firstName.value.trim() !== '';
+        const isLastNameValid = lastName.value.trim() !== '';
+        const isPhoneValid = phonePattern.test(phone.value.trim());
+        
+        if (isFirstNameValid && isLastNameValid && isPhoneValid) {
             loginButton.disabled = false;
         } else {
             loginButton.disabled = true;
         }
     }
+
 
     firstName.addEventListener('input', checkFields);
     lastName.addEventListener('input', checkFields);

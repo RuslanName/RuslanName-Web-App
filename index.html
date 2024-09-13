@@ -26,17 +26,9 @@
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* Минимальная высота на весь экран */
+            min-height: 100vh;
         }
-    
-        #auth, #shop {
-            max-width: 1200px;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: var(--tg-theme-secondary-bg-color);
-            margin-bottom: 60px;
-        }
-        
+
         #auth {
             flex: 1;
             display: flex;
@@ -46,10 +38,10 @@
             width: 100%;
             padding: 20px;
             background-color: var(--tg-theme-secondary-bg-color);
-            max-height: 90vh; /* Ограничение максимальной высоты окна */
+            max-height: 80vh; /* Ограничение максимальной высоты */
             min-height: 300px; /* Минимальная высота */
         }
-    
+
         input {
             width: calc(100% - 20px);
             padding: 10px;
@@ -58,7 +50,7 @@
             border: 1px solid #ccc;
         }
     
-        button {
+       button {
             padding: 10px 15px;
             background-color: var(--tg-theme-button-color);
             color: var(--tg-button-text-color);
@@ -94,28 +86,6 @@
             box-sizing: border-box;
         }
 
-        .product img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-        }
-
-        .product button {
-            padding: 10px 15px;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-button-text-color);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 5px 0;
-            width: 100%;
-        }
-
-        .product button:hover {
-            opacity: 0.8;
-        }
-
         .cart-controls {
             display: flex;
             justify-content: center;
@@ -138,20 +108,21 @@
             margin: 0 10px;
         }
 
-        footer {
+      footer {
+            position: fixed;
+            bottom: 0;
             width: 100%;
             background-color: var(--tg-theme-footer-bg-color);
             color: var(--tg-theme-footer-text-color);
             display: flex;
             justify-content: center;
             padding: 10px;
-            position: sticky; /* Фиксируем футер внизу */
-            bottom: 0;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             box-sizing: border-box;
         }
         
         footer button {
+            flex: 1;
             margin: 0 10px;
             padding: 10px;
             background-color: var(--tg-theme-button-color);
@@ -160,8 +131,6 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            flex-grow: 1;
-            max-width: 200px;
         }
     </style>
 </head>
@@ -219,10 +188,10 @@
         </div>
     </div>
 
-    <footer>
-        <button onclick="location.href='cart.html'">Корзина</button>
-        <button onclick="location.href='orders.html'">Заказы</button>
-    </footer>
+<footer>
+    <button onclick="location.href='cart.html'">Корзина</button>
+    <button onclick="location.href='orders.html'">Заказы</button>
+</footer>
 </div>
 
 <script>
@@ -233,21 +202,13 @@
     const authSection = document.getElementById('auth');
     const shopSection = document.getElementById('shop');
 
-    // Функция для проверки полей
-    const phonePattern = /^\d{10}$/; // Уже существующий шаблон
-    
     function checkFields() {
         const isFirstNameValid = firstName.value.trim() !== '';
         const isLastNameValid = lastName.value.trim() !== '';
-        const isPhoneValid = phonePattern.test(phone.value.trim());
+        const isPhoneValid = /^\d{10}$/.test(phone.value.trim());
         
-        if (isFirstNameValid && isLastNameValid && isPhoneValid) {
-            loginButton.disabled = false;
-        } else {
-            loginButton.disabled = true;
-        }
+        loginButton.disabled = !(isFirstNameValid && isLastNameValid && isPhoneValid);
     }
-
 
     firstName.addEventListener('input', checkFields);
     lastName.addEventListener('input', checkFields);

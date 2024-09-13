@@ -151,7 +151,7 @@
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             box-sizing: border-box;
-            z-index: 10; /* Убедитесь, что футер выше других элементов */
+            z-index: 1000; /* Чтобы футер всегда был сверху */
         }
         
         footer button {
@@ -277,6 +277,29 @@
                 cartControls.style.display = 'none'; // Скрыть элементы корзины
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const authSection = document.getElementById('auth');
+            const shopSection = document.getElementById('shop');
+            const footer = document.querySelector('footer');
+        
+            function showShop() {
+                authSection.style.display = 'none';
+                shopSection.style.display = 'block';
+                footer.style.display = 'flex'; // Показываем футер
+            }
+        
+            function showAuth() {
+                authSection.style.display = 'flex';
+                shopSection.style.display = 'none';
+                footer.style.display = 'none'; // Скрываем футер
+            }
+        
+            // Изначально показываем страницу авторизации
+            showAuth();
+        
+            document.getElementById('login').addEventListener('click', showShop);
+        });
     </script>
 </body>
 </html>

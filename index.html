@@ -270,44 +270,40 @@
             const cartControls = document.getElementById(`cart-controls${productId}`);
             const quantityElement = document.getElementById(`cart-quantity${productId}`);
             const totalQuantityElement = document.getElementById(`quantity${productId}`);
-        
-            let currentQuantity = parseInt(quantityElement.textContent);
-            const availableQuantity = parseInt(totalQuantityElement.textContent.split(': ')[1]);
-        
-            if (currentQuantity < availableQuantity) {
-                currentQuantity += 1;
-                quantityElement.textContent = currentQuantity;
-        
-                // Показать элементы управления корзиной
-                cartControls.style.display = 'flex';
-                
-                // Если достигли максимального количества, скрыть кнопку "Добавить"
-                if (currentQuantity >= availableQuantity) {
-                    addButton.style.display = 'none';
-                }
+    
+            // Скрываем кнопку "Добавить" и показываем элементы управления корзиной
+            addButton.style.display = 'none';
+            cartControls.style.display = 'flex';
+    
+            // Устанавливаем начальное значение количества в корзине
+            let quantity = parseInt(quantityElement.textContent);
+            quantity = (quantity || 0) + 1;
+            quantityElement.textContent = quantity;
+    
+            // Проверяем, что количество не превышает доступное количество товара
+            const totalQuantity = parseInt(totalQuantityElement.textContent.split(': ')[1]);
+            if (quantity > totalQuantity) {
+                quantityElement.textContent = totalQuantity; // Устанавливаем максимальное значение
             }
         }
-        
+    
         function updateCart(productId, change) {
             const quantityElement = document.getElementById(`cart-quantity${productId}`);
             const totalQuantityElement = document.getElementById(`quantity${productId}`);
-        
+            
             let quantity = parseInt(quantityElement.textContent);
-            const availableQuantity = parseInt(totalQuantityElement.textContent.split(': ')[1]);
-        
+            const totalQuantity = parseInt(totalQuantityElement.textContent.split(': ')[1]);
+    
             quantity += change;
-        
-            if (quantity >= 0 && quantity <= availableQuantity) {
-                quantityElement.textContent = quantity;
-        
-                // Если количество вернулось к нулю, показываем кнопку "Добавить" и скрываем элементы управления корзиной
-                if (quantity === 0) {
-                    document.getElementById(`cart-controls${productId}`).style.display = 'none';
-                    document.getElementById(`add${productId}`).style.display = 'block';
-                } else if (quantity < availableQuantity) {
-                    // Если меньше доступного количества, показываем кнопку "Добавить"
-                    document.getElementById(`add${productId}`).style.display = 'none';
-                }
+    
+            if (quantity < 0) quantity = 0; // Устанавливаем минимальное значение
+            if (quantity > totalQuantity) quantity = totalQuantity; // Устанавливаем максимальное значение
+    
+            quantityElement.textContent = quantity;
+    
+            if (quantity === 0) {
+                document.getElementById(`cart-controls${productId}`).style.display = 'none';
+                document.getElementById(`add${productId}`).style.display = 'block';
             }
         }
 

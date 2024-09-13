@@ -29,7 +29,7 @@
         }
 
         #shop {
-            padding-bottom: 50px; /* Добавьте отступ снизу, чтобы футер не перекрывал контент */
+            padding-bottom: 60px; /* Добавьте отступ снизу, чтобы футер не перекрывал контент */
         }
 
         #auth {
@@ -43,6 +43,7 @@
             padding: 20px;
             background-color: var(--tg-theme-secondary-bg-color);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Добавлен эффект тени */
+            margin: 0 auto; /* Центрирование по горизонтали */
         }
 
         input {
@@ -146,6 +147,7 @@
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             box-sizing: border-box;
+            z-index: 10; /* Убедитесь, что футер выше других элементов */
         }
         
         footer button {
@@ -248,10 +250,18 @@
         });
 
         function addToCart(productId) {
-            const quantityElem = document.getElementById(`cart-controls${productId}`);
-            quantityElem.style.display = 'flex';
+            const cartControls = document.getElementById(`cart-controls${productId}`);
+            const addButton = document.getElementById(`add${productId}`);
+            
+            if (cartControls.style.display === 'none') {
+                cartControls.style.display = 'flex';
+                addButton.style.display = 'none'; // Скрыть кнопку добавления
+            } else {
+                // Логика, если корзина уже отображается
+            }
             document.getElementById(`cart-quantity${productId}`).innerText = 1; // Задаем начальное значение
         }
+
 
         function updateCart(productId, delta) {
             const quantityElem = document.getElementById(`cart-quantity${productId}`);

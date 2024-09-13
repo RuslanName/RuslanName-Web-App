@@ -5,14 +5,16 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Авторизация</title>
+    <title>Авторизация и Магазин</title>
     <style>
         :root {
-            --tg-theme-bg-color: #ffffff; /* Светлый фон */
-            --tg-theme-text-color: #000000; /* Тёмный текст */
-            --tg-theme-secondary-bg-color: #f5f5f5; /* Вторичный цвет фона */
-            --tg-theme-button-color: #0088cc; /* Цвет кнопок как у Telegram */
-            --tg-button-text-color: #ffffff; /* Цвет текста кнопок */
+            --tg-theme-bg-color: #ffffff;
+            --tg-theme-text-color: #000000;
+            --tg-theme-secondary-bg-color: #f5f5f5;
+            --tg-theme-button-color: #0088cc;
+            --tg-button-text-color: #ffffff;
+            --tg-theme-footer-bg-color: #f5f5f5;
+            --tg-theme-footer-text-color: #000000;
         }
 
         body {
@@ -23,23 +25,24 @@
             color: var(--tg-theme-text-color);
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
-            text-align: center;
         }
 
-        #main, #shop {
-            max-width: 400px;
+        #auth, #shop {
+            max-width: 1200px;
             padding: 20px;
             border-radius: 10px;
             background-color: var(--tg-theme-secondary-bg-color);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: none; /* Скрыто по умолчанию */
+            margin-bottom: 60px;
         }
 
-        #main.active, #shop.active {
-            display: block;
+        #auth {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
         input {
@@ -68,10 +71,96 @@
             background-color: gray;
             cursor: not-allowed;
         }
+
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .product {
+            flex: 0 1 calc(50% - 10px);
+            background-color: var(--tg-theme-secondary-bg-color);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .product button {
+            padding: 10px 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 0;
+            width: 100%;
+        }
+
+        .product button:hover {
+            opacity: 0.8;
+        }
+
+        .cart-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .cart-controls button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cart-controls span {
+            font-size: 16px;
+            margin: 0 10px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: var(--tg-theme-footer-bg-color);
+            color: var(--tg-theme-footer-text-color);
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+        }
+
+        footer button {
+            flex: 1;
+            margin: 0 10px;
+            padding: 10px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
-<div id="main" class="active">
+<div id="auth">
     <h1>Авторизация</h1>
     <input type="text" placeholder="Введите имя" id="firstName">
     <input type="text" placeholder="Введите фамилию" id="lastName">
@@ -79,22 +168,68 @@
     <button id="login" disabled>Войти</button>
 </div>
 
-<div id="shop">
-    <h1>Добро пожаловать в магазин!</h1>
-    <p>Здесь будут товары</p>
+<div id="shop" style="display: none;">
+    <div class="product-grid">
+        <!-- Первый товар -->
+        <div class="product" id="product1">
+            <h3>Товар 1</h3>
+            <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 1">
+            <p><span id="price1">1000</span> руб.</p>
+            <p id="quantity1">В наличии: 10</p>
+            <button id="add1" onclick="addToCart('1')">Добавить</button>
+            <div id="cart-controls1" class="cart-controls" style="display:none;">
+                <button onclick="updateCart('1', -1)">-</button>
+                <span id="cart-quantity1">0</span>
+                <button onclick="updateCart('1', 1)">+</button>
+            </div>
+        </div>
+
+        <!-- Второй товар -->
+        <div class="product" id="product2">
+            <h3>Товар 2</h3>
+            <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 2">
+            <p><span id="price2">1500</span> руб.</p>
+            <p id="quantity2">В наличии: 5</p>
+            <button id="add2" onclick="addToCart('2')">Добавить</button>
+            <div id="cart-controls2" class="cart-controls" style="display:none;">
+                <button onclick="updateCart('2', -1)">-</button>
+                <span id="cart-quantity2">0</span>
+                <button onclick="updateCart('2', 1)">+</button>
+            </div>
+        </div>
+
+        <!-- Третий товар -->
+        <div class="product" id="product3">
+            <h3>Товар 3</h3>
+            <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 3">
+            <p><span id="price3">2000</span> руб.</p>
+            <p id="quantity3">В наличии: 8</p>
+            <button id="add3" onclick="addToCart('3')">Добавить</button>
+            <div id="cart-controls3" class="cart-controls" style="display:none;">
+                <button onclick="updateCart('3', -1)">-</button>
+                <span id="cart-quantity3">0</span>
+                <button onclick="updateCart('3', 1)">+</button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<footer>
+    <button onclick="location.href='cart.html'">Корзина</button>
+    <button onclick="location.href='orders.html'">Заказы</button>
+</footer>
 
 <script>
     const firstName = document.getElementById('firstName');
     const lastName = document.getElementById('lastName');
     const phone = document.getElementById('phone');
     const loginButton = document.getElementById('login');
-    const mainSection = document.getElementById('main');
+    const authSection = document.getElementById('auth');
     const shopSection = document.getElementById('shop');
 
     // Функция для проверки полей
     function checkFields() {
-        const phonePattern = /^\d{10}$/; // Проверка, что номер телефона состоит из 10 цифр
+        const phonePattern = /^\d{10}$/;
         if (firstName.value.trim() !== '' &&
             lastName.value.trim() !== '' &&
             phonePattern.test(phone.value.trim())) {
@@ -104,28 +239,50 @@
         }
     }
 
-    // Добавляем обработчики событий
     firstName.addEventListener('input', checkFields);
     lastName.addEventListener('input', checkFields);
     phone.addEventListener('input', checkFields);
 
-    // При нажатии на кнопку входа
     loginButton.addEventListener('click', function () {
         if (!loginButton.disabled) {
+            // Отправляем данные в Telegram бота
             const data = {
                 firstName: firstName.value.trim(),
                 lastName: lastName.value.trim(),
                 phone: phone.value.trim()
             };
-
-            // Отправляем данные в Telegram бота
             Telegram.WebApp.sendData(JSON.stringify(data));
 
-            // Переходим на "страницу" магазина
-            mainSection.classList.remove('active');
-            shopSection.classList.add('active');
+            // Скрываем авторизацию и показываем магазин
+            authSection.style.display = 'none';
+            shopSection.style.display = 'block';
         }
     });
+
+    function addToCart(productId) {
+        document.getElementById(`add${productId}`).style.display = 'none';
+        document.getElementById(`cart-controls${productId}`).style.display = 'flex';
+        updateCart(productId, 1);
+    }
+
+    function updateCart(productId, change) {
+        const quantityElement = document.getElementById(`cart-quantity${productId}`);
+        const totalQuantityElement = document.getElementById(`quantity${productId}`);
+        
+        let quantity = parseInt(quantityElement.textContent);
+        const totalQuantity = parseInt(totalQuantityElement.textContent.split(': ')[1]);
+
+        quantity += change;
+
+        if (quantity >= 0 && quantity <= totalQuantity) {
+            quantityElement.textContent = quantity;
+        }
+
+        if (quantity === 0) {
+            document.getElementById(`cart-controls${productId}`).style.display = 'none';
+            document.getElementById(`add${productId}`).style.display = 'block';
+        }
+    }
 </script>
 </body>
 </html>

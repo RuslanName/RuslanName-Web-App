@@ -259,14 +259,20 @@
             const availableQuantityElem = document.getElementById(`quantity${productId}`);
             
             const availableQuantity = parseInt(availableQuantityElem.innerText.replace('В наличии: ', ''));
-            const currentQuantity = parseInt(cartQuantityElem.innerText);
-        
+            let currentQuantity = parseInt(cartQuantityElem.innerText);
+            
             if (currentQuantity >= availableQuantity) {
                 return; // Не добавляем товар, если достигнут предел
             }
         
-            quantityElem.style.display = 'flex';
-            cartQuantityElem.innerText = currentQuantity + 1; // Увеличиваем количество
+            currentQuantity += 1;
+            cartQuantityElem.innerText = currentQuantity;
+            quantityElem.style.display = 'flex'; // Показать элементы управления корзиной
+        
+            // В случае, если товар достиг максимального количества, скрываем кнопку "Добавить"
+            if (currentQuantity >= availableQuantity) {
+                document.getElementById(`add${productId}`).style.display = 'none';
+            }
         }
         
         function updateCart(productId, delta) {
@@ -286,10 +292,13 @@
         
             quantityElem.innerText = currentQuantity;
         
+            // Если количество вернулось к нулю, скрываем элементы управления корзиной
             if (currentQuantity === 0) {
                 document.getElementById(`cart-controls${productId}`).style.display = 'none';
+                document.getElementById(`add${productId}`).style.display = 'block'; // Показать кнопку "Добавить"
             }
         }
+
 
         document.addEventListener('DOMContentLoaded', () => {
             const authSection = document.getElementById('auth');

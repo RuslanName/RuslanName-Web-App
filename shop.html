@@ -91,12 +91,13 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-secondary-bg-color);
+            background-color: var(--tg-theme-secondary-bg-color); /* Прозрачность убрана */
             display: flex;
             justify-content: center;
             padding: 10px;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); /* Тень для разделения футера */
             box-sizing: border-box;
+            z-index: 1000; /* Футер будет всегда поверх товаров */
         }
 
         footer button {

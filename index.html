@@ -43,8 +43,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 400px; /* Добавьте минимальную высоту */
-            width: 100%; /* Растяжение по ширине */
+            min-height: 100vh; /* Растягиваем окно авторизации на весь экран */
+            width: 100%;
             padding: 20px;
             background-color: var(--tg-theme-secondary-bg-color);
         }
@@ -251,7 +251,6 @@
 
     loginButton.addEventListener('click', function () {
         if (!loginButton.disabled) {
-            // Отправляем данные в Telegram бота
             const data = {
                 firstName: firstName.value.trim(),
                 lastName: lastName.value.trim(),
@@ -259,9 +258,9 @@
             };
             Telegram.WebApp.sendData(JSON.stringify(data));
 
-            // Скрываем авторизацию и показываем магазин
-            authSection.style.display = 'none';
-            shopSection.style.display = 'block';
+            // Скрываем авторизацию и открываем магазин
+            document.getElementById('auth').style.display = 'none';
+            // Здесь добавьте код для показа магазина
         }
     });
 

@@ -254,51 +254,50 @@
         });
 
         function addToCart(productId) {
-            const quantityElem = document.getElementById(`cart-controls${productId}`);
-            const cartQuantityElem = document.getElementById(`cart-quantity${productId}`);
-            const availableQuantityElem = document.getElementById(`quantity${productId}`);
-            
-            const availableQuantity = parseInt(availableQuantityElem.innerText.replace('В наличии: ', ''));
-            let currentQuantity = parseInt(cartQuantityElem.innerText);
-            
-            if (currentQuantity >= availableQuantity) {
-                return; // Не добавляем товар, если достигнут предел
-            }
+            const addButton = document.getElementById(`add${productId}`);
+            const cartControls = document.getElementById(`cart-controls${productId}`);
+            const quantityElement = document.getElementById(`cart-quantity${productId}`);
+            const totalQuantityElement = document.getElementById(`quantity${productId}`);
         
-            currentQuantity += 1;
-            cartQuantityElem.innerText = currentQuantity;
-            quantityElem.style.display = 'flex'; // Показать элементы управления корзиной
+            let currentQuantity = parseInt(quantityElement.textContent);
+            const availableQuantity = parseInt(totalQuantityElement.textContent.split(': ')[1]);
         
-            // В случае, если товар достиг максимального количества, скрываем кнопку "Добавить"
-            if (currentQuantity >= availableQuantity) {
-                document.getElementById(`add${productId}`).style.display = 'none';
-            }
-        }
+            if (currentQuantity < availableQuantity) {
+                currentQuantity += 1;
+                quantityElement.textContent = currentQuantity;
         
-        function updateCart(productId, delta) {
-            const quantityElem = document.getElementById(`cart-quantity${productId}`);
-            const availableQuantityElem = document.getElementById(`quantity${productId}`);
-            
-            let currentQuantity = parseInt(quantityElem.innerText);
-            const availableQuantity = parseInt(availableQuantityElem.innerText.replace('В наличии: ', ''));
-        
-            currentQuantity += delta;
-        
-            if (currentQuantity > availableQuantity) {
-                currentQuantity = availableQuantity; // Устанавливаем максимальное доступное количество
-            } else if (currentQuantity < 0) {
-                currentQuantity = 0;
-            }
-        
-            quantityElem.innerText = currentQuantity;
-        
-            // Если количество вернулось к нулю, скрываем элементы управления корзиной
-            if (currentQuantity === 0) {
-                document.getElementById(`cart-controls${productId}`).style.display = 'none';
-                document.getElementById(`add${productId}`).style.display = 'block'; // Показать кнопку "Добавить"
+                // Показать элементы управления корзиной
+                cartControls.style.display = 'flex';
+                
+                // Если достигли максимального количества, скрыть кнопку "Добавить"
+                if (currentQuantity >= availableQuantity) {
+                    addButton.style.display = 'none';
+                }
             }
         }
-
+        
+        function updateCart(productId, change) {
+            const quantityElement = document.getElementById(`cart-quantity${productId}`);
+            const totalQuantityElement = document.getElementById(`quantity${productId}`);
+        
+            let quantity = parseInt(quantityElement.textContent);
+            const availableQuantity = parseInt(totalQuantityElement.textContent.split(': ')[1]);
+        
+            quantity += change;
+        
+            if (quantity >= 0 && quantity <= availableQuantity) {
+                quantityElement.textContent = quantity;
+        
+                // Если количество вернулось к нулю, показываем кнопку "Добавить" и скрываем элементы управления корзиной
+                if (quantity === 0) {
+                    document.getElementById(`cart-controls${productId}`).style.display = 'none';
+                    document.getElementById(`add${productId}`).style.display = 'block';
+                } else if (quantity < availableQuantity) {
+                    // Если меньше доступного количества, показываем кнопку "Добавить"
+                    document.getElementById(`add${productId}`).style.display = 'none';
+                }
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             const authSection = document.getElementById('auth');

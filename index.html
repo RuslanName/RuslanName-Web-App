@@ -104,6 +104,9 @@
 
         // Отправляем данные обратно в бота
         Telegram.WebApp.sendData(JSON.stringify(data));
+
+        // Закрытие WebApp после успешной отправки данных
+        Telegram.WebApp.close();
     });
 </script>
 </body>

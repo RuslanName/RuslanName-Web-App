@@ -320,6 +320,15 @@
             showAuth();
         
             document.getElementById('login').addEventListener('click', showShop);
+        }
+
+        // Проверка авторизации при загрузке страницы магазина
+        window.addEventListener('load', () => {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+    
+            if (isAuthenticated !== 'true') {
+                window.location.href = 'auth.html'; // Перенаправляем на страницу авторизации
+            }
         });
     </script>
 </body>

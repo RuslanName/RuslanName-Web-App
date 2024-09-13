@@ -43,10 +43,11 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh; /* Растягиваем окно авторизации на весь экран */
             width: 100%;
             padding: 20px;
             background-color: var(--tg-theme-secondary-bg-color);
+            height: auto; /* Убираем фиксированную высоту */
+            min-height: 300px; /* Минимальная высота */
         }
 
         input {
@@ -264,15 +265,16 @@
         }
     });
 
+ // Исправляем функцию addToCart
     function addToCart(productId) {
-        document.getElementById(add${productId}).style.display = 'none';
-        document.getElementById(cart-controls${productId}).style.display = 'flex';
+        document.getElementById(`add${productId}`).style.display = 'none';
+        document.getElementById(`cart-controls${productId}`).style.display = 'flex';
         updateCart(productId, 1);
     }
 
     function updateCart(productId, change) {
-        const quantityElement = document.getElementById(cart-quantity${productId});
-        const totalQuantityElement = document.getElementById(quantity${productId});
+        const quantityElement = document.getElementById(`cart-quantity${productId}`);
+        const totalQuantityElement = document.getElementById(`quantity${productId}`);
         
         let quantity = parseInt(quantityElement.textContent);
         const totalQuantity = parseInt(totalQuantityElement.textContent.split(': ')[1]);
@@ -284,10 +286,28 @@
         }
 
         if (quantity === 0) {
-            document.getElementById(cart-controls${productId}).style.display = 'none';
-            document.getElementById(add${productId}).style.display = 'block';
+            document.getElementById(`cart-controls${productId}`).style.display = 'none';
+            document.getElementById(`add${productId}`).style.display = 'block';
         }
     }
+
+        // Исправляем ошибку с кнопкой "Войти"
+    loginButton.addEventListener('click', function () {
+        if (!loginButton.disabled) {
+            const data = {
+                firstName: firstName.value.trim(),
+                lastName: lastName.value.trim(),
+                phone: phone.value.trim()
+            };
+
+            // Отправка данных в Telegram
+            Telegram.WebApp.sendData(JSON.stringify(data));
+
+            // Скрываем блок авторизации и показываем магазин
+            authSection.style.display = 'none';
+            shopSection.style.display = 'block';
+        }
+    });
 </script>
 </body>
 </html>

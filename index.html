@@ -29,12 +29,17 @@
             text-align: center;
         }
 
-        #main {
+        #main, #shop {
             max-width: 400px;
             padding: 20px;
             border-radius: 10px;
             background-color: var(--tg-theme-secondary-bg-color);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none; /* Скрыто по умолчанию */
+        }
+
+        #main.active, #shop.active {
+            display: block;
         }
 
         input {
@@ -66,22 +71,30 @@
     </style>
 </head>
 <body>
-<div id="main">
+<div id="main" class="active">
     <h1>Авторизация</h1>
     <input type="text" placeholder="Введите имя" id="firstName">
     <input type="text" placeholder="Введите фамилию" id="lastName">
     <input type="tel" placeholder="Введите номер телефона" id="phone" pattern="\d{10}" maxlength="10">
     <button id="login" disabled>Войти</button>
 </div>
+
+<div id="shop">
+    <h1>Добро пожаловать в магазин!</h1>
+    <p>Здесь будут товары</p>
+</div>
+
 <script>
     const firstName = document.getElementById('firstName');
     const lastName = document.getElementById('lastName');
     const phone = document.getElementById('phone');
     const loginButton = document.getElementById('login');
+    const mainSection = document.getElementById('main');
+    const shopSection = document.getElementById('shop');
 
-    // Функция для проверки полей, включая проверку на формат телефона
+    // Функция для проверки полей
     function checkFields() {
-        const phonePattern = /^\d{10}$/; // Проверяем, что номер состоит из 10 цифр
+        const phonePattern = /^\d{10}$/; // Проверка, что номер телефона состоит из 10 цифр
         if (firstName.value.trim() !== '' &&
             lastName.value.trim() !== '' &&
             phonePattern.test(phone.value.trim())) {
@@ -91,27 +104,28 @@
         }
     }
 
-    // Добавляем обработчики событий для всех полей
+    // Добавляем обработчики событий
     firstName.addEventListener('input', checkFields);
     lastName.addEventListener('input', checkFields);
     phone.addEventListener('input', checkFields);
 
-loginButton.addEventListener('click', function () {
-    if (!loginButton.disabled) {
-        const data = {
-            firstName: firstName.value.trim(),
-            lastName: lastName.value.trim(),
-            phone: phone.value.trim()
-        };
+    // При нажатии на кнопку входа
+    loginButton.addEventListener('click', function () {
+        if (!loginButton.disabled) {
+            const data = {
+                firstName: firstName.value.trim(),
+                lastName: lastName.value.trim(),
+                phone: phone.value.trim()
+            };
 
-        // Проверяем, что данные отправлены
-        console.log('Отправляем данные в Telegram:', data);
+            // Отправляем данные в Telegram бота
+            Telegram.WebApp.sendData(JSON.stringify(data));
 
-        // Отправляем данные в бота через Telegram WebApp
-        Telegram.WebApp.sendData(JSON.stringify(data));
-    }
-});
-
+            // Переходим на "страницу" магазина
+            mainSection.classList.remove('active');
+            shopSection.classList.add('active');
+        }
+    });
 </script>
 </body>
 </html>

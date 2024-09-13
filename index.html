@@ -28,17 +28,21 @@
             min-height: 100vh;
         }
 
+        #shop {
+            padding-bottom: 50px; /* Добавьте отступ снизу, чтобы футер не перекрывал контент */
+        }
+
         #auth {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 100%;
+            width: calc(100% - 40px); /* Аналогично окну магазина */
+            max-width: 600px; /* Максимальная ширина, чтобы соответствовать окну магазина */
             padding: 20px;
             background-color: var(--tg-theme-secondary-bg-color);
-            max-height: 80vh; /* Ограничение максимальной высоты */
-            min-height: 300px; /* Минимальная высота */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Добавлен эффект тени */
         }
 
         input {

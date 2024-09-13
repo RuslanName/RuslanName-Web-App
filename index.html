@@ -235,7 +235,7 @@
         const loginButton = document.getElementById('login');
         const authSection = document.getElementById('auth');
         const shopSection = document.getElementById('shop');
-
+    
         function checkFields() {
             const isFirstNameValid = firstName.value.trim() !== '';
             const isLastNameValid = lastName.value.trim() !== '';
@@ -243,14 +243,26 @@
             
             loginButton.disabled = !(isFirstNameValid && isLastNameValid && isPhoneValid);
         }
-
+    
         firstName.addEventListener('input', checkFields);
         lastName.addEventListener('input', checkFields);
         phone.addEventListener('input', checkFields);
-
+    
         loginButton.addEventListener('click', () => {
+            // Устанавливаем флаг авторизации
+            localStorage.setItem('isAuthenticated', 'true');
             authSection.style.display = 'none';
             shopSection.style.display = 'block';
+        });
+    
+        // Проверка, если пользователь уже авторизован
+        window.addEventListener('load', () => {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+    
+            if (isAuthenticated === 'true') {
+                authSection.style.display = 'none';
+                shopSection.style.display = 'block';
+            }
         });
 
         function addToCart(productId) {

@@ -16,7 +16,7 @@
             --tg-theme-footer-bg-color: #f5f5f5;
             --tg-theme-footer-text-color: #000000;
         }
-
+        
         body {
             margin: 0;
             padding: 0;
@@ -26,24 +26,23 @@
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* Устанавливаем минимальную высоту для тела */
+            min-height: 100vh; /* Минимальная высота на весь экран */
         }
 
+        #auth, #shop {
+            max-width: 1200px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: var(--tg-theme-secondary-bg-color);
+            margin-bottom: 60px;
+        }
+        
         #auth {
-            flex: 1;
+            flex: 1; /* Динамическое заполнение пространства */
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            background-color: var(--tg-theme-secondary-bg-color);
-        }
-
-        #shop {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--tg-theme-secondary-bg-color);
-            display: none; /* Скрываем раздел магазина по умолчанию */
+            justify-content: center;
         }
 
         input {
@@ -135,6 +134,7 @@
         }
 
         footer {
+            width: 100%;
             background-color: var(--tg-theme-footer-bg-color);
             color: var(--tg-theme-footer-text-color);
             display: flex;
@@ -142,9 +142,7 @@
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             box-sizing: border-box;
-            position: relative;
         }
-
         footer button {
             margin: 0 10px;
             padding: 10px;
@@ -154,6 +152,8 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            flex-grow: 1;
+            max-width: 200px;
         }
     </style>
 </head>
@@ -166,7 +166,7 @@
     <button id="login" disabled>Войти</button>
 </div>
 
-<div id="shop">
+<div id="shop" style="display: none;">
     <div class="product-grid">
         <!-- Первый товар -->
         <div class="product" id="product1">
@@ -225,6 +225,7 @@
     const authSection = document.getElementById('auth');
     const shopSection = document.getElementById('shop');
 
+    // Функция для проверки полей
     function checkFields() {
         const phonePattern = /^\d{10}$/;
         if (firstName.value.trim() !== '' &&
@@ -242,6 +243,7 @@
 
     loginButton.addEventListener('click', function () {
         if (!loginButton.disabled) {
+            // Отправляем данные в Telegram бота
             const data = {
                 firstName: firstName.value.trim(),
                 lastName: lastName.value.trim(),
@@ -249,20 +251,21 @@
             };
             Telegram.WebApp.sendData(JSON.stringify(data));
 
+            // Скрываем авторизацию и показываем магазин
             authSection.style.display = 'none';
-            shopSection.style.display = 'flex'; // Изменено на flex для правильного отображения
+            shopSection.style.display = 'block';
         }
     });
 
     function addToCart(productId) {
-        document.getElementById(`add${productId}`).style.display = 'none';
-        document.getElementById(`cart-controls${productId}`).style.display = 'flex';
+        document.getElementById(add${productId}).style.display = 'none';
+        document.getElementById(cart-controls${productId}).style.display = 'flex';
         updateCart(productId, 1);
     }
 
     function updateCart(productId, change) {
-        const quantityElement = document.getElementById(`cart-quantity${productId}`);
-        const totalQuantityElement = document.getElementById(`quantity${productId}`);
+        const quantityElement = document.getElementById(cart-quantity${productId});
+        const totalQuantityElement = document.getElementById(quantity${productId});
         
         let quantity = parseInt(quantityElement.textContent);
         const totalQuantity = parseInt(totalQuantityElement.textContent.split(': ')[1]);
@@ -274,8 +277,8 @@
         }
 
         if (quantity === 0) {
-            document.getElementById(`cart-controls${productId}`).style.display = 'none';
-            document.getElementById(`add${productId}`).style.display = 'block';
+            document.getElementById(cart-controls${productId}).style.display = 'none';
+            document.getElementById(add${productId}).style.display = 'block';
         }
     }
 </script>

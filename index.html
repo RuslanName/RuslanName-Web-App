@@ -223,6 +223,7 @@
     </div>
 
     <footer>
+        <button onclick="showShop()">Магазин</button>
         <button onclick="location.href='cart.html'">Корзина</button>
         <button onclick="location.href='orders.html'">Заказы</button>
     </footer>
@@ -235,6 +236,7 @@
         const loginButton = document.getElementById('login');
         const authSection = document.getElementById('auth');
         const shopSection = document.getElementById('shop');
+        const footer = document.querySelector('footer');
     
         function checkFields() {
             const isFirstNameValid = firstName.value.trim() !== '';
@@ -251,8 +253,7 @@
         loginButton.addEventListener('click', () => {
             // Устанавливаем флаг авторизации
             localStorage.setItem('isAuthenticated', 'true');
-            authSection.style.display = 'none';
-            shopSection.style.display = 'block';
+            showShop();
         });
     
         // Проверка, если пользователь уже авторизован
@@ -260,11 +261,24 @@
             const isAuthenticated = localStorage.getItem('isAuthenticated');
     
             if (isAuthenticated === 'true') {
-                authSection.style.display = 'none';
-                shopSection.style.display = 'block';
+                showShop();
+            } else {
+                showAuth();
             }
         });
 
+        function showShop() {
+            authSection.style.display = 'none';
+            shopSection.style.display = 'block';
+            footer.style.display = 'flex'; // Показываем футер
+        }
+        
+        function showAuth() {
+            authSection.style.display = 'flex';
+            shopSection.style.display = 'none';
+            footer.style.display = 'none'; // Скрываем футер
+        }
+    
         function addToCart(productId) {
             const addButton = document.getElementById(`add${productId}`);
             const cartControls = document.getElementById(`cart-controls${productId}`);
@@ -306,38 +320,6 @@
                 document.getElementById(`add${productId}`).style.display = 'block';
             }
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const authSection = document.getElementById('auth');
-            const shopSection = document.getElementById('shop');
-            const footer = document.querySelector('footer');
-        
-            function showShop() {
-                authSection.style.display = 'none';
-                shopSection.style.display = 'block';
-                footer.style.display = 'flex'; // Показываем футер
-            }
-        
-            function showAuth() {
-                authSection.style.display = 'flex';
-                shopSection.style.display = 'none';
-                footer.style.display = 'none'; // Скрываем футер
-            }
-        
-            // Изначально показываем страницу авторизации
-            showAuth();
-        
-            document.getElementById('login').addEventListener('click', showShop);
-        }
-
-        // Проверка авторизации при загрузке страницы магазина
-        window.addEventListener('load', () => {
-            const isAuthenticated = localStorage.getItem('isAuthenticated');
-    
-            if (isAuthenticated !== 'true') {
-                window.location.href = 'auth.html'; // Перенаправляем на страницу авторизации
-            }
-        });
     </script>
 </body>
 </html>

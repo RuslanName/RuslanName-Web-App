@@ -45,6 +45,10 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Добавлен эффект тени */
             margin: 0 auto; /* Центрирование по горизонтали */
         }
+        
+        #auth + footer {
+            display: none; /* Скрыть футер, когда отображается секция авторизации */
+        }
 
         input {
             width: calc(100% - 20px);
@@ -253,22 +257,25 @@
             const cartControls = document.getElementById(`cart-controls${productId}`);
             const addButton = document.getElementById(`add${productId}`);
             
-            if (cartControls.style.display === 'none') {
-                cartControls.style.display = 'flex';
-                addButton.style.display = 'none'; // Скрыть кнопку добавления
-            } else {
-                // Логика, если корзина уже отображается
-            }
+            cartControls.style.display = 'flex';
+            addButton.style.display = 'none'; // Скрыть кнопку добавления
             document.getElementById(`cart-quantity${productId}`).innerText = 1; // Задаем начальное значение
         }
-
-
+        
         function updateCart(productId, delta) {
             const quantityElem = document.getElementById(`cart-quantity${productId}`);
             let currentQuantity = parseInt(quantityElem.innerText);
             currentQuantity += delta;
             if (currentQuantity < 0) currentQuantity = 0;
             quantityElem.innerText = currentQuantity;
+            
+            const addButton = document.getElementById(`add${productId}`);
+            const cartControls = document.getElementById(`cart-controls${productId}`);
+            
+            if (currentQuantity === 0) {
+                addButton.style.display = 'block'; // Показать кнопку добавления
+                cartControls.style.display = 'none'; // Скрыть элементы корзины
+            }
         }
     </script>
 </body>

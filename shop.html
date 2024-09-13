@@ -116,11 +116,12 @@
 <body>
 <div id="main">
     <div class="product-grid">
-        <!-- Пример первого товара -->
+    <!-- Первый товар -->
         <div class="product" id="product1">
+            <h3>Товар 1</h3> <!-- Название товара -->
             <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 1">
-            <p>Цена: <span id="price1">1000</span> руб.</p>
-            <p id="quantity1">Количество: 10</p>
+            <p><span id="price1">1000</span> руб.</p> <!-- Убрано слово "Цена" -->
+            <p id="quantity1">В наличии: 10</p> <!-- Изменено на "В наличии" -->
             <button id="add1" onclick="addToCart('1')">Добавить</button>
             <div id="cart-controls1" class="cart-controls" style="display:none;">
                 <button onclick="updateCart('1', -1)">-</button>
@@ -128,12 +129,13 @@
                 <button onclick="updateCart('1', 1)">+</button>
             </div>
         </div>
-
-        <!-- Пример второго товара -->
+    
+        <!-- Второй товар -->
         <div class="product" id="product2">
+            <h3>Товар 2</h3> <!-- Название товара -->
             <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 2">
-            <p>Цена: <span id="price2">1500</span> руб.</p>
-            <p id="quantity2">Количество: 5</p>
+            <p><span id="price2">1500</span> руб.</p> <!-- Убрано слово "Цена" -->
+            <p id="quantity2">В наличии: 5</p> <!-- Изменено на "В наличии" -->
             <button id="add2" onclick="addToCart('2')">Добавить</button>
             <div id="cart-controls2" class="cart-controls" style="display:none;">
                 <button onclick="updateCart('2', -1)">-</button>
@@ -141,12 +143,13 @@
                 <button onclick="updateCart('2', 1)">+</button>
             </div>
         </div>
-
-        <!-- Пример третьего товара -->
+    
+        <!-- Третий товар -->
         <div class="product" id="product3">
+            <h3>Товар 3</h3> <!-- Название товара -->
             <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 3">
-            <p>Цена: <span id="price3">2000</span> руб.</p>
-            <p id="quantity3">Количество: 8</p>
+            <p><span id="price3">2000</span> руб.</p> <!-- Убрано слово "Цена" -->
+            <p id="quantity3">В наличии: 8</p> <!-- Изменено на "В наличии" -->
             <button id="add3" onclick="addToCart('3')">Добавить</button>
             <div id="cart-controls3" class="cart-controls" style="display:none;">
                 <button onclick="updateCart('3', -1)">-</button>

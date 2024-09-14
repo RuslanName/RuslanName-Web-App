@@ -141,20 +141,18 @@
         }
 
         footer {
-            display: none;
+            display: none; 
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-bg-color); /* Меняем на основной цвет фона */
-            color: var(--tg-theme-text-color); /* Меняем текстовый цвет на основной */
-            display: flex;
+            background-color: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
             justify-content: center;
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
-            box-sizing: border-box;
             z-index: 1000;
         }
-        
+
         footer button {
             flex: 1;
             margin: 0 10px;
@@ -250,7 +248,7 @@
         loginButton.addEventListener('click', function() {
             authSection.style.display = 'none';
             shopSection.style.display = 'block';
-            footer.style.display = 'flex';
+            footer.style.display = 'flex'; // Футер отображается только после входа
         });
     
         function addToCart(productId) {

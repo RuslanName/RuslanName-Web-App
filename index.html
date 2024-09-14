@@ -28,28 +28,6 @@
             min-height: 100vh;
         }
 
-        #shop {
-            padding-bottom: 50px;
-        }
-
-        #auth {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: calc(100% - 40px);
-            max-width: 600px;
-            padding: 20px;
-            background-color: var(--tg-theme-secondary-bg-color);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin: 0 auto;
-        }
-        
-        #auth + footer {
-            display: none;
-        }
-
         input {
             width: calc(100% - 20px);
             padding: 10px;
@@ -141,18 +119,40 @@
         }
 
         footer {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: var(--tg-theme-bg-color); /* Меняем на основной цвет фона */
-            color: var(--tg-theme-text-color); /* Меняем текстовый цвет на основной */
+            position: relative; /* Изменено с fixed */
+            background-color: var(--tg-theme-footer-bg-color);
+            color: var(--tg-theme-footer-text-color);
             display: flex;
             justify-content: center;
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
-            box-sizing: border-box;
-            z-index: 1000;
+            width: 100%;
+        }
+
+        #auth {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: calc(100% - 40px);
+            max-width: 600px;
+            padding: 20px;
+            background-color: var(--tg-theme-secondary-bg-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 0 auto;
+        }
+        
+        #auth + footer {
+            display: none;
+        }
+
+        #shop {
+            padding-bottom: 50px;
+        }
+        
+        #shop + footer {
+            display: flex; /* Показывать футер только на странице магазина */
         }
         
         footer button {
@@ -251,7 +251,9 @@
             authSection.style.display = 'none';
             shopSection.style.display = 'block';
             footer.style.display = 'flex';
+            document.body.style.minHeight = '100vh';
         });
+
 
     
         function addToCart(productId) {

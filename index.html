@@ -9,10 +9,10 @@
         :root {
             --tg-theme-bg-color: #ffffff;
             --tg-theme-text-color: #000000;
-            --tg-theme-secondary-bg-color: #ffffff; /* Заменено на белый */
+            --tg-theme-secondary-bg-color: #ffffff;
             --tg-theme-button-color: #0088cc;
             --tg-button-text-color: #ffffff;
-            --tg-theme-footer-bg-color: #ffffff; /* Заменено на белый */
+            --tg-theme-footer-bg-color: #ffffff;
             --tg-theme-footer-text-color: #000000;
         }
         
@@ -29,7 +29,7 @@
         }
 
         #shop {
-            padding-bottom: 50px; /* Добавьте отступ снизу, чтобы футер не перекрывал контент */
+            padding-bottom: 50px;
         }
 
         #auth {
@@ -38,16 +38,16 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: calc(100% - 40px); /* Аналогично окну магазина */
-            max-width: 600px; /* Максимальная ширина, чтобы соответствовать окну магазина */
+            width: calc(100% - 40px);
+            max-width: 600px;
             padding: 20px;
             background-color: var(--tg-theme-secondary-bg-color);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Добавлен эффект тени */
-            margin: 0 auto; /* Центрирование по горизонтали */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 0 auto;
         }
         
         #auth + footer {
-            display: none; /* Скрыть футер, когда отображается секция авторизации */
+            display: none;
         }
 
         input {
@@ -151,7 +151,7 @@
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             box-sizing: border-box;
-            z-index: 1000; /* Чтобы футер всегда был сверху */
+            z-index: 1000;
         }
         
         footer button {
@@ -178,7 +178,6 @@
 
     <div id="shop" style="display: none;">
         <div class="product-grid">
-            <!-- Первый товар -->
             <div class="product" id="product1">
                 <h3>Товар 1</h3>
                 <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 1">
@@ -192,7 +191,6 @@
                 </div>
             </div>
 
-            <!-- Второй товар -->
             <div class="product" id="product2">
                 <h3>Товар 2</h3>
                 <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 2">
@@ -206,7 +204,6 @@
                 </div>
             </div>
 
-            <!-- Третий товар -->
             <div class="product" id="product3">
                 <h3>Товар 3</h3>
                 <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 3">
@@ -249,74 +246,35 @@
         lastName.addEventListener('input', checkFields);
         phone.addEventListener('input', checkFields);
     
-        loginButton.addEventListener('click', () => {
-            // Устанавливаем флаг авторизации
-            localStorage.setItem('isAuthenticated', 'true');
-            showShop();
-        });
-    
-        // Проверка, если пользователь уже авторизован
-        window.addEventListener('load', () => {
-            const isAuthenticated = localStorage.getItem('isAuthenticated');
-    
-            if (isAuthenticated === 'true') {
-                showShop();
-            } else {
-                showAuth();
-            }
-        });
-
-        function showShop() {
+        loginButton.addEventListener('click', function() {
             authSection.style.display = 'none';
             shopSection.style.display = 'block';
-            footer.style.display = 'flex'; // Показываем футер
-        }
-        
-        function showAuth() {
-            authSection.style.display = 'flex';
-            shopSection.style.display = 'none';
-            footer.style.display = 'none'; // Скрываем футер
-        }
+            footer.style.display = 'flex';
+        });
     
         function addToCart(productId) {
             const addButton = document.getElementById(`add${productId}`);
             const cartControls = document.getElementById(`cart-controls${productId}`);
-            const quantityElement = document.getElementById(`cart-quantity${productId}`);
-            const totalQuantityElement = document.getElementById(`quantity${productId}`);
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
     
-            // Скрываем кнопку "Добавить" и показываем элементы управления корзиной
             addButton.style.display = 'none';
             cartControls.style.display = 'flex';
-    
-            // Устанавливаем начальное значение количества в корзине
-            let quantity = parseInt(quantityElement.textContent);
-            quantity = (quantity || 0) + 1;
-            quantityElement.textContent = quantity;
-    
-            // Проверяем, что количество не превышает доступное количество товара
-            const totalQuantity = parseInt(totalQuantityElement.textContent.split(': ')[1]);
-            if (quantity > totalQuantity) {
-                quantityElement.textContent = totalQuantity; // Устанавливаем максимальное значение
-            }
+            cartQuantity.innerText = 1;
+            quantity.innerText = `В наличии: ${+quantity.innerText.split(': ')[1] - 1}`;
         }
     
-        function updateCart(productId, change) {
-            const quantityElement = document.getElementById(`cart-quantity${productId}`);
-            const totalQuantityElement = document.getElementById(`quantity${productId}`);
-            
-            let quantity = parseInt(quantityElement.textContent);
-            const totalQuantity = parseInt(totalQuantityElement.textContent.split(': ')[1]);
+        function updateCart(productId, delta) {
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
+            const newQuantity = +cartQuantity.innerText + delta;
     
-            quantity += change;
-    
-            if (quantity < 0) quantity = 0; // Устанавливаем минимальное значение
-            if (quantity > totalQuantity) quantity = totalQuantity; // Устанавливаем максимальное значение
-    
-            quantityElement.textContent = quantity;
-    
-            if (quantity === 0) {
-                document.getElementById(`cart-controls${productId}`).style.display = 'none';
+            if (newQuantity <= 0) {
                 document.getElementById(`add${productId}`).style.display = 'block';
+                document.getElementById(`cart-controls${productId}`).style.display = 'none';
+            } else {
+                cartQuantity.innerText = newQuantity;
+                quantity.innerText = `В наличии: ${+quantity.innerText.split(': ')[1] - delta}`;
             }
         }
     </script>

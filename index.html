@@ -141,6 +141,7 @@
         }
 
         footer {
+            display: none;
             position: fixed;
             bottom: 0;
             width: 100%;
@@ -251,6 +252,7 @@
             shopSection.style.display = 'block';
             footer.style.display = 'flex';
         });
+
     
         function addToCart(productId) {
             const addButton = document.getElementById(`add${productId}`);

@@ -28,6 +28,28 @@
             min-height: 100vh;
         }
 
+        #shop {
+            padding-bottom: 50px;
+        }
+
+        #auth {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: calc(100% - 40px);
+            max-width: 600px;
+            padding: 20px;
+            background-color: var(--tg-theme-secondary-bg-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 0 auto;
+        }
+        
+        #auth + footer {
+            display: none;
+        }
+
         input {
             width: calc(100% - 20px);
             padding: 10px;
@@ -119,40 +141,18 @@
         }
 
         footer {
-            position: relative; /* Изменено с fixed */
-            background-color: var(--tg-theme-footer-bg-color);
-            color: var(--tg-theme-footer-text-color);
+            display: none;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: var(--tg-theme-bg-color); /* Меняем на основной цвет фона */
+            color: var(--tg-theme-text-color); /* Меняем текстовый цвет на основной */
             display: flex;
             justify-content: center;
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
-            width: 100%;
-        }
-
-        #auth {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: calc(100% - 40px);
-            max-width: 600px;
-            padding: 20px;
-            background-color: var(--tg-theme-secondary-bg-color);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin: 0 auto;
-        }
-        
-        #auth + footer {
-            display: none;
-        }
-
-        #shop {
-            padding-bottom: 50px;
-        }
-        
-        #shop + footer {
-            display: flex; /* Показывать футер только на странице магазина */
+            box-sizing: border-box;
+            z-index: 1000;
         }
         
         footer button {
@@ -251,34 +251,31 @@
             authSection.style.display = 'none';
             shopSection.style.display = 'block';
             footer.style.display = 'flex';
-            document.body.style.minHeight = '100vh';
         });
-
-
     
         function addToCart(productId) {
-            const addButton = document.getElementById(`add${productId}`);
-            const cartControls = document.getElementById(`cart-controls${productId}`);
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
+            const addButton = document.getElementById(add${productId});
+            const cartControls = document.getElementById(cart-controls${productId});
+            const cartQuantity = document.getElementById(cart-quantity${productId});
+            const quantity = document.getElementById(quantity${productId});
     
             addButton.style.display = 'none';
             cartControls.style.display = 'flex';
             cartQuantity.innerText = 1;
-            quantity.innerText = `В наличии: ${+quantity.innerText.split(': ')[1] - 1}`;
+            quantity.innerText = В наличии: ${+quantity.innerText.split(': ')[1] - 1};
         }
     
         function updateCart(productId, delta) {
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
+            const cartQuantity = document.getElementById(cart-quantity${productId});
+            const quantity = document.getElementById(quantity${productId});
             const newQuantity = +cartQuantity.innerText + delta;
     
             if (newQuantity <= 0) {
-                document.getElementById(`add${productId}`).style.display = 'block';
-                document.getElementById(`cart-controls${productId}`).style.display = 'none';
+                document.getElementById(add${productId}).style.display = 'block';
+                document.getElementById(cart-controls${productId}).style.display = 'none';
             } else {
                 cartQuantity.innerText = newQuantity;
-                quantity.innerText = `В наличии: ${+quantity.innerText.split(': ')[1] - delta}`;
+                quantity.innerText = В наличии: ${+quantity.innerText.split(': ')[1] - delta};
             }
         }
     </script>

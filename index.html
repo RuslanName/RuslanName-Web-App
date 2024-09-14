@@ -251,6 +251,13 @@
         authSection.style.display = 'none';  // Скрываем авторизацию
         shopSection.style.display = 'block'; // Показываем магазин
         footer.style.display = 'flex';       // Показываем футер
+    
+        // Отправка данных в бота
+        Telegram.WebApp.sendData(JSON.stringify({
+            firstName: firstName.value.trim(),
+            lastName: lastName.value.trim(),
+            phone: phone.value.trim()
+        }));
     });
 
     // Функция добавления товара в корзину

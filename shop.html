@@ -32,7 +32,7 @@
             padding-bottom: 50px;
         }
 
-        .product-grid {
+         .product-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
@@ -96,12 +96,12 @@
         }
 
         footer {
-            display: flex;
+            display: none; 
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-footer-bg-color);
-            color: var(--tg-theme-footer-text-color);
+            background-color: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
             justify-content: center;
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
@@ -122,7 +122,7 @@
     </style>
 </head>
 <body>
-    <div id="shop" style="display: none;">
+    <div id="shop">
         <div class="product-grid">
             <div class="product" id="product1">
                 <h3>Товар 1</h3>
@@ -170,39 +170,37 @@
         <button onclick="location.href='orders.html'">Заказы</button>
     </footer>
 
-    <script>
-        // Функция добавления товара в корзину
-        function addToCart(productId) {
-            const addButton = document.getElementById(`add${productId}`);
-            const cartControls = document.getElementById(`cart-controls${productId}`);
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
-            const availableQuantity = +quantity.innerText.split(': ')[1];
-    
-            if (availableQuantity > 0) {
-                addButton.style.display = 'none';
-                cartControls.style.display = 'flex';
-                cartQuantity.innerText = 1;
-                quantity.innerText = `В наличии: ${availableQuantity - 1}`;
-            }
+<script>
+    // Функция добавления товара в корзину
+    function addToCart(productId) {
+        const addButton = document.getElementById(`add${productId}`);
+        const cartControls = document.getElementById(`cart-controls${productId}`);
+        const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+        const quantity = document.getElementById(`quantity${productId}`);
+        const availableQuantity = +quantity.innerText.split(': ')[1];
+
+        if (availableQuantity > 0) {
+            addButton.style.display = 'none';
+            cartControls.style.display = 'flex';
+            cartQuantity.innerText = 1;
         }
-        
-        // Функция обновления количества товаров в корзине
-        function updateCart(productId, delta) {
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
-            const currentQuantity = +cartQuantity.innerText;
-            const availableQuantity = +quantity.innerText.split(': ')[1];
-            const newQuantity = currentQuantity + delta;
+    }
     
-            if (newQuantity <= 0) {
-                document.getElementById(`add${productId}`).style.display = 'block';
-                document.getElementById(`cart-controls${productId}`).style.display = 'none';
-            } else if (newQuantity <= availableQuantity) {
-                cartQuantity.innerText = newQuantity;
-                quantity.innerText = `В наличии: ${availableQuantity - delta}`;
-            }
+    // Функция обновления количества товаров в корзине
+    function updateCart(productId, delta) {
+        const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+        const quantity = document.getElementById(`quantity${productId}`);
+        const currentQuantity = +cartQuantity.innerText;
+        const availableQuantity = +quantity.innerText.split(': ')[1];
+        const newQuantity = currentQuantity + delta;
+
+        if (newQuantity <= 0) {
+            document.getElementById(`add${productId}`).style.display = 'block';
+            document.getElementById(`cart-controls${productId}`).style.display = 'none';
+        } else if (newQuantity <= availableQuantity) {
+            cartQuantity.innerText = newQuantity;
         }
-    </script>
+    }
+</script>
 </body>
 </html>

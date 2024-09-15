@@ -39,8 +39,9 @@
             justify-content: space-between;
             padding: 20px;
             background-color: var(--tg-theme-secondary-bg-color);
+            box-sizing: border-box;
         }
-
+        
         .product {
             flex: 0 1 calc(50% - 10px);
             background-color: var(--tg-theme-secondary-bg-color);
@@ -96,8 +97,7 @@
         }
 
         footer {
-            display: none;
-/*             display: flex; */
+            display: flex;
             position: fixed;
             bottom: 0;
             width: 100%;
@@ -107,6 +107,7 @@
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             z-index: 1000;
+            height: 50px; /* Установите фиксированную высоту футера */
         }
 
         footer button {

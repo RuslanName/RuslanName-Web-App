@@ -111,7 +111,7 @@
 
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -299,5 +299,293 @@
         }
     </script>
 </body>
-</html>
+</html> -->
 
+
+
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Авторизация и Магазин</title>
+    <style>
+        :root {
+            --tg-theme-bg-color: #ffffff;
+            --tg-theme-text-color: #000000;
+            --tg-theme-secondary-bg-color: #ffffff;
+            --tg-theme-button-color: #0088cc;
+            --tg-button-text-color: #ffffff;
+            --tg-theme-footer-bg-color: #ffffff;
+            --tg-theme-footer-text-color: #000000;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #shop {
+            padding-bottom: 50px;
+        }
+
+        #auth {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: calc(100% - 40px);
+            max-width: 600px;
+            padding: 20px;
+            background-color: var(--tg-theme-secondary-bg-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 0 auto;
+        }
+        
+        #auth + footer {
+            display: none;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    
+        button {
+            padding: 10px 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+        }
+
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: var(--tg-theme-secondary-bg-color);
+        }
+
+        .product {
+            flex: 0 1 calc(50% - 10px);
+            background-color: var(--tg-theme-secondary-bg-color);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .product button {
+            padding: 10px 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 0;
+            width: 100%;
+        }
+
+        .product button:hover {
+            opacity: 0.8;
+        }
+
+        .cart-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .cart-controls button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cart-controls span {
+            font-size: 16px;
+            margin: 0 10px;
+        }
+
+        footer {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: var(--tg-theme-bg-color); /* Меняем на основной цвет фона */
+            color: var(--tg-theme-text-color); /* Меняем текстовый цвет на основной */
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+        
+        footer button {
+            flex: 1;
+            margin: 0 10px;
+            padding: 10px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="auth">
+        <h1>Авторизация</h1>
+        <input type="text" placeholder="Введите имя" id="firstName">
+        <input type="text" placeholder="Введите фамилию" id="lastName">
+        <input type="tel" placeholder="Введите номер телефона" id="phone" pattern="\d{10}" maxlength="10">
+        <button id="login" disabled>Войти</button>
+    </div>
+
+    <div id="shop" style="display: none;">
+        <div class="product-grid">
+            <div class="product" id="product1">
+                <h3>Товар 1</h3>
+                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 1">
+                <p><span id="price1">1000</span> руб.</p>
+                <p id="quantity1">В наличии: 10</p>
+                <button id="add1" onclick="addToCart('1')">Добавить</button>
+                <div id="cart-controls1" class="cart-controls" style="display:none;">
+                    <button onclick="updateCart('1', -1)">-</button>
+                    <span id="cart-quantity1">0</span>
+                    <button onclick="updateCart('1', 1)">+</button>
+                </div>
+            </div>
+
+            <div class="product" id="product2">
+                <h3>Товар 2</h3>
+                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 2">
+                <p><span id="price2">1500</span> руб.</p>
+                <p id="quantity2">В наличии: 5</p>
+                <button id="add2" onclick="addToCart('2')">Добавить</button>
+                <div id="cart-controls2" class="cart-controls" style="display:none;">
+                    <button onclick="updateCart('2', -1)">-</button>
+                    <span id="cart-quantity2">0</span>
+                    <button onclick="updateCart('2', 1)">+</button>
+                </div>
+            </div>
+
+            <div class="product" id="product3">
+                <h3>Товар 3</h3>
+                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 3">
+                <p><span id="price3">2000</span> руб.</p>
+                <p id="quantity3">В наличии: 8</p>
+                <button id="add3" onclick="addToCart('3')">Добавить</button>
+                <div id="cart-controls3" class="cart-controls" style="display:none;">
+                    <button onclick="updateCart('3', -1)">-</button>
+                    <span id="cart-quantity3">0</span>
+                    <button onclick="updateCart('3', 1)">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <button onclick="location.href='cart.html'">Корзина</button>
+        <button onclick="location.href='orders.html'">Заказы</button>
+    </footer>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        const firstName = document.getElementById('firstName');
+        const lastName = document.getElementById('lastName');
+        const phone = document.getElementById('phone');
+        const loginButton = document.getElementById('login');
+        const authSection = document.getElementById('auth');
+        const shopSection = document.getElementById('shop');
+        const footer = document.querySelector('footer');
+    
+        function checkFields() {
+            const isFirstNameValid = firstName.value.trim() !== '';
+            const isLastNameValid = lastName.value.trim() !== '';
+            const isPhoneValid = /^\d{10}$/.test(phone.value.trim());
+            
+            loginButton.disabled = !(isFirstNameValid && isLastNameValid && isPhoneValid);
+        }
+    
+        firstName.addEventListener('input', checkFields);
+        lastName.addEventListener('input', checkFields);
+        phone.addEventListener('input', checkFields);
+    
+        loginButton.addEventListener('click', function() {
+            authSection.style.display = 'none';
+            shopSection.style.display = 'block';
+            footer.style.display = 'flex';
+        });
+
+    
+        function addToCart(productId) {
+            const addButton = document.getElementById(add${productId});
+            const cartControls = document.getElementById(cart-controls${productId});
+            const cartQuantity = document.getElementById(cart-quantity${productId});
+            const quantity = document.getElementById(quantity${productId});
+    
+            addButton.style.display = 'none';
+            cartControls.style.display = 'flex';
+            cartQuantity.innerText = 1;
+            quantity.innerText = В наличии: ${+quantity.innerText.split(': ')[1] - 1};
+        }
+    
+        function updateCart(productId, delta) {
+            const cartQuantity = document.getElementById(cart-quantity${productId});
+            const quantity = document.getElementById(quantity${productId});
+            const newQuantity = +cartQuantity.innerText + delta;
+    
+            if (newQuantity <= 0) {
+                document.getElementById(add${productId}).style.display = 'block';
+                document.getElementById(cart-controls${productId}).style.display = 'none';
+            } else {
+                cartQuantity.innerText = newQuantity;
+                quantity.innerText = В наличии: ${+quantity.innerText.split(': ')[1] - delta};
+            }
+        }
+    </script>
+</body>
+</html>

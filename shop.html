@@ -12,6 +12,8 @@
             --tg-theme-secondary-bg-color: #ffffff;
             --tg-theme-button-color: #0088cc;
             --tg-button-text-color: #ffffff;
+            --tg-theme-footer-bg-color: #ffffff;
+            --tg-theme-footer-text-color: #000000;
         }
         
         body {
@@ -27,10 +29,7 @@
         }
 
         #shop {
-            flex: 1;
-            padding: 20px;
-            background-color: var(--tg-theme-secondary-bg-color);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding-bottom: 50px;
         }
 
         .product-grid {
@@ -38,6 +37,8 @@
             flex-wrap: wrap;
             gap: 10px;
             justify-content: space-between;
+            padding: 20px;
+            background-color: var(--tg-theme-secondary-bg-color);
         }
 
         .product {
@@ -95,12 +96,12 @@
         }
 
         footer {
-            display: flex; 
+            display: flex;
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-bg-color);
-            color: var(--tg-theme-text-color);
+            background-color: var(--tg-theme-footer-bg-color);
+            color: var(--tg-theme-footer-text-color);
             justify-content: center;
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
@@ -118,14 +119,10 @@
             cursor: pointer;
             font-size: 16px;
         }
-
-        footer button:hover {
-            opacity: 0.8;
-        }
     </style>
 </head>
 <body>
-    <div id="shop">
+    <div id="shop" style="display: none;">
         <div class="product-grid">
             <div class="product" id="product1">
                 <h3>Товар 1</h3>
@@ -181,11 +178,12 @@
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
             const quantity = document.getElementById(`quantity${productId}`);
             const availableQuantity = +quantity.innerText.split(': ')[1];
-
+    
             if (availableQuantity > 0) {
                 addButton.style.display = 'none';
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
+                quantity.innerText = `В наличии: ${availableQuantity - 1}`;
             }
         }
         
@@ -196,12 +194,13 @@
             const currentQuantity = +cartQuantity.innerText;
             const availableQuantity = +quantity.innerText.split(': ')[1];
             const newQuantity = currentQuantity + delta;
-
+    
             if (newQuantity <= 0) {
                 document.getElementById(`add${productId}`).style.display = 'block';
                 document.getElementById(`cart-controls${productId}`).style.display = 'none';
             } else if (newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
+                quantity.innerText = `В наличии: ${availableQuantity - delta}`;
             }
         }
     </script>

@@ -84,7 +84,6 @@
         const phone = document.getElementById('phone');
         const loginButton = document.getElementById('login');
         
-        // Функция для проверки валидности полей авторизации
         function checkFields() {
             const isFirstNameValid = firstName.value.trim() !== '';
             const isLastNameValid = lastName.value.trim() !== '';
@@ -92,22 +91,18 @@
             
             loginButton.disabled = !(isFirstNameValid && isLastNameValid && isPhoneValid);
         }
-        
+
         firstName.addEventListener('input', checkFields);
         lastName.addEventListener('input', checkFields);
         phone.addEventListener('input', checkFields);
-        
-        // Логика входа и перехода на страницу магазина
+
         loginButton.addEventListener('click', function() {
-            // Сохранение данных в localStorage
-            localStorage.setItem('userData', JSON.stringify({
+            Telegram.WebApp.sendData(JSON.stringify({
                 firstName: firstName.value.trim(),
                 lastName: lastName.value.trim(),
                 phone: phone.value.trim()
             }));
-            
-            // Переход на страницу магазина
-            window.location.href = 'shop.html';
+            window.location.href = "shop.html"; // Переключаемся на страницу магазина
         });
     </script>
 </body>

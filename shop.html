@@ -174,16 +174,24 @@
         const addButton = document.getElementById(`add${productId}`);
         const cartControls = document.getElementById(`cart-controls${productId}`);
         const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+        const quantity = document.getElementById(`quantity${productId}`);
     
-        addButton.style.display = 'none';
-        cartControls.style.display = 'flex';
-        cartQuantity.innerText = 1;
+        const availableQuantity = parseInt(quantity.innerText.split(': ')[1]);
+    
+        if (availableQuantity > 0) {
+            addButton.style.display = 'none';
+            cartControls.style.display = 'flex';
+            cartQuantity.innerText = 1;
+        } else {
+            alert('Нет в наличии');
+        }
     }
-
     
     // Функция обновления количества товаров в корзине
     function updateCart(productId, delta) {
         const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+        const quantity = document.getElementById(`quantity${productId}`);
+        const availableQuantity = parseInt(quantity.innerText.split(': ')[1]);
         const newQuantity = +cartQuantity.innerText + delta;
     
         if (newQuantity <= 0) {
@@ -191,6 +199,7 @@
             document.getElementById(`cart-controls${productId}`).style.display = 'none';
         } else {
             cartQuantity.innerText = newQuantity;
+            quantity.innerText = `В наличии: ${availableQuantity}`;
         }
     }
     </script>

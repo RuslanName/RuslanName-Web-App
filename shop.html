@@ -7,150 +7,46 @@
     <title>Магазин</title>
     <style>
         :root {
-            --tg-theme-bg-color: #ffffff;
-            --tg-theme-text-color: #000000;
-            --tg-theme-secondary-bg-color: #ffffff;
-            --tg-theme-button-color: #0088cc;
-            --tg-button-text-color: #ffffff;
-            --tg-theme-footer-bg-color: #ffffff;
-            --tg-theme-footer-text-color: #000000;
+            --bg-color: #ffffff;
+            --text-color: #000000;
         }
 
         body {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            background: var(--tg-theme-bg-color);
-            color: var(--tg-theme-text-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
             font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        #shop {
-            padding-bottom: 50px;
-        }
-
-        .product-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: space-between;
-            padding: 20px;
-            background-color: var(--tg-theme-secondary-bg-color);
         }
 
         .product {
-            flex: 0 1 calc(50% - 10px);
-            background-color: var(--tg-theme-secondary-bg-color);
+            background-color: lightgray;
             padding: 10px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 10px;
             text-align: center;
-            box-sizing: border-box;
-        }
-
-        .product img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-        }
-
-        .cart-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .cart-controls span {
-            font-size: 16px;
-            margin: 0 10px;
         }
 
         footer {
-            display: flex;
+            background-color: darkgray;
+            color: white;
+            text-align: center;
+            padding: 10px;
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-footer-bg-color);
-            color: var(--tg-theme-footer-text-color);
-            justify-content: center;
-            padding: 10px;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
         }
     </style>
 </head>
 <body>
-    <div id="shop">
-        <div class="product-grid">
-            <div class="product" id="product1">
-                <h3>Товар 1</h3>
-                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 1">
-                <p><span id="price1">1000</span> руб.</p>
-                <p id="quantity1">В наличии: 10</p>
-                <div id="cart-controls1" class="cart-controls" style="display:none;">
-                    <span id="cart-quantity1">0</span>
-                </div>
-            </div>
-
-            <div class="product" id="product2">
-                <h3>Товар 2</h3>
-                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 2">
-                <p><span id="price2">1500</span> руб.</p>
-                <p id="quantity2">В наличии: 5</p>
-                <div id="cart-controls2" class="cart-controls" style="display:none;">
-                    <span id="cart-quantity2">0</span>
-                </div>
-            </div>
-
-            <div class="product" id="product3">
-                <h3>Товар 3</h3>
-                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 3">
-                <p><span id="price3">2000</span> руб.</p>
-                <p id="quantity3">В наличии: 8</p>
-                <div id="cart-controls3" class="cart-controls" style="display:none;">
-                    <span id="cart-quantity3">0</span>
-                </div>
-            </div>
-        </div>
+    <div class="product">
+        <h3>Товар</h3>
+        <p>Описание товара</p>
     </div>
 
     <footer>
-        <button onclick="location.href='cart.html'">Корзина</button>
-        <button onclick="location.href='orders.html'">Заказы</button>
+        <p>Футер</p>
     </footer>
-
-    <script>
-        // Функция добавления товара в корзину
-        function addToCart(productId) {
-            const cartControls = document.getElementById(`cart-controls${productId}`);
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
-            const availableQuantity = +quantity.innerText.split(': ')[1];
-
-            if (availableQuantity > 0) {
-                cartControls.style.display = 'flex';
-                cartQuantity.innerText = 1;
-            }
-        }
-
-        // Функция обновления количества товаров в корзине
-        function updateCart(productId, delta) {
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
-            const currentQuantity = +cartQuantity.innerText;
-            const availableQuantity = +quantity.innerText.split(': ')[1];
-            const newQuantity = currentQuantity + delta;
-
-            if (newQuantity <= 0) {
-                cartControls.style.display = 'none';
-            } else if (newQuantity <= availableQuantity) {
-                cartQuantity.innerText = newQuantity;
-            }
-        }
-    </script>
 </body>
 </html>

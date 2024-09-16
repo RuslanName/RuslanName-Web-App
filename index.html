@@ -118,36 +118,31 @@
     <title>Магазин</title>
     <style>
         :root {
-            --tg-bg-color-light: #ffffff;
-            --tg-bg-color-dark: #333333;
-            --tg-text-color-light: #000000;
-            --tg-text-color-dark: #ffffff;
+            --bg-color-light: #ffffff;
+            --bg-color-dark: #333333;
+            --text-color-light: #000000;
+            --text-color-dark: #ffffff;
         }
 
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            color: var(--tg-text-color-light); /* Дефолтный цвет текста */
-            background-color: var(--tg-bg-color-light); /* Дефолтный цвет фона */
-            transition: background-color 0.3s, color 0.3s; /* Плавный переход между темами */
-        }
-
-        .content {
-            padding: 20px;
-            text-align: center;
+            color: var(--text-color-light);
+            background-color: var(--bg-color-light);
+            transition: background-color 0.3s, color 0.3s;
         }
 
         /* Стили для тёмной темы */
         [data-theme="dark"] {
-            background-color: var(--tg-bg-color-dark);
-            color: var(--tg-text-color-dark);
+            background-color: var(--bg-color-dark);
+            color: var(--text-color-dark);
         }
 
         /* Стили для светлой темы */
         [data-theme="light"] {
-            background-color: var(--tg-bg-color-light);
-            color: var(--tg-text-color-light);
+            background-color: var(--bg-color-light);
+            color: var(--text-color-light);
         }
     </style>
 </head>
@@ -158,13 +153,16 @@
     </div>
 
     <script>
-        function applyTheme() {
-            const theme = Telegram.WebApp.themeParams ? Telegram.WebApp.themeParams.name : 'light';
+        // Проверяем, доступна ли Telegram Web App API
+        if (window.Telegram && Telegram.WebApp && Telegram.WebApp.themeParams) {
+            // Применяем тему из Telegram
+            const theme = Telegram.WebApp.themeParams.name || 'light';
             document.documentElement.setAttribute('data-theme', theme);
+        } else {
+            // Устанавливаем светлую тему по умолчанию
+            document.documentElement.setAttribute('data-theme', 'light');
         }
-
-        // Применить тему при загрузке страницы
-        window.onload = applyTheme;
     </script>
 </body>
 </html>
+

@@ -321,26 +321,26 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-footer-bg-color, #f1f1f1) !important; /* Принудительное применение фона */
-            color: var(--tg-theme-footer-text-color, #000000) !important; /* Принудительное применение цвета текста */
+            background-color: var(--tg-theme-footer-bg-color); /* Убедись, что фон непрозрачен */
+            color: var(--tg-theme-footer-text-color);
             justify-content: center;
             padding: 10px;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: none; /* Убираем черту */
             z-index: 1000;
-            opacity: 1 !important; /* Принудительная непрозрачность */
-            background-clip: border-box; /* Убедись, что фон не обрезается */
+            mix-blend-mode: normal; /* Гарантируем непрозрачность футера */
         }
-
+        
         footer button {
             flex: 1;
             margin: 0 10px;
             padding: 10px;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-button-text-color);
+            background-color: var(--tg-theme-footer-bg-color); /* Убедись, что цвет совпадает */
+            color: var(--tg-theme-footer-text-color);
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            box-shadow: none; /* Убираем возможные тени у кнопок */
         }
     </style>
 </head>

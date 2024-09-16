@@ -29,7 +29,7 @@
         }
 
         #shop {
-            padding-bottom: 50px;
+            padding-bottom: 70px; /* Для свободного места под футер */
         }
 
         .product-grid {
@@ -42,7 +42,7 @@
         }
 
         .product {
-            flex: 0 1 calc(50% - 10px);
+            flex: 0 1 calc(50% - 10px); /* По 2 товара в ряд */
             background-color: var(--tg-theme-secondary-bg-color);
             padding: 10px;
             border-radius: 10px;
@@ -103,21 +103,23 @@
             background-color: var(--tg-theme-footer-bg-color);
             color: var(--tg-theme-footer-text-color);
             justify-content: center;
-            padding: 10px;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+            padding: 10px 0;
+            box-shadow: none;
             z-index: 1000;
+            mix-blend-mode: normal;
         }
-
+        
         footer button {
-            flex: 1;
-            margin: 0 10px;
-            padding: 10px;
+            flex: 1; /* Сделать кнопки гибкими и растягивать их */
+            margin: 0 5px; /* Установите отступы между кнопками */
+            padding: 15px; /* Установите размер padding для кнопок */
             background-color: var(--tg-theme-button-color);
             color: var(--tg-button-text-color);
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            text-align: center; /* Выравнивание текста по центру */
         }
     </style>
 </head>
@@ -170,37 +172,53 @@
         <button onclick="location.href='orders.html'">Заказы</button>
     </footer>
 
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        // Функция добавления товара в корзину
         function addToCart(productId) {
-            const addButton = document.getElementById(add${productId});
-            const cartControls = document.getElementById(cart-controls${productId});
-            const cartQuantity = document.getElementById(cart-quantity${productId});
-            const quantity = document.getElementById(quantity${productId});
+            const addButton = document.getElementById(`add${productId}`);
+            const cartControls = document.getElementById(`cart-controls${productId}`);
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
             const availableQuantity = +quantity.innerText.split(': ')[1];
-
+        
             if (availableQuantity > 0) {
                 addButton.style.display = 'none';
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
             }
         }
-
-        // Функция обновления количества товаров в корзине
+        
         function updateCart(productId, delta) {
-            const cartQuantity = document.getElementById(cart-quantity${productId});
-            const quantity = document.getElementById(quantity${productId});
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
             const currentQuantity = +cartQuantity.innerText;
             const availableQuantity = +quantity.innerText.split(': ')[1];
             const newQuantity = currentQuantity + delta;
-
+        
             if (newQuantity <= 0) {
-                document.getElementById(add${productId}).style.display = 'block';
-                document.getElementById(cart-controls${productId}).style.display = 'none';
+                document.getElementById(`add${productId}`).style.display = 'block';
+                document.getElementById(`cart-controls${productId}`).style.display = 'none';
             } else if (newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
             }
         }
+
+        function applyTheme() {
+            const themeColor = Telegram.WebApp.themeParams.bg_color;
+            const themeTextColor = Telegram.WebApp.themeParams.text_color;
+            const themeButtonColor = Telegram.WebApp.themeParams.button_color;
+            const themeFooterBgColor = Telegram.WebApp.themeParams.footer_bg_color;
+            const themeFooterTextColor = Telegram.WebApp.themeParams.footer_text_color;
+        
+            document.documentElement.style.setProperty('--tg-theme-bg-color', themeColor);
+            document.documentElement.style.setProperty('--tg-theme-text-color', themeTextColor);
+            document.documentElement.style.setProperty('--tg-theme-button-color', themeButtonColor);
+            document.documentElement.style.setProperty('--tg-theme-footer-bg-color', themeFooterBgColor);
+            document.documentElement.style.setProperty('--tg-theme-footer-text-color', themeFooterTextColor);
+        }
+        
+        Telegram.WebApp.onThemeChanged = applyTheme;
+        applyTheme();
     </script>
 </body>
 </html>

@@ -206,13 +206,13 @@
             margin: 0 10px;
         }
 
-        footer {
+/*         footer {
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 10px 0;
-            background-color: transparent; /* Сделаем общий фон прозрачным */
-            box-shadow: none; /* Убираем тень от футера */
+            background-color: transparent;
+            box-shadow: none;
             z-index: 1000;
             width: 100%;
         }
@@ -221,13 +221,38 @@
             flex: none;
             margin: 0 10px;
             padding: 10px;
-            background-color: var(--tg-theme-footer-bg-color); /* Фон под кнопкой */
+            background-color: var(--tg-theme-footer-bg-color);
             color: var(--tg-theme-footer-text-color);
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); /* Добавляем тень к каждой кнопке */
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); 
+        } */
+
+        footer {
+            display: flex;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: var(--tg-theme-footer-bg-color);
+            color: var(--tg-theme-footer-text-color);
+            justify-content: center;
+            padding: 10px;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        footer button {
+            flex: 1;
+            margin: 0 10px;
+            padding: 10px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
         }
     </style>
 </head>

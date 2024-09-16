@@ -208,28 +208,26 @@
 
         footer {
             display: flex;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: var(--tg-theme-footer-bg-color);
-            color: var(--tg-theme-footer-text-color);
             justify-content: center;
-            padding: 10px;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+            align-items: center;
+            padding: 10px 0;
+            background-color: transparent; /* Прозрачный фон футера */
+            box-shadow: none;
             z-index: 1000;
-            mix-blend-mode: normal; /* Непрозрачный футер */
+            width: 100%;
         }
-
+        
         footer button {
-            flex: 1;
+            flex: none;
             margin: 0 10px;
             padding: 10px;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-button-text-color);
+            background-color: var(--tg-theme-footer-bg-color); /* Фон кнопок */
+            color: var(--tg-theme-footer-text-color);
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); /* Тень для кнопок */
         }
     </style>
 </head>

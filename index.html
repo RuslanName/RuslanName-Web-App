@@ -206,53 +206,32 @@
             margin: 0 10px;
         }
 
-/*         footer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 0;
-            background-color: transparent;
-            box-shadow: none;
-            z-index: 1000;
-            width: 100%;
-        }
-        
-        footer button {
-            flex: none;
-            margin: 0 10px;
-            padding: 10px;
-            background-color: var(--tg-theme-footer-bg-color);
-            color: var(--tg-theme-footer-text-color);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); 
-        } */
-
         footer {
             display: flex;
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-footer-bg-color);
+            background-color: var(--tg-theme-footer-bg-color); /* Фон футера */
             color: var(--tg-theme-footer-text-color);
             justify-content: center;
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             z-index: 1000;
         }
-
+            
         footer button {
-            flex: 1;
             margin: 0 10px;
             padding: 10px;
-            background-color: var(--tg-theme-button-color);
+            background-color: var(--tg-theme-button-color); /* Фон кнопок */
             color: var(--tg-button-text-color);
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+        }
+        
+        footer button:hover {
+            opacity: 0.9; /* Опционально, для эффекта наведения */
         }
     </style>
 </head>

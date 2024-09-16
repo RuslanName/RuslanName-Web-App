@@ -320,20 +320,19 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-footer-bg-color);
+            background-color: var(--tg-theme-footer-bg-color); /* Убедитесь, что эта переменная правильно установлена */
             color: var(--tg-theme-footer-text-color);
             justify-content: center;
-            padding: 10px;
-            box-shadow: none; /* Удалить тень */
+            padding: 20px 0; /* Увеличьте отступы для лучшего выравнивания */
+            box-shadow: none; /* Удалить тень, если она есть */
             z-index: 1000;
             mix-blend-mode: normal; /* Непрозрачный футер */
         }
-
+        
         footer button {
-            flex: 1;
-            margin: 0 10px;
+            margin: 0 10px; /* Убедитесь, что кнопки имеют отступы */
             padding: 10px;
-            background-color: var(--tg-theme-button-color);
+            background-color: var(--tg-theme-button-color); /* Убедитесь, что эта переменная правильно установлена */
             color: var(--tg-button-text-color);
             border: none;
             border-radius: 5px;
@@ -431,14 +430,14 @@
             const themeButtonColor = Telegram.WebApp.themeParams.button_color;
             const themeFooterBgColor = Telegram.WebApp.themeParams.footer_bg_color;
             const themeFooterTextColor = Telegram.WebApp.themeParams.footer_text_color;
-
+        
             document.documentElement.style.setProperty('--tg-theme-bg-color', themeColor);
             document.documentElement.style.setProperty('--tg-theme-text-color', themeTextColor);
             document.documentElement.style.setProperty('--tg-theme-button-color', themeButtonColor);
             document.documentElement.style.setProperty('--tg-theme-footer-bg-color', themeFooterBgColor);
             document.documentElement.style.setProperty('--tg-theme-footer-text-color', themeFooterTextColor);
         }
-
+        
         // Применение темы при загрузке страницы
         Telegram.WebApp.onThemeChanged = applyTheme;
         applyTheme();

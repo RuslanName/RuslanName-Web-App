@@ -318,11 +318,11 @@
 
         // Функция для применения темы
         function applyTheme() {
-            const themeColor = Telegram.WebApp.themeParams.bg_color;
-            const themeTextColor = Telegram.WebApp.themeParams.text_color;
-            const themeButtonColor = Telegram.WebApp.themeParams.button_color;
-            const themeFooterBgColor = Telegram.WebApp.themeParams.footer_bg_color;
-            const themeFooterTextColor = Telegram.WebApp.themeParams.footer_text_color;
+            const themeColor = Telegram.WebApp.themeParams.bg_color || '#ffffff';
+            const themeTextColor = Telegram.WebApp.themeParams.text_color || '#000000';
+            const themeButtonColor = Telegram.WebApp.themeParams.button_color || '#0088cc';
+            const themeFooterBgColor = Telegram.WebApp.themeParams.footer_bg_color || '#ffffff';
+            const themeFooterTextColor = Telegram.WebApp.themeParams.footer_text_color || '#000000';
 
             document.documentElement.style.setProperty('--tg-theme-bg-color', themeColor);
             document.documentElement.style.setProperty('--tg-theme-text-color', themeTextColor);
@@ -331,7 +331,7 @@
             document.documentElement.style.setProperty('--tg-theme-footer-text-color', themeFooterTextColor);
         }
 
-        // Применение темы при загрузке страницы
+        // Применение темы при изменении
         Telegram.WebApp.onThemeChanged = applyTheme;
         applyTheme();
     </script>

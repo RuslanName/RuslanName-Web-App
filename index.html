@@ -232,10 +232,10 @@
             --tg-theme-secondary-bg-color: #ffffff;
             --tg-theme-button-color: #0088cc;
             --tg-button-text-color: #ffffff;
-            --tg-theme-footer-bg-color: #ffffff;
+            --tg-theme-footer-bg-color: #f1f1f1; /* Пример не белого фона для футера */
             --tg-theme-footer-text-color: #000000;
         }
-
+        
         body {
             margin: 0;
             padding: 0;
@@ -246,6 +246,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            justify-content: space-between; /* Расположение футера внизу страницы */
         }
 
         #shop {
@@ -323,9 +324,8 @@
             width: 100%;
             background-color: var(--tg-theme-footer-bg-color); /* Убедитесь, что это правильный цвет */
             color: var(--tg-theme-footer-text-color);
-            justify-content: center;
-            align-items: center; /* Центрирование кнопок по вертикали */
-            padding: 10px; /* Регулируйте отступы по необходимости */
+            justify-content: center; /* Центрирование кнопок относительно футера */
+            padding: 10px 20px; /* Регулируйте отступы по необходимости */
             box-shadow: none; /* Уберите тень, если она вам не нужна */
             z-index: 1000;
             mix-blend-mode: normal; /* Непрозрачный футер */
@@ -341,7 +341,6 @@
             cursor: pointer;
             font-size: 16px;
             text-align: center;
-            flex: 1; /* Расширение кнопок для более равномерного распределения */
         }
         
         body {

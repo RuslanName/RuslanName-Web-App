@@ -317,7 +317,7 @@
 
         footer {
             display: flex;
-            position: fixed;
+            position: sticky; /* Липкий футер */
             bottom: 0;
             width: 100%;
             background-color: var(--tg-theme-footer-bg-color);
@@ -326,7 +326,7 @@
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             z-index: 1000;
-            mix-blend-mode: normal; /* Непрозрачный футер */
+            mix-blend-mode: normal;
         }
 
         footer button {

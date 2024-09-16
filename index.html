@@ -323,17 +323,16 @@
             width: 100%;
             background-color: var(--tg-theme-footer-bg-color); /* Убедись, что футер имеет непрозрачный фон */
             color: var(--tg-theme-footer-text-color);
-            justify-content: center;
+            justify-content: center; /* Центрирование кнопок */
             padding: 10px;
             box-shadow: none; /* Убираем черту */
             z-index: 1000;
             mix-blend-mode: normal; /* Гарантируем непрозрачность футера */
-            text-align: center; /* Выровнять содержимое по центру */
         }
         
         footer button {
-            margin: 0 10px;
-            padding: 10px;
+            margin: 0 5px; /* Уменьшение отступов, если кнопки все равно смещены */
+            padding: 10px 15px;
             background-color: var(--tg-theme-button-color); /* Цвет кнопок */
             color: var(--tg-button-text-color); /* Цвет текста кнопок */
             border: none;
@@ -341,7 +340,6 @@
             cursor: pointer;
             font-size: 16px;
             box-shadow: none; /* Убираем возможные тени */
-            display: inline-block; /* Чтобы кнопки не растягивались на всю ширину футера */
         }
         
         footer button:hover {

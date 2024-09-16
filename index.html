@@ -211,23 +211,25 @@
             justify-content: center;
             align-items: center;
             padding: 10px 0;
-            background-color: transparent; /* Прозрачный фон футера */
-            box-shadow: none;
+            background-color: var(--tg-theme-footer-bg-color); /* Фон для всего футера */
+            color: var(--tg-theme-footer-text-color);
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             width: 100%;
+            position: fixed;
+            bottom: 0;
         }
         
         footer button {
             flex: none;
             margin: 0 10px;
             padding: 10px;
-            background-color: var(--tg-theme-footer-bg-color); /* Фон кнопок */
+            background-color: var(--tg-theme-footer-bg-color); /* Фон под кнопкой */
             color: var(--tg-theme-footer-text-color);
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); /* Тень для кнопок */
         }
     </style>
 </head>

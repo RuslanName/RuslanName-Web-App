@@ -15,7 +15,7 @@
             --tg-theme-footer-bg-color: #ffffff;
             --tg-theme-footer-text-color: #000000;
         }
-        
+
         body {
             margin: 0;
             padding: 0;
@@ -96,12 +96,12 @@
         }
 
         footer {
-            display: none; 
+            display: flex;
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-bg-color);
-            color: var(--tg-theme-text-color);
+            background-color: var(--tg-theme-footer-bg-color);
+            color: var(--tg-theme-footer-text-color);
             justify-content: center;
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
@@ -170,7 +170,7 @@
         <button onclick="location.href='orders.html'">Заказы</button>
     </footer>
 
- <script>
+    <script>
         // Функция добавления товара в корзину
         function addToCart(productId) {
             const addButton = document.getElementById(add${productId});
@@ -194,8 +194,6 @@
             const availableQuantity = +quantity.innerText.split(': ')[1];
             const newQuantity = currentQuantity + delta;
 
-
-
             if (newQuantity <= 0) {
                 document.getElementById(add${productId}).style.display = 'block';
                 document.getElementById(cart-controls${productId}).style.display = 'none';
@@ -206,4 +204,3 @@
     </script>
 </body>
 </html>
-

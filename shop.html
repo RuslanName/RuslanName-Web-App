@@ -27,7 +27,7 @@
             flex-direction: column;
             min-height: 100vh;
         }
-        
+
         #shop {
             padding-bottom: 50px;
         }
@@ -173,10 +173,10 @@
     <script>
         // Функция добавления товара в корзину
         function addToCart(productId) {
-            const addButton = document.getElementById(add${productId});
-            const cartControls = document.getElementById(cart-controls${productId});
-            const cartQuantity = document.getElementById(cart-quantity${productId});
-            const quantity = document.getElementById(quantity${productId});
+            const addButton = document.getElementById(`add${productId}`);
+            const cartControls = document.getElementById(`cart-controls${productId}`);
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
             const availableQuantity = +quantity.innerText.split(': ')[1];
 
             if (availableQuantity > 0) {
@@ -188,15 +188,15 @@
 
         // Функция обновления количества товаров в корзине
         function updateCart(productId, delta) {
-            const cartQuantity = document.getElementById(cart-quantity${productId});
-            const quantity = document.getElementById(quantity${productId});
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
             const currentQuantity = +cartQuantity.innerText;
             const availableQuantity = +quantity.innerText.split(': ')[1];
             const newQuantity = currentQuantity + delta;
 
             if (newQuantity <= 0) {
-                document.getElementById(add${productId}).style.display = 'block';
-                document.getElementById(cart-controls${productId}).style.display = 'none';
+                document.getElementById(`add${productId}`).style.display = 'block';
+                document.getElementById(`cart-controls${productId}`).style.display = 'none';
             } else if (newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
             }

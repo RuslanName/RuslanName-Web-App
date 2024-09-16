@@ -57,37 +57,11 @@
             margin-bottom: 10px;
         }
 
-        .product button {
-            padding: 10px 15px;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-button-text-color);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 5px 0;
-            width: 100%;
-        }
-
-        .product button:hover {
-            opacity: 0.8;
-        }
-
         .cart-controls {
             display: flex;
             justify-content: center;
             align-items: center;
             margin-top: 10px;
-        }
-
-        .cart-controls button {
-            padding: 10px;
-            font-size: 16px;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-button-text-color);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
         }
 
         .cart-controls span {
@@ -107,18 +81,6 @@
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             z-index: 1000;
         }
-
-        footer button {
-            flex: 1;
-            margin: 0 10px;
-            padding: 10px;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-button-text-color);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
     </style>
 </head>
 <body>
@@ -129,11 +91,8 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 1">
                 <p><span id="price1">1000</span> руб.</p>
                 <p id="quantity1">В наличии: 10</p>
-                <button id="add1" onclick="addToCart('1')">Добавить</button>
                 <div id="cart-controls1" class="cart-controls" style="display:none;">
-                    <button onclick="updateCart('1', -1)">-</button>
                     <span id="cart-quantity1">0</span>
-                    <button onclick="updateCart('1', 1)">+</button>
                 </div>
             </div>
 
@@ -142,11 +101,8 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 2">
                 <p><span id="price2">1500</span> руб.</p>
                 <p id="quantity2">В наличии: 5</p>
-                <button id="add2" onclick="addToCart('2')">Добавить</button>
                 <div id="cart-controls2" class="cart-controls" style="display:none;">
-                    <button onclick="updateCart('2', -1)">-</button>
                     <span id="cart-quantity2">0</span>
-                    <button onclick="updateCart('2', 1)">+</button>
                 </div>
             </div>
 
@@ -155,11 +111,8 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 3">
                 <p><span id="price3">2000</span> руб.</p>
                 <p id="quantity3">В наличии: 8</p>
-                <button id="add3" onclick="addToCart('3')">Добавить</button>
                 <div id="cart-controls3" class="cart-controls" style="display:none;">
-                    <button onclick="updateCart('3', -1)">-</button>
                     <span id="cart-quantity3">0</span>
-                    <button onclick="updateCart('3', 1)">+</button>
                 </div>
             </div>
         </div>
@@ -173,14 +126,12 @@
     <script>
         // Функция добавления товара в корзину
         function addToCart(productId) {
-            const addButton = document.getElementById(`add${productId}`);
             const cartControls = document.getElementById(`cart-controls${productId}`);
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
             const quantity = document.getElementById(`quantity${productId}`);
             const availableQuantity = +quantity.innerText.split(': ')[1];
 
             if (availableQuantity > 0) {
-                addButton.style.display = 'none';
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
             }
@@ -195,8 +146,7 @@
             const newQuantity = currentQuantity + delta;
 
             if (newQuantity <= 0) {
-                document.getElementById(`add${productId}`).style.display = 'block';
-                document.getElementById(`cart-controls${productId}`).style.display = 'none';
+                cartControls.style.display = 'none';
             } else if (newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
             }

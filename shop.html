@@ -185,14 +185,17 @@
                 addButton.style.display = 'none';
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
-        
+            
                 const data = {
                     productId: productId,
                     quantity: 1
                 };
-        
-                // Отправляем данные в бота
-                Telegram.WebApp.sendData(JSON.stringify(data));
+            
+                try {
+                    Telegram.WebApp.sendData(JSON.stringify(data));
+                } catch (error) {
+                    console.error('Error sending data:', error);
+                }
             }
         }
         

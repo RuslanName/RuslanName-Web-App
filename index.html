@@ -320,19 +320,18 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-footer-bg-color); /* Использовать цвет темы */
+            background-color: var(--tg-theme-footer-bg-color); /* Фон под цвет темы Telegram */
             color: var(--tg-theme-footer-text-color);
             justify-content: center;
-            padding: 10px; /* Уменьшить отступы */
-            box-shadow: none; /* Убрать тень, если нужна, оставьте как есть */
+            padding: 10px; /* Уменьшить отступы для уменьшения фона */
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); /* Добавить тень, если нужно */
             z-index: 1000;
             mix-blend-mode: normal; /* Непрозрачный футер */
-            align-items: center; /* Вертикальное центрирование */
         }
         
         footer button {
-            margin: 0 5px; /* Уменьшить отступы между кнопками */
-            padding: 10px 15px;
+            margin: 0 10px; /* Центрирование кнопок */
+            padding: 10px;
             background-color: var(--tg-theme-button-color);
             color: var(--tg-button-text-color);
             border: none;
@@ -340,7 +339,7 @@
             cursor: pointer;
             font-size: 16px;
         }
-        
+ 
         footer button:first-child {
             margin-left: 0; /* Убрать отступ слева у первой кнопки */
         }

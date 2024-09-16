@@ -140,7 +140,7 @@
         }
 
         #shop {
-            padding-bottom: 50px; /* Убедитесь, что футер не перекрывает контент */
+            padding-bottom: 50px;
         }
 
         .product-grid {
@@ -153,15 +153,13 @@
         }
 
         .product {
-            flex: 0 1 calc(50% - 10px); /* Два товара в ряд */
+            flex: 0 1 calc(50% - 10px);
             background-color: var(--tg-theme-secondary-bg-color);
-            padding: 15px;
+            padding: 10px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
             box-sizing: border-box;
-            max-width: 400px; /* Максимальная ширина товара */
-            margin-bottom: 20px; /* Отступ снизу для последующих товаров */
         }
 
         .product img {
@@ -219,7 +217,7 @@
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             z-index: 1000;
-            opacity: 1; /* Непрозрачность футера */
+            mix-blend-mode: normal; /* Используйте нормальный режим наложения */
         }
 
         footer button {
@@ -315,25 +313,6 @@
                 cartQuantity.innerText = newQuantity;
             }
         }
-
-        // Функция для применения темы
-        function applyTheme() {
-            const themeColor = Telegram.WebApp.themeParams.bg_color || '#ffffff';
-            const themeTextColor = Telegram.WebApp.themeParams.text_color || '#000000';
-            const themeButtonColor = Telegram.WebApp.themeParams.button_color || '#0088cc';
-            const themeFooterBgColor = Telegram.WebApp.themeParams.footer_bg_color || '#ffffff';
-            const themeFooterTextColor = Telegram.WebApp.themeParams.footer_text_color || '#000000';
-
-            document.documentElement.style.setProperty('--tg-theme-bg-color', themeColor);
-            document.documentElement.style.setProperty('--tg-theme-text-color', themeTextColor);
-            document.documentElement.style.setProperty('--tg-theme-button-color', themeButtonColor);
-            document.documentElement.style.setProperty('--tg-theme-footer-bg-color', themeFooterBgColor);
-            document.documentElement.style.setProperty('--tg-theme-footer-text-color', themeFooterTextColor);
-        }
-
-        // Применение темы при изменении
-        Telegram.WebApp.onThemeChanged = applyTheme;
-        applyTheme();
     </script>
 </body>
 </html>

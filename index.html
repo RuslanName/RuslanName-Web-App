@@ -115,21 +115,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Тест темы</title>
+    <title>Магазин</title>
     <style>
         :root {
-            --background-light: #f0f0f0;
-            --background-dark: #333333;
-            --text-light: #000000;
-            --text-dark: #ffffff;
+            --tg-bg-color-light: #ffffff;
+            --tg-bg-color-dark: #333333;
+            --tg-text-color-light: #000000;
+            --tg-text-color-dark: #ffffff;
         }
 
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            color: var(--text-dark); /* Используйте var(--text-light) для светлой темы */
-            background-color: var(--background-dark); /* Используйте var(--background-light) для светлой темы */
+            color: var(--tg-text-color-light); /* Дефолтный цвет текста */
+            background-color: var(--tg-bg-color-light); /* Дефолтный цвет фона */
         }
 
         .content {
@@ -142,37 +142,49 @@
             cursor: pointer;
             padding: 10px;
             background-color: #007bff;
-            color: #fff;
+            color: #ffffff;
             border: none;
             border-radius: 5px;
             font-size: 16px;
+        }
+
+        /* Стили для тёмной темы */
+        [data-theme="dark"] {
+            background-color: var(--tg-bg-color-dark);
+            color: var(--tg-text-color-dark);
+        }
+
+        /* Стили для светлой темы */
+        [data-theme="light"] {
+            background-color: var(--tg-bg-color-light);
+            color: var(--tg-text-color-light);
         }
     </style>
 </head>
 <body>
     <div class="content">
         <h1>Тестовый фон</h1>
-        <p>Фон должен изменяться в зависимости от темы.</p>
+        <p>Фон должен автоматически менять цвет в зависимости от темы Telegram.</p>
         <button class="theme-toggle" onclick="toggleTheme()">Переключить тему</button>
     </div>
 
     <script>
-        function toggleTheme() {
-            const root = document.documentElement;
-            if (root.style.getPropertyValue('--background-dark') === '#333333') {
-                root.style.setProperty('--background-dark', '#f0f0f0');
-                root.style.setProperty('--background-light', '#333333');
-                root.style.setProperty('--text-dark', '#ffffff');
-                root.style.setProperty('--text-light', '#000000');
-            } else {
-                root.style.setProperty('--background-dark', '#333333');
-                root.style.setProperty('--background-light', '#f0f0f0');
-                root.style.setProperty('--text-dark', '#000000');
-                root.style.setProperty('--text-light', '#ffffff');
-            }
+        function applyTheme() {
+            const theme = Telegram.WebApp.themeParams ? Telegram.WebApp.themeParams.name : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
         }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+        }
+
+        // Применить тему при загрузке страницы
+        window.onload = applyTheme;
     </script>
 </body>
 </html>
+
 
 

@@ -115,33 +115,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Тест</title>
+    <title>Тестовый фон</title>
     <style>
         :root {
-            --tg-theme-bg-color-light: #f0f0f0; /* светлая тема */
-            --tg-theme-bg-color-dark: #333333; /* тёмная тема */
+            --background-light: #f0f0f0;
+            --background-dark: #333333;
         }
 
-        /* Стили по умолчанию для светлой темы */
         body {
-            background-color: var(--tg-theme-bg-color-light);
-            color: #000;
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--background-dark); /* Измените на var(--background-light) для светлой темы */
+            color: #fff;
         }
 
-        /* Применение тёмной темы с помощью класса */
-        .dark-theme {
-            background-color: var(--tg-theme-bg-color-dark) !important;
-            color: #fff;
+        .content {
+            padding: 20px;
+            text-align: center;
         }
     </style>
 </head>
-<body class="dark-theme">
+<body>
     <div class="content">
-        <h1>Тестовый контент</h1>
-        <p>Фон должен быть тёмно-серым.</p>
+        <h1>Тестовый фон</h1>
+        <p>Если фон не тёмный, попробуйте изменить переменную в стиле.</p>
     </div>
 </body>
 </html>

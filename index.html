@@ -107,6 +107,9 @@
 </body>
 </html>
  -->
+
+
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -332,7 +335,6 @@
     </div>
 
     <footer>
-        <button onclick="showShop()">Магазин</button>
         <button onclick="location.href='cart.html'">Корзина</button>
         <button onclick="location.href='orders.html'">Заказы</button>
     </footer>
@@ -343,67 +345,68 @@
         const lastName = document.getElementById('lastName');
         const phone = document.getElementById('phone');
         const loginButton = document.getElementById('login');
-        const authSection = document.getElementById('auth');
-        const shopSection = document.getElementById('shop');
-        const footer = document.querySelector('footer');
-    
-        function checkFields() {
-            const isFirstNameValid = firstName.value.trim() !== '';
-            const isLastNameValid = lastName.value.trim() !== '';
-            const isPhoneValid = /^\d{10}$/.test(phone.value.trim());
-            
-            loginButton.disabled = !(isFirstNameValid && isLastNameValid && isPhoneValid);
-        }
-    
-        firstName.addEventListener('input', checkFields);
-        lastName.addEventListener('input', checkFields);
-        phone.addEventListener('input', checkFields);
-    
-        loginButton.addEventListener('click', () => {
-            // Устанавливаем флаг авторизации
-            localStorage.setItem('isAuthenticated', 'true');
-            showShop();
-        });
-    
-        // Проверка, если пользователь уже авторизован
-        window.addEventListener('load', () => {
-            const isAuthenticated = localStorage.getItem('isAuthenticated');
-    
-            if (isAuthenticated === 'true') {
-                showShop();
-            } else {
-                showAuth();
-            }
-        });
+        const
+authSection = document.getElementById('auth'); const shopSection = document.getElementById('shop'); const footer = document.querySelector('footer');
 
-        function showShop() {
-            authSection.style.display = 'none';
-            shopSection.style.display = 'block';
-            footer.style.display = 'flex'; // Показываем футер
-        }
+javascript
+Копировать код
+    function checkFields() {
+        const isFirstNameValid = firstName.value.trim() !== '';
+        const isLastNameValid = lastName.value.trim() !== '';
+        const isPhoneValid = /^\d{10}$/.test(phone.value.trim());
         
-        function showAuth() {
-            authSection.style.display = 'flex';
-            shopSection.style.display = 'none';
-            footer.style.display = 'none'; // Скрываем футер
+        loginButton.disabled = !(isFirstNameValid && isLastNameValid && isPhoneValid);
+    }
+
+    firstName.addEventListener('input', checkFields);
+    lastName.addEventListener('input', checkFields);
+    phone.addEventListener('input', checkFields);
+
+    loginButton.addEventListener('click', () => {
+        // Устанавливаем флаг авторизации
+        localStorage.setItem('isAuthenticated', 'true');
+        showShop();
+    });
+
+    // Проверка, если пользователь уже авторизован
+    window.addEventListener('load', () => {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+
+        if (isAuthenticated === 'true') {
+            showShop();
+        } else {
+            showAuth();
         }
+    });
+
+    function showShop() {
+        authSection.style.display = 'none';
+        shopSection.style.display = 'block';
+        footer.style.display = 'flex'; // Показываем футер
+    }
     
-        function addToCart(productId) {
-            const addButton = document.getElementById(`add${productId}`);
-            const cartControls = document.getElementById(`cart-controls${productId}`);
-            const quantityElement = document.getElementById(`cart-quantity${productId}`);
-            const totalQuantityElement = document.getElementById(`quantity${productId}`);
-    
-            // Скрываем кнопку "Добавить" и показываем элементы управления корзиной
-            addButton.style.display = 'none';
-            cartControls.style.display = 'flex';
-    
-            // Устанавливаем начальное значение количества в корзине
-            let quantity = parseInt(quantityElement.textContent);
-            quantity = (quantity || 0) + 1;
-            quantityElement.textContent = quantity;
-    
-            // Проверяем, что количество не превышает доступное количество товара
+    function showAuth() {
+        authSection.style.display = 'flex';
+        shopSection.style.display = 'none';
+        footer.style.display = 'none'; // Скрываем футер
+    }
+
+    function addToCart(productId) {
+        const addButton = document.getElementById(`add${productId}`);
+        const cartControls = document.getElementById(`cart-controls${productId}`);
+        const quantityElement = document.getElementById(`cart-quantity${productId}`);
+        const totalQuantityElement = document.getElementById(`quantity${productId}`);
+
+        // Скрываем кнопку "Добавить" и показываем элементы управления корзиной
+        addButton.style.display = 'none';
+        cartControls.style.display = 'flex';
+
+        // Устанавливаем начальное значение количества в корзине
+        let quantity = parseInt(quantityElement.textContent);
+        quantity = (quantity || 0) + 1;
+        quantityElement.textContent = quantity;
+
+        // Проверяем, что количество не превышает доступ
             const totalQuantity = parseInt(totalQuantityElement.textContent.split(': ')[1]);
             if (quantity > totalQuantity) {
                 quantityElement.textContent = totalQuantity; // Устанавливаем максимальное значение

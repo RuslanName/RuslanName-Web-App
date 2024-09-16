@@ -206,14 +206,14 @@
             margin: 0 10px;
         }
 
-        footer {
+       footer {
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 10px 0;
-            background-color: var(--tg-theme-footer-bg-color); /* Убедитесь, что здесь установлен нужный цвет фона */
-            color: var(--tg-theme-footer-text-color); /* Цвет текста в футере */
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); /* Легкая тень для футера */
+            background-color: var(--tg-theme-footer-bg-color); /* Фон футера */
+            color: var(--tg-theme-footer-text-color); /* Цвет текста футера */
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             width: 100%;
             position: fixed; /* Закрепляем футер внизу страницы */
@@ -221,20 +221,19 @@
         }
         
         footer button {
-            flex: none;
             margin: 0 10px;
             padding: 10px;
-            background-color: var(--tg-theme-footer-bg-color); /* Цвет фона кнопок в футере */
-            color: var(--tg-theme-footer-text-color); /* Цвет текста кнопок в футере */
+            background-color: var(--tg-theme-button-color); /* Цвет фона кнопок футера */
+            color: var(--tg-button-text-color); /* Цвет текста кнопок футера */
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); /* Тень для кнопок */
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); 
         }
         
         footer button:hover {
-            opacity: 0.8; /* Эффект при наведении на кнопку */
+            opacity: 0.8;
         }
     </style>
 </head>

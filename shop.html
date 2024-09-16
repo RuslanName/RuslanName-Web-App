@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Авторизация и Магазин</title>
+    <title>Магазин</title>
     <style>
         :root {
             --tg-theme-bg-color: #ffffff;
@@ -30,51 +30,6 @@
 
         #shop {
             padding-bottom: 50px;
-        }
-
-        #auth {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: calc(100% - 40px);
-            max-width: 600px;
-            padding: 20px;
-            background-color: var(--tg-theme-secondary-bg-color);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin: 0 auto;
-        }
-        
-        #auth + footer {
-            display: none;
-        }
-
-        input {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-    
-        button {
-            padding: 10px 15px;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-button-text-color);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            opacity: 0.9;
-        }
-
-        button:disabled {
-            background-color: gray;
-            cursor: not-allowed;
         }
 
         .product-grid {
@@ -167,15 +122,7 @@
     </style>
 </head>
 <body>
-    <div id="auth">
-        <h1>Авторизация</h1>
-        <input type="text" placeholder="Введите имя" id="firstName">
-        <input type="text" placeholder="Введите фамилию" id="lastName">
-        <input type="tel" placeholder="Введите номер телефона" id="phone" pattern="\d{10}" maxlength="10">
-        <button id="login" disabled>Войти</button>
-    </div>
-
-    <div id="shop" style="display: none;">
+    <div id="shop">
         <div class="product-grid">
             <div class="product" id="product1">
                 <h3>Товар 1</h3>

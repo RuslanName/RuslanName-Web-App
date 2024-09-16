@@ -283,33 +283,55 @@
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        Telegram.WebApp.ready();
+        // Функция добавления товара в корзину
+        function addToCart(productId) {
+            const addButton = document.getElementById(`add${productId}`);
+            const cartControls = document.getElementById(`cart-controls${productId}`);
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
+            const availableQuantity = +quantity.innerText.split(': ')[1];
 
-        function applyTheme(theme) {
-            if (theme === 'dark') {
-                document.documentElement.style.setProperty('--tg-theme-bg-color', '#333');
-                document.documentElement.style.setProperty('--tg-theme-text-color', '#fff');
-                document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', '#444');
-                document.documentElement.style.setProperty('--tg-theme-button-color', '#007bff');
-                document.documentElement.style.setProperty('--tg-button-text-color', '#fff');
-                document.documentElement.style.setProperty('--tg-theme-footer-bg-color', '#333');
-                document.documentElement.style.setProperty('--tg-theme-footer-text-color', '#fff');
-            } else {
-                document.documentElement.style.setProperty('--tg-theme-bg-color', '#ffffff');
-                document.documentElement.style.setProperty('--tg-theme-text-color', '#000000');
-                document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', '#ffffff');
-                document.documentElement.style.setProperty('--tg-theme-button-color', '#0088cc');
-                document.documentElement.style.setProperty('--tg-button-text-color', '#ffffff');
-                document.documentElement.style.setProperty('--tg-theme-footer-bg-color', '#ffffff');
-                document.documentElement.style.setProperty('--tg-theme-footer-text-color', '#000000');
+            if (availableQuantity > 0) {
+                addButton.style.display = 'none';
+                cartControls.style.display = 'flex';
+                cartQuantity.innerText = 1;
             }
         }
 
-        Telegram.WebApp.onEvent('themeChanged', function(event) {
-            applyTheme(event.theme);
-        });
+        // Функция обновления количества товаров в корзине
+        function updateCart(productId, delta) {
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
+            const currentQuantity = +cartQuantity.innerText;
+            const availableQuantity = +quantity.innerText.split(': ')[1];
+            const newQuantity = currentQuantity + delta;
 
-        applyTheme(Telegram.WebApp.themeParams.theme || 'light');
+            if (newQuantity <= 0) {
+                document.getElementById(`add${productId}`).style.display = 'block';
+                document.getElementById(`cart-controls${productId}`).style.display = 'none';
+            } else if (newQuantity <= availableQuantity) {
+                cartQuantity.innerText = newQuantity;
+            }
+        }
+
+        // Функция для применения темы
+        function applyTheme() {
+            const themeColor = Telegram.WebApp.themeParams.bg_color;
+            const themeTextColor = Telegram.WebApp.themeParams.text_color;
+            const themeButtonColor = Telegram.WebApp.themeParams.button_color;
+            const themeFooterBgColor = Telegram.WebApp.themeParams.footer_bg_color;
+            const themeFooterTextColor = Telegram.WebApp.themeParams.footer_text_color;
+
+            document.documentElement.style.setProperty('--tg-theme-bg-color', themeColor);
+            document.documentElement.style.setProperty('--tg-theme-text-color', themeTextColor);
+            document.documentElement.style.setProperty('--tg-theme-button-color', themeButtonColor);
+            document.documentElement.style.setProperty('--tg-theme-footer-bg-color', themeFooterBgColor);
+            document.documentElement.style.setProperty('--tg-theme-footer-text-color', themeFooterTextColor);
+        }
+
+        // Применение темы при загрузке страницы
+        Telegram.WebApp.onThemeChanged = applyTheme;
+        applyTheme();
     </script>
 </body>
 </html>

@@ -211,27 +211,25 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-footer-bg-color); /* Фон футера */
+            background-color: var(--tg-theme-footer-bg-color);
             color: var(--tg-theme-footer-text-color);
             justify-content: center;
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             z-index: 1000;
+            mix-blend-mode: normal; /* Непрозрачный футер */
         }
-            
+
         footer button {
+            flex: 1;
             margin: 0 10px;
             padding: 10px;
-            background-color: var(--tg-theme-button-color); /* Фон кнопок */
+            background-color: var(--tg-theme-button-color);
             color: var(--tg-button-text-color);
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-        }
-        
-        footer button:hover {
-            opacity: 0.9; /* Опционально, для эффекта наведения */
         }
     </style>
 </head>
@@ -288,10 +286,10 @@
     <script>
         // Функция добавления товара в корзину
         function addToCart(productId) {
-            const addButton = document.getElementById(`add${productId}`);
-            const cartControls = document.getElementById(`cart-controls${productId}`);
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
+            const addButton = document.getElementById(add${productId});
+            const cartControls = document.getElementById(cart-controls${productId});
+            const cartQuantity = document.getElementById(cart-quantity${productId});
+            const quantity = document.getElementById(quantity${productId});
             const availableQuantity = +quantity.innerText.split(': ')[1];
 
             if (availableQuantity > 0) {
@@ -303,15 +301,15 @@
 
         // Функция обновления количества товаров в корзине
         function updateCart(productId, delta) {
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
+            const cartQuantity = document.getElementById(cart-quantity${productId});
+            const quantity = document.getElementById(quantity${productId});
             const currentQuantity = +cartQuantity.innerText;
             const availableQuantity = +quantity.innerText.split(': ')[1];
             const newQuantity = currentQuantity + delta;
 
             if (newQuantity <= 0) {
-                document.getElementById(`add${productId}`).style.display = 'block';
-                document.getElementById(`cart-controls${productId}`).style.display = 'none';
+                document.getElementById(add${productId}).style.display = 'block';
+                document.getElementById(cart-controls${productId}).style.display = 'none';
             } else if (newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
             }

@@ -130,22 +130,12 @@
             font-family: Arial, sans-serif;
             color: var(--tg-text-color-light); /* Дефолтный цвет текста */
             background-color: var(--tg-bg-color-light); /* Дефолтный цвет фона */
+            transition: background-color 0.3s, color 0.3s; /* Плавный переход между темами */
         }
 
         .content {
             padding: 20px;
             text-align: center;
-        }
-
-        .theme-toggle {
-            margin-top: 20px;
-            cursor: pointer;
-            padding: 10px;
-            background-color: #007bff;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
         }
 
         /* Стили для тёмной темы */
@@ -165,7 +155,6 @@
     <div class="content">
         <h1>Тестовый фон</h1>
         <p>Фон должен автоматически менять цвет в зависимости от темы Telegram.</p>
-        <button class="theme-toggle" onclick="toggleTheme()">Переключить тему</button>
     </div>
 
     <script>
@@ -174,17 +163,8 @@
             document.documentElement.setAttribute('data-theme', theme);
         }
 
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', newTheme);
-        }
-
         // Применить тему при загрузке страницы
         window.onload = applyTheme;
     </script>
 </body>
 </html>
-
-
-

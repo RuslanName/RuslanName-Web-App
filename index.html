@@ -318,21 +318,21 @@
         
         footer {
             display: flex;
-            justify-content: center; /* Центрирование кнопок */
-            align-items: center;
             position: fixed;
             bottom: 0;
             width: 100%;
             background-color: var(--tg-theme-footer-bg-color); /* Убедись, что футер имеет непрозрачный фон */
             color: var(--tg-theme-footer-text-color);
+            justify-content: center;
             padding: 10px;
             box-shadow: none; /* Убираем черту */
             z-index: 1000;
             mix-blend-mode: normal; /* Гарантируем непрозрачность футера */
-            gap: 10px; /* Расстояние между кнопками */
+            text-align: center; /* Выровнять содержимое по центру */
         }
         
         footer button {
+            margin: 0 10px;
             padding: 10px;
             background-color: var(--tg-theme-button-color); /* Цвет кнопок */
             color: var(--tg-button-text-color); /* Цвет текста кнопок */
@@ -340,6 +340,8 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            box-shadow: none; /* Убираем возможные тени */
+            display: inline-block; /* Чтобы кнопки не растягивались на всю ширину футера */
         }
         
         footer button:hover {
@@ -400,10 +402,10 @@
     <script>
         // Функция добавления товара в корзину
         function addToCart(productId) {
-            const addButton = document.getElementById(`add${productId}`);
-            const cartControls = document.getElementById(`cart-controls${productId}`);
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
+            const addButton = document.getElementById(add${productId});
+            const cartControls = document.getElementById(cart-controls${productId});
+            const cartQuantity = document.getElementById(cart-quantity${productId});
+            const quantity = document.getElementById(quantity${productId});
             const availableQuantity = +quantity.innerText.split(': ')[1];
 
             if (availableQuantity > 0) {
@@ -415,15 +417,15 @@
 
         // Функция обновления количества товаров в корзине
         function updateCart(productId, delta) {
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
+            const cartQuantity = document.getElementById(cart-quantity${productId});
+            const quantity = document.getElementById(quantity${productId});
             const currentQuantity = +cartQuantity.innerText;
             const availableQuantity = +quantity.innerText.split(': ')[1];
             const newQuantity = currentQuantity + delta;
 
             if (newQuantity <= 0) {
-                document.getElementById(`add${productId}`).style.display = 'block';
-                document.getElementById(`cart-controls${productId}`).style.display = 'none';
+                document.getElementById(add${productId}).style.display = 'block';
+                document.getElementById(cart-controls${productId}).style.display = 'none';
             } else if (newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
             }

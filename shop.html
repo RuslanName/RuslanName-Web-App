@@ -7,19 +7,20 @@
     <title>Магазин</title>
     <style>
         :root {
-            --tg-theme-text-color: #000000;
-            --tg-theme-secondary-bg-color: #ffffff;
-            --tg-theme-button-color: #0088cc;
+            --tg-theme-bg-color: #0000ff; /* Синий цвет фона */
+            --tg-theme-text-color: #ffffff; /* Белый цвет текста для контраста на синем фоне */
+            --tg-theme-secondary-bg-color: #0000cc; /* Более тёмный синий цвет для фона товаров */
+            --tg-theme-button-color: #0088cc; /* Цвет кнопок */
             --tg-button-text-color: #ffffff;
-            --tg-theme-footer-bg-color: #ffffff;
-            --tg-theme-footer-text-color: #000000;
+            --tg-theme-footer-bg-color: #0000cc; /* Такой же цвет для футера, как у фона товаров */
+            --tg-theme-footer-text-color: #ffffff; /* Белый текст в футере для контраста */
         }
 
         body {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            background: linear-gradient(135deg, #f0f0f0, #ffffff); /* Градиентный фон */
+            background: var(--tg-theme-bg-color);
             color: var(--tg-theme-text-color);
             font-family: Arial, sans-serif;
             display: flex;

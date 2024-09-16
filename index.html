@@ -249,6 +249,7 @@
         }
 
         #shop {
+            flex: 1;
             padding-bottom: 70px; /* Для свободного места под футер */
         }
 
@@ -317,7 +318,7 @@
 
         footer {
             display: flex;
-            position: sticky; /* Липкий футер */
+            position: fixed;
             bottom: 0;
             width: 100%;
             background-color: var(--tg-theme-footer-bg-color);
@@ -326,7 +327,7 @@
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             z-index: 1000;
-            mix-blend-mode: normal;
+            mix-blend-mode: normal; /* Непрозрачный футер */
         }
 
         footer button {

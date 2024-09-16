@@ -315,19 +315,20 @@
             font-size: 16px;
             margin: 0 10px;
         }
-
+        
         footer {
             display: flex;
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-footer-bg-color, #f1f1f1); /* Фон по умолчанию */
-            color: var(--tg-theme-footer-text-color, #000000); /* Цвет текста по умолчанию */
+            background-color: var(--tg-theme-footer-bg-color, #f1f1f1) !important; /* Принудительное применение фона */
+            color: var(--tg-theme-footer-text-color, #000000) !important; /* Принудительное применение цвета текста */
             justify-content: center;
             padding: 10px;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); /* Тень для отделения футера */
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             z-index: 1000;
-            opacity: 1; /* Полная непрозрачность */
+            opacity: 1 !important; /* Принудительная непрозрачность */
+            background-clip: border-box; /* Убедись, что фон не обрезается */
         }
 
         footer button {

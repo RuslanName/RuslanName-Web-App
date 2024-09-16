@@ -29,7 +29,7 @@
         }
 
         #shop {
-            padding-bottom: 70px; /* Для свободного места под футер */
+            padding-bottom: 70px;
         }
 
         .product-grid {
@@ -42,7 +42,7 @@
         }
 
         .product {
-            flex: 0 1 calc(50% - 10px); /* По 2 товара в ряд */
+            flex: 0 1 calc(50% - 10px);
             background-color: var(--tg-theme-secondary-bg-color);
             padding: 10px;
             border-radius: 10px;
@@ -110,16 +110,16 @@
         }
         
         footer button {
-            flex: 1; /* Сделать кнопки гибкими и растягивать их */
-            margin: 0 5px; /* Установите отступы между кнопками */
-            padding: 15px; /* Установите размер padding для кнопок */
+            flex: 1; 
+            margin: 0 5px; 
+            padding: 15px; 
             background-color: var(--tg-theme-button-color);
             color: var(--tg-button-text-color);
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            text-align: center; /* Выравнивание текста по центру */
+            text-align: center;
         }
     </style>
 </head>
@@ -180,11 +180,31 @@
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
             const quantity = document.getElementById(`quantity${productId}`);
             const availableQuantity = +quantity.innerText.split(': ')[1];
-        
+            
             if (availableQuantity > 0) {
                 addButton.style.display = 'none';
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
+        
+                const data = {
+                    productId: productId,
+                    quantity: 1
+                };
+        
+                // Отправка данных в Telegram бота
+                fetch('https://api.telegram.org/bot<YOUR_BOT_TOKEN>/sendWebAppData', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chat_id: '<YOUR_CHAT_ID>',
+                        text: JSON.stringify(data) 
+                    })
+                })
+                .then(response => response.json())
+                .then(data => console.log('Success:', data))
+                .catch(error => console.error('Error:', error));
             }
         }
         

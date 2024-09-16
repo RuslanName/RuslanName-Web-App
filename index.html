@@ -249,7 +249,6 @@
         }
 
         #shop {
-            flex: 1;
             padding-bottom: 70px; /* Для свободного места под футер */
         }
 
@@ -315,35 +314,31 @@
             font-size: 16px;
             margin: 0 10px;
         }
-        
+
         footer {
             display: flex;
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-footer-bg-color); /* Убедись, что футер имеет непрозрачный фон */
+            background-color: var(--tg-theme-footer-bg-color);
             color: var(--tg-theme-footer-text-color);
-            justify-content: center; /* Центрирование кнопок */
-            padding: 10px;
-            box-shadow: none; /* Убираем черту */
+            justify-content: center;
+            padding: 20px 10px; /* Увеличить отступы, чтобы заполнить пространство */
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); /* Добавить тень, если нужно */
             z-index: 1000;
-            mix-blend-mode: normal; /* Гарантируем непрозрачность футера */
+            mix-blend-mode: normal; /* Непрозрачный футер */
         }
-        
+
         footer button {
-            margin: 0 5px; /* Уменьшение отступов, если кнопки все равно смещены */
-            padding: 10px 15px;
-            background-color: var(--tg-theme-button-color); /* Цвет кнопок */
-            color: var(--tg-button-text-color); /* Цвет текста кнопок */
+            flex: 1;
+            margin: 0 10px;
+            padding: 10px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            box-shadow: none; /* Убираем возможные тени */
-        }
-        
-        footer button:hover {
-            opacity: 0.8; /* Эффект при наведении */
         }
     </style>
 </head>

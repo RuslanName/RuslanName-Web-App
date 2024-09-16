@@ -321,13 +321,13 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-footer-bg-color, #f1f1f1); /* Добавлено значение по умолчанию */
-            color: var(--tg-theme-footer-text-color, #000000); /* Добавлено значение по умолчанию */
+            background-color: var(--tg-theme-footer-bg-color, #f1f1f1); /* Фон по умолчанию */
+            color: var(--tg-theme-footer-text-color, #000000); /* Цвет текста по умолчанию */
             justify-content: center;
             padding: 10px;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); /* Тень для отделения футера */
             z-index: 1000;
-            mix-blend-mode: normal;
+            opacity: 1; /* Полная непрозрачность */
         }
 
         footer button {

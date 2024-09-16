@@ -118,27 +118,31 @@
     <title>Тест</title>
     <style>
         :root {
-            --tg-theme-bg-color: #f0f0f0;
+            --tg-theme-bg-color-light: #f0f0f0; /* светлая тема */
+            --tg-theme-bg-color-dark: #333333; /* тёмная тема */
         }
 
+        /* Стили по умолчанию для светлой темы */
         body {
+            background-color: var(--tg-theme-bg-color-light);
+            color: #000;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--tg-theme-bg-color);
-            font-family: Arial, sans-serif;
         }
 
-        .content {
-            padding: 20px;
-            background-color: var(--tg-theme-bg-color);
-            text-align: center;
+        /* Применение тёмной темы с помощью класса */
+        .dark-theme {
+            background-color: var(--tg-theme-bg-color-dark);
+            color: #fff;
         }
     </style>
 </head>
-<body>
+<body class="dark-theme">
     <div class="content">
         <h1>Тестовый контент</h1>
-        <p>Фон должен быть светло-серым.</p>
+        <p>Фон должен быть тёмно-серым.</p>
     </div>
 </body>
 </html>
+

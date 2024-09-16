@@ -318,8 +318,8 @@
         
         footer {
             display: flex;
-            justify-content: center; /* Центрируем кнопки */
-            align-items: center; /* Центрируем по вертикали */
+            justify-content: center; /* Центрирование кнопок */
+            align-items: center;
             position: fixed;
             bottom: 0;
             width: 100%;
@@ -329,18 +329,17 @@
             box-shadow: none; /* Убираем черту */
             z-index: 1000;
             mix-blend-mode: normal; /* Гарантируем непрозрачность футера */
+            gap: 10px; /* Расстояние между кнопками */
         }
         
         footer button {
-            margin: 0 10px;
-            padding: 10px 20px;
+            padding: 10px;
             background-color: var(--tg-theme-button-color); /* Цвет кнопок */
             color: var(--tg-button-text-color); /* Цвет текста кнопок */
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            flex: 1;
         }
         
         footer button:hover {
@@ -399,11 +398,12 @@
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
+        // Функция добавления товара в корзину
         function addToCart(productId) {
-            const addButton = document.getElementById(add${productId});
-            const cartControls = document.getElementById(cart-controls${productId});
-            const cartQuantity = document.getElementById(cart-quantity${productId});
-            const quantity = document.getElementById(quantity${productId});
+            const addButton = document.getElementById(`add${productId}`);
+            const cartControls = document.getElementById(`cart-controls${productId}`);
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
             const availableQuantity = +quantity.innerText.split(': ')[1];
 
             if (availableQuantity > 0) {
@@ -413,21 +413,23 @@
             }
         }
 
+        // Функция обновления количества товаров в корзине
         function updateCart(productId, delta) {
-            const cartQuantity = document.getElementById(cart-quantity${productId});
-            const quantity = document.getElementById(quantity${productId});
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
             const currentQuantity = +cartQuantity.innerText;
             const availableQuantity = +quantity.innerText.split(': ')[1];
             const newQuantity = currentQuantity + delta;
 
             if (newQuantity <= 0) {
-                document.getElementById(add${productId}).style.display = 'block';
-                document.getElementById(cart-controls${productId}).style.display = 'none';
+                document.getElementById(`add${productId}`).style.display = 'block';
+                document.getElementById(`cart-controls${productId}`).style.display = 'none';
             } else if (newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
             }
         }
-        
+
+        // Функция для применения темы
         function applyTheme() {
             const themeColor = Telegram.WebApp.themeParams.bg_color;
             const themeTextColor = Telegram.WebApp.themeParams.text_color;
@@ -442,6 +444,7 @@
             document.documentElement.style.setProperty('--tg-theme-footer-text-color', themeFooterTextColor);
         }
 
+        // Применение темы при загрузке страницы
         Telegram.WebApp.onThemeChanged = applyTheme;
         applyTheme();
     </script>

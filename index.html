@@ -108,6 +108,7 @@
  -->
 
 
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -232,20 +233,9 @@
     </style>
 </head>
 <body>
-    <div class="product" id="product1">
-        <h3>Товар 1</h3>
-        <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Product 1">
-        <p><span id="price1">1000</span> руб.</p>
-        <p id="quantity1">В наличии: 10</p>
-        <button id="add1" onclick="addToCart('1')">Добавить</button>
-        <div id="cart-controls1" class="cart-controls" style="display:none;">
-            <button onclick="updateCart('1', -1)">-</button>
-            <span id="cart-quantity1">0</span>
-            <button onclick="updateCart('1', 1)">+</button>
-        </div>
+    <div id="shop">
+        <!-- Здесь можно добавить другие элементы, если необходимо -->
     </div>
-    
-    <!-- Аналогичные элементы для product2 и product3 -->
 
     <footer>
         <button onclick="location.href='cart.html'">Корзина</button>
@@ -253,33 +243,14 @@
     </footer>
 
     <script>
+        // Функция добавления товара в корзину
         function addToCart(productId) {
-            const addButton = document.getElementById(`add${productId}`);
-            const cartControls = document.getElementById(`cart-controls${productId}`);
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
-            const availableQuantity = +quantity.innerText.split(': ')[1];
-        
-            if (availableQuantity > 0) {
-                addButton.style.display = 'none';
-                cartControls.style.display = 'flex';
-                cartQuantity.innerText = 1;
-            }
+            // Поскольку карточек товара больше нет, эта функция больше не нужна.
         }
-        
+
+        // Функция обновления количества товаров в корзине
         function updateCart(productId, delta) {
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
-            const currentQuantity = +cartQuantity.innerText;
-            const availableQuantity = +quantity.innerText.split(': ')[1];
-            const newQuantity = currentQuantity + delta;
-        
-            if (newQuantity <= 0) {
-                document.getElementById(`add${productId}`).style.display = 'block';
-                document.getElementById(`cart-controls${productId}`).style.display = 'none';
-            } else if (newQuantity <= availableQuantity) {
-                cartQuantity.innerText = newQuantity;
-            }
+            // Поскольку карточек товара больше нет, эта функция больше не нужна.
         }
     </script>
 </body>

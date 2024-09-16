@@ -170,70 +170,40 @@
         <button onclick="location.href='orders.html'">Заказы</button>
     </footer>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
-    const firstName = document.getElementById('firstName');
-    const lastName = document.getElementById('lastName');
-    const phone = document.getElementById('phone');
-    const loginButton = document.getElementById('login');
-    const authSection = document.getElementById('auth');
-    const shopSection = document.getElementById('shop');
-    const footer = document.querySelector('footer');
-    
-    // Функция для проверки валидности полей авторизации
-    function checkFields() {
-        const isFirstNameValid = firstName.value.trim() !== '';
-        const isLastNameValid = lastName.value.trim() !== '';
-        const isPhoneValid = /^\d{10}$/.test(phone.value.trim());
-        
-        loginButton.disabled = !(isFirstNameValid && isLastNameValid && isPhoneValid);
-    }
-    
-    firstName.addEventListener('input', checkFields);
-    lastName.addEventListener('input', checkFields);
-    phone.addEventListener('input', checkFields);
-    
-    // Логика входа и переключения на магазин
-    loginButton.addEventListener('click', function() {
-        authSection.style.display = 'none';  // Скрываем авторизацию
-        shopSection.style.display = 'block'; // Показываем магазин
-        footer.style.display = 'flex';       // Показываем футер
-    
-        // Отправка данных в бота
-        Telegram.WebApp.sendData(JSON.stringify({
-            firstName: firstName.value.trim(),
-            lastName: lastName.value.trim(),
-            phone: phone.value.trim()
-        }));
-    });
+ <script>
+        // Функция добавления товара в корзину
+        function addToCart(productId) {
+            const addButton = document.getElementById(add${productId});
+            const cartControls = document.getElementById(cart-controls${productId});
+            const cartQuantity = document.getElementById(cart-quantity${productId});
+            const quantity = document.getElementById(quantity${productId});
+            const availableQuantity = +quantity.innerText.split(': ')[1];
 
-    // Функция добавления товара в корзину
-    function addToCart(productId) {
-        const addButton = document.getElementById(add${productId});
-        const cartControls = document.getElementById(cart-controls${productId});
-        const cartQuantity = document.getElementById(cart-quantity${productId});
-        const quantity = document.getElementById(quantity${productId});
-    
-        addButton.style.display = 'none';
-        cartControls.style.display = 'flex';
-        cartQuantity.innerText = 1;
-        quantity.innerText = В наличии: ${+quantity.innerText.split(': ')[1] - 1};
-    }
-    
-    // Функция обновления количества товаров в корзине
-    function updateCart(productId, delta) {
-        const cartQuantity = document.getElementById(cart-quantity${productId});
-        const quantity = document.getElementById(quantity${productId});
-        const newQuantity = +cartQuantity.innerText + delta;
-    
-        if (newQuantity <= 0) {
-            document.getElementById(add${productId}).style.display = 'block';
-            document.getElementById(cart-controls${productId}).style.display = 'none';
-        } else {
-            cartQuantity.innerText = newQuantity;
-            quantity.innerText = В наличии: ${+quantity.innerText.split(': ')[1] - delta};
+            if (availableQuantity > 0) {
+                addButton.style.display = 'none';
+                cartControls.style.display = 'flex';
+                cartQuantity.innerText = 1;
+            }
         }
-    }
-</script>
+
+        // Функция обновления количества товаров в корзине
+        function updateCart(productId, delta) {
+            const cartQuantity = document.getElementById(cart-quantity${productId});
+            const quantity = document.getElementById(quantity${productId});
+            const currentQuantity = +cartQuantity.innerText;
+            const availableQuantity = +quantity.innerText.split(': ')[1];
+            const newQuantity = currentQuantity + delta;
+
+
+
+            if (newQuantity <= 0) {
+                document.getElementById(add${productId}).style.display = 'block';
+                document.getElementById(cart-controls${productId}).style.display = 'none';
+            } else if (newQuantity <= availableQuantity) {
+                cartQuantity.innerText = newQuantity;
+            }
+        }
+    </script>
 </body>
 </html>
+

@@ -319,18 +319,21 @@
             display: flex;
             position: fixed;
             bottom: 0;
+            left: 0;
             width: 100%;
-            background-color: var(--tg-theme-footer-bg-color); /* Цвет фона по теме Telegram */
+            background-color: var(--tg-theme-footer-bg-color); /* Убедитесь, что это правильный цвет */
             color: var(--tg-theme-footer-text-color);
-            justify-content: center; /* Центрирование кнопок */
-            padding: 10px; /* Отступы для футера */
-            box-shadow: none; /* Удаление тени */
+            justify-content: center;
+            align-items: center; /* Центрирование кнопок по вертикали */
+            padding: 10px; /* Регулируйте отступы по необходимости */
+            box-shadow: none; /* Уберите тень, если она вам не нужна */
             z-index: 1000;
+            mix-blend-mode: normal; /* Непрозрачный футер */
         }
         
         footer button {
-            margin: 0 10px;
-            padding: 12px 20px; /* Размер кнопок, если нужен больший */
+            margin: 0 10px; /* Расстояние между кнопками */
+            padding: 10px 20px; /* Увеличьте размер кнопок */
             background-color: var(--tg-theme-button-color);
             color: var(--tg-button-text-color);
             border: none;
@@ -338,11 +341,20 @@
             cursor: pointer;
             font-size: 16px;
             text-align: center;
-            white-space: nowrap; /* Чтобы текст не переносился на новую строку */
+            flex: 1; /* Расширение кнопок для более равномерного распределения */
         }
         
-        footer button:hover {
-            opacity: 0.8; /* Прозрачность при наведении, если нужна */
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: space-between; /* Расположение футера внизу страницы */
         }
     </style>
 </head>

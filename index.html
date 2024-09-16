@@ -140,7 +140,7 @@
         }
 
         #shop {
-            padding-bottom: 50px;
+            padding-bottom: 50px; /* Убедитесь, что футер не перекрывает контент */
         }
 
         .product-grid {
@@ -153,13 +153,15 @@
         }
 
         .product {
-            flex: 0 1 calc(33% - 10px);
+            flex: 0 1 calc(50% - 10px); /* Два товара в ряд */
             background-color: var(--tg-theme-secondary-bg-color);
-            padding: 10px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
             box-sizing: border-box;
+            max-width: 400px; /* Максимальная ширина товара */
+            margin-bottom: 20px; /* Отступ снизу для последующих товаров */
         }
 
         .product img {
@@ -217,6 +219,7 @@
             padding: 10px;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             z-index: 1000;
+            opacity: 1; /* Непрозрачность футера */
         }
 
         footer button {
@@ -281,7 +284,6 @@
         <button onclick="location.href='orders.html'">Заказы</button>
     </footer>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         // Функция добавления товара в корзину
         function addToCart(productId) {

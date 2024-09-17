@@ -191,13 +191,11 @@
                     quantity: 1
                 };
             
-                try {
-                    await Telegram.WebApp.sendData(JSON.stringify(data));
-                    console.log('Data sent successfully:', data);
-                } catch (error) {
-                    console.error('Error sending data:', error);
-                    alert('Произошла ошибка при отправке данных.');
-                }
+            try {
+                await Telegram.WebApp.sendData(JSON.stringify(data));
+                console.log('Data sent successfully:', data);
+            } catch (error) {
+                console.error('Error sending data:', error);
             }
         }
         

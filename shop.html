@@ -185,20 +185,21 @@
                 addButton.style.display = 'none';
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
-            
+        
                 const data = {
                     productId: productId,
                     quantity: 1
                 };
-            
-            try {
-                await Telegram.WebApp.sendData(JSON.stringify(data));
-                console.log('Data sent successfully:', data);
-            } catch (error) {
-                console.error('Error sending data:', error);
+        
+                try {
+                    await Telegram.WebApp.sendData(JSON.stringify(data));
+                    console.log('Data sent successfully:', data);
+                } catch (error) {
+                    console.error('Error sending data:', error);
+                }
             }
         }
-        
+
         function updateCart(productId, delta) {
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
             const quantity = document.getElementById(`quantity${productId}`);

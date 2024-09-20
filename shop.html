@@ -182,25 +182,28 @@
             const availableQuantity = +quantity.innerText.split(': ')[1];
         
             if (availableQuantity > 0) {
-                // Обновляем интерфейс
-                addButton.style.display = 'none';
-                cartControls.style.display = 'flex';
-                cartQuantity.innerText = 1;
+                addButton.style.display = 'none'; // Скрываем кнопку добавления
+                cartControls.style.display = 'flex'; // Показываем контролы корзины
+                cartQuantity.innerText = 1; // Устанавливаем количество товара
         
-                // Готовим данные для отправки
                 const data = {
                     productId: productId,
                     quantity: 1
                 };
         
                 try {
-                    // Отправляем данные в бота
-                    Telegram.WebApp.MainButton.preventClose(); // Предотвращаем закрытие
-                    Telegram.WebApp.sendData(JSON.stringify(data)); // Отправка данных
+                    Telegram.WebApp.MainButton.preventClose(); // Не закрывать WebApp
+                    await Telegram.WebApp.sendData(JSON.stringify(data)); // Отправляем данные в бота
+        
+                    // Если успешно отправили данные, можно выполнить действия для обновления интерфейса
                     console.log('Data sent successfully:', data);
+        
+                    // Обновляем количество товара на странице (опционально)
+                    quantity.innerText = `В наличии: ${availableQuantity - 1}`;
                 } catch (error) {
                     console.error('Error sending data:', error);
-                    // Восстанавливаем состояние интерфейса при ошибке
+        
+                    // Если произошла ошибка, возвращаем интерфейс в исходное состояние
                     addButton.style.display = 'block';
                     cartControls.style.display = 'none';
                 }

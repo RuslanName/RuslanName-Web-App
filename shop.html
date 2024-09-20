@@ -215,11 +215,20 @@
             const availableQuantity = +quantity.innerText.split(': ')[1];
             const newQuantity = currentQuantity + delta;
         
+            const newAvailableQuantity = availableQuantity - delta;
+        
             if (newQuantity <= 0) {
                 document.getElementById(`add${productId}`).style.display = 'block';
                 document.getElementById(`cart-controls${productId}`).style.display = 'none';
-            } else if (newQuantity <= availableQuantity) {
+            } 
+            else if (newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
+        
+                quantity.innerText = `Остаток: ${newAvailableQuantity}`;
+            }
+        
+            if (newQuantity > availableQuantity) {
+                cartQuantity.innerText = availableQuantity;
             }
         }
 

@@ -208,8 +208,8 @@
             const newQuantity = currentQuantity + delta;
         
             if (newQuantity <= 0) {
-                document.getElementById(add${productId}).style.display = 'block';
-                document.getElementById(cart-controls${productId}).style.display = 'none';
+                document.getElementById(`add${productId}`).style.display = 'block';
+                document.getElementById(`cart-controls${productId}`).style.display = 'none';
             } else if (newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
             }

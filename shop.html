@@ -182,9 +182,9 @@
             const availableQuantity = +quantity.innerText.split(': ')[1];
         
             if (availableQuantity > 0) {
-                addButton.style.display = 'none'; // Скрываем кнопку добавления
-                cartControls.style.display = 'flex'; // Показываем контролы корзины
-                cartQuantity.innerText = 1; // Устанавливаем количество товара
+                addButton.style.display = 'none';
+                cartControls.style.display = 'flex';
+                cartQuantity.innerText = 1;
         
                 const data = {
                     productId: productId,
@@ -192,20 +192,18 @@
                 };
         
                 try {
-                    Telegram.WebApp.MainButton.preventClose(); // Не закрывать WebApp
-                    await Telegram.WebApp.sendData(JSON.stringify(data)); // Отправляем данные в бота
-        
-                    // Если успешно отправили данные, можно выполнить действия для обновления интерфейса
+                    // Не закрывать WebApp после отправки данных
+                    Telegram.WebApp.MainButton.preventClose();
+                    
+                    // Отправка данных боту
+                    await Telegram.WebApp.sendData(JSON.stringify(data));
                     console.log('Data sent successfully:', data);
         
-                    // Обновляем количество товара на странице (опционально)
-                    quantity.innerText = `В наличии: ${availableQuantity - 1}`;
+                    // Обновление интерфейса (например, можно скрыть кнопку или обновить состояние корзины)
+                    updateCartUI(productId, 1); // Обновляем UI, добавив 1 товар в корзину
+        
                 } catch (error) {
                     console.error('Error sending data:', error);
-        
-                    // Если произошла ошибка, возвращаем интерфейс в исходное состояние
-                    addButton.style.display = 'block';
-                    cartControls.style.display = 'none';
                 }
             }
         }

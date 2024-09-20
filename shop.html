@@ -175,60 +175,43 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         async function addToCart(productId) {
-            const addButton = document.getElementById(`add${productId}`);
-            const cartControls = document.getElementById(`cart-controls${productId}`);
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
+            const addButton = document.getElementById(add${productId});
+            const cartControls = document.getElementById(cart-controls${productId});
+            const cartQuantity = document.getElementById(cart-quantity${productId});
+            const quantity = document.getElementById(quantity${productId});
             const availableQuantity = +quantity.innerText.split(': ')[1];
-        
+            
             if (availableQuantity > 0) {
                 addButton.style.display = 'none';
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
-        
+            
                 const data = {
                     productId: productId,
                     quantity: 1
                 };
-        
+            
                 try {
-                    // Не закрывать WebApp после отправки данных
-                    Telegram.WebApp.MainButton.preventClose();
-                    
-                    // Отправка данных боту
                     await Telegram.WebApp.sendData(JSON.stringify(data));
                     console.log('Data sent successfully:', data);
-        
-                    // Обновление интерфейса (например, можно скрыть кнопку или обновить состояние корзины)
-                    updateCartUI(productId, 1); // Обновляем UI, добавив 1 товар в корзину
-        
                 } catch (error) {
                     console.error('Error sending data:', error);
                 }
             }
         }
-
+        
         function updateCart(productId, delta) {
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
+            const cartQuantity = document.getElementById(cart-quantity${productId});
+            const quantity = document.getElementById(quantity${productId});
             const currentQuantity = +cartQuantity.innerText;
             const availableQuantity = +quantity.innerText.split(': ')[1];
             const newQuantity = currentQuantity + delta;
         
-            const newAvailableQuantity = availableQuantity - delta;
-        
             if (newQuantity <= 0) {
-                document.getElementById(`add${productId}`).style.display = 'block';
-                document.getElementById(`cart-controls${productId}`).style.display = 'none';
-            } 
-            else if (newQuantity <= availableQuantity) {
+                document.getElementById(add${productId}).style.display = 'block';
+                document.getElementById(cart-controls${productId}).style.display = 'none';
+            } else if (newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
-        
-                quantity.innerText = `Остаток: ${newAvailableQuantity}`;
-            }
-        
-            if (newQuantity > availableQuantity) {
-                cartQuantity.innerText = availableQuantity;
             }
         }
 

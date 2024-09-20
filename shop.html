@@ -175,10 +175,10 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         async function addToCart(productId) {
-            const addButton = document.getElementById(add${productId});
-            const cartControls = document.getElementById(cart-controls${productId});
-            const cartQuantity = document.getElementById(cart-quantity${productId});
-            const quantity = document.getElementById(quantity${productId});
+            const addButton = document.getElementById(`add${productId}`);
+            const cartControls = document.getElementById(`cart-controls${productId}`);
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
             const availableQuantity = +quantity.innerText.split(': ')[1];
             
             if (availableQuantity > 0) {
@@ -201,8 +201,8 @@
         }
         
         function updateCart(productId, delta) {
-            const cartQuantity = document.getElementById(cart-quantity${productId});
-            const quantity = document.getElementById(quantity${productId});
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
             const currentQuantity = +cartQuantity.innerText;
             const availableQuantity = +quantity.innerText.split(': ')[1];
             const newQuantity = currentQuantity + delta;

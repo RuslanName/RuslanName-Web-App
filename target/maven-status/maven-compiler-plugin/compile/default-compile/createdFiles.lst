@@ -1,0 +1,11 @@
+mainFiles\model\differentStates\DifferentStates.class
+mainFiles\model\userProducts\UserProducts.class
+mainFiles\model\differentStates\DifferentStatesRepository.class
+mainFiles\model\configurations\SQLiteDialect.class
+mainFiles\service\TelegramBot.class
+mainFiles\SpringBotApplication.class
+mainFiles\config\BotInitializer.class
+mainFiles\model\user\User.class
+mainFiles\model\user\UserRepository.class
+mainFiles\model\userProducts\UserProductsRepository.class
+mainFiles\config\BotConfig.class

@@ -9,14 +9,12 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>mainFiles</groupId>
-	<artifactId>Base</artifactId>
+	<artifactId>TelegramWebApp</artifactId>
 	<version>1.0.0-RELEASE</version>
-	<name>SpringDemoBot</name>
-	<description>Demo project for Spring Boot</description>
 
 	<properties>
 		<java.version>11</java.version>
-		<telegram.version>5.6.0</telegram.version>
+		<telegram.version>6.7.0</telegram.version>
 		<lombok.version>1.18.32</lombok.version>
 		<emoji.version>5.1.1</emoji.version>
 		<sqlite-jdbc.version>3.36.0.3</sqlite-jdbc.version>
@@ -27,6 +25,12 @@
 		<dependency>
 			<groupId>org.telegram</groupId>
 			<artifactId>telegrambots</artifactId>
+			<version>${telegram.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.telegram</groupId>
+			<artifactId>telegrambots-meta</artifactId>
 			<version>${telegram.version}</version>
 		</dependency>
 
@@ -103,7 +107,11 @@
 			<type>pom</type>
 		</dependency>
 
-
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>3.8.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -119,5 +127,3 @@
 	</build>
 
 </project>
-
-

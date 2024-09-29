@@ -1,5 +1,5 @@
-# Используем официальный образ Java 11
-FROM openjdk:11-jre-slim AS app
+# Используем официальный образ Java 11 JDK
+FROM openjdk:11-jdk-slim AS app
 
 # Копируем JAR-файл вашего приложения
 COPY target/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWebApp-1.0.0-RELEASE.jar

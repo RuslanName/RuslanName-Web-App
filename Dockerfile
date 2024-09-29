@@ -1,5 +1,5 @@
 # Используем базовый образ с JDK 11 для запуска Java приложения
-FROM openjdk:11-jre-slim AS java-build
+FROM adoptopenjdk:11-jre-hotspot
 
 # Устанавливаем рабочую директорию
 WORKDIR /app

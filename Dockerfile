@@ -1,4 +1,4 @@
-# Используем официальный образ Java 11 JDK
+# Используем Java 11 JDK
 FROM openjdk:11-jdk-slim AS app
 
 # Копируем JAR-файл вашего приложения

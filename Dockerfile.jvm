@@ -1,0 +1,14 @@
+# Используем официальный образ Java
+FROM openjdk:11-jre-slim
+
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Копируем JAR файл в контейнер
+COPY target/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWebApp-1.0.0-RELEASE.jar
+
+# Открываем порт, на котором будет работать ваше приложение
+EXPOSE 8080
+
+# Команда для запуска приложения
+CMD ["java", "-jar", "TelegramWebApp-1.0.0-RELEASE.jar"]

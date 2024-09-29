@@ -1,27 +1,28 @@
-# Сборка Java-приложения
-FROM openjdk:11-jre-slim AS builder
+# Используем базовый образ с JDK 11 для запуска Java приложения
+FROM openjdk:11-jre-slim AS java-build
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Копируем файл JAR в контейнер
-COPY target/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWebApp-1.0.0-RELEASE.jar
+# Копируем файл JAR вашего приложения в контейнер
+COPY target/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWebApp.jar
 
-# Второй этап: запуск Nginx и Java-приложения
+# Используем официальный образ Nginx
 FROM nginx:alpine
 
 # Копируем конфигурацию Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Копируем скомпилированное Java-приложение
-COPY --from=builder /app/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWebApp-1.0.0-RELEASE.jar
+# Копируем статические файлы из первого этапа сборки, если есть
+COPY --from=java-build /app/TelegramWebApp.jar /app/TelegramWebApp.jar
 
 # Открываем порт 80
 EXPOSE 80
 
-# Открываем порт для вашего Java-приложения (например, 8080)
-EXPOSE 8080
+# Настраиваем Nginx на хост 0.0.0.0
+CMD ["nginx", "-g", "daemon off;"]
 
-# Запускаем Nginx и Java-приложение
-CMD ["sh", "-c", "java -jar /app/TelegramWebApp-1.0.0-RELEASE.jar & nginx -g 'daemon off;'"]
+# Запуск Java приложения
+CMD ["java", "-jar", "/app/TelegramWebApp.jar"]
+
 

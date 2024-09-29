@@ -1,14 +1,10 @@
 meta:
-  environment: jvm
+  environment: docker
   toolchain:
-    name: maven
-    version: 17
-
+    name: docker
+    version: latest
 build:
   dockerfile: Dockerfile
-  args: -Dserver.port=80 -Pproduction
-
 run:
-  jarName: TelegramWebApp.jar
   persistenceMount: /data
   containerPort: 80

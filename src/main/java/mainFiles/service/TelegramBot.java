@@ -73,7 +73,10 @@ public class TelegramBot extends TelegramLongPollingBot {
             Message message = update.getMessage();
             long chatId = message.getChatId();
 
-            // Обработка данных от WebApp
+            if (message.hasText() && message.getText().equals("/start")) {
+                start(chatId);
+            }
+
             if (message.getWebAppData() != null) {
                 String webAppData = message.getWebAppData().getData();
 
@@ -82,17 +85,14 @@ public class TelegramBot extends TelegramLongPollingBot {
                     try {
                         Map<String, Object> data = objectMapper.readValue(webAppData, Map.class);
 
-                        // Добавляем проверку на наличие productId и quantity
                         if (data.containsKey("productId") && data.containsKey("quantity")) {
                             int productId = Integer.parseInt(data.get("productId").toString());
                             int quantity = Integer.parseInt(data.get("quantity").toString());
 
-                            // Сохраняем данные в БД, не отправляя сообщение пользователю
                             addUserProductsDB(chatId, productId, quantity);
                         }
                     } catch (JsonProcessingException e) {
                         log.error("Error parsing WebApp data", e);
-                        // Не отправляем сообщение об ошибке
                     }
                 }
             }
@@ -104,7 +104,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.setChatId(String.valueOf(chatId));
         message.setText("Откройте приложение");
 
-        // Обычная клавиатура
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(true);
@@ -129,7 +128,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.setChatId(String.valueOf(chatId));
         message.setText("Регистрация завершена! Перейдите в магазин");
 
-        // Обычная клавиатура для перехода в магазин
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(true);
@@ -137,9 +135,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<KeyboardRow> keyboardRows = new ArrayList<>();
         KeyboardRow row = new KeyboardRow();
 
-        // Создаем кнопку для перехода в магазин
         KeyboardButton shopButton = new KeyboardButton("Магазин");
-        shopButton.setWebApp(new WebAppInfo("https://main--zippy-cheesecake-7a1392.netlify.app/shop.html")); // ссылка на магазин
+        shopButton.setWebApp(new WebAppInfo("https://main--zippy-cheesecake-7a1392.netlify.app/shop.html")); 
 
         row.add(shopButton);
         keyboardRows.add(row);

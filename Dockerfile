@@ -29,11 +29,8 @@ RUN apt-get update && apt-get install -y nginx supervisor && apt-get clean
 # Копируем собранный jar-файл из первого этапа
 COPY --from=build /app/target/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWebApp-1.0.0-RELEASE.jar
 
-# Копируем файл index.html
+# Копируем файл index.html в Nginx
 COPY index.html /usr/share/nginx/html/index.html
-
-# Явно удаляем стандартную страницу Nginx, чтобы не было конфликта
-RUN rm /usr/share/nginx/html/index.nginx-debian.html
 
 # Копируем конфигурацию для Supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf

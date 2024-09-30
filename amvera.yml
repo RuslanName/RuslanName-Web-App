@@ -1,19 +1,19 @@
-meta:
-  environment: jvm
-  toolchain:
-    name: maven
-    version: 11
+# meta:
+#   environment: jvm
+#   toolchain:
+#     name: maven
+#     version: 11
 
-build:
-  artifacts:
-    target/*.jar: /
+# build:
+#   artifacts:
+#     target/*.jar: /
 
-run:
-  jarName: TelegramWebApp-1.0.0-RELEASE.jar
-  persistenceMount: /data
-  containerPort: 80
+# run:
+#   jarName: TelegramWebApp-1.0.0-RELEASE.jar
+#   persistenceMount: /data
+#   containerPort: 80
 
----
+# ---
 meta:
   environment: docker
   toolchain:

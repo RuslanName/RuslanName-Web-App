@@ -112,7 +112,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         KeyboardRow row = new KeyboardRow();
 
         KeyboardButton openAppButton = new KeyboardButton("Приложение");
-        openAppButton.setWebApp(new WebAppInfo("https://main--zippy-cheesecake-7a1392.netlify.app"));
+        openAppButton.setWebApp(new WebAppInfo("https://magazin-ruslanname.amvera.io"));
 
         row.add(openAppButton);
         keyboardRows.add(row);
@@ -136,7 +136,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         KeyboardRow row = new KeyboardRow();
 
         KeyboardButton shopButton = new KeyboardButton("Магазин");
-        shopButton.setWebApp(new WebAppInfo("https://main--zippy-cheesecake-7a1392.netlify.app/shop.html")); 
+        shopButton.setWebApp(new WebAppInfo("https://magazin-ruslanname.amvera.io/shop.html")); 
 
         row.add(shopButton);
         keyboardRows.add(row);

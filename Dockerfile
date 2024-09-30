@@ -10,17 +10,17 @@
 # # Настраиваем Nginx на хост 0.0.0.0
 # CMD ["nginx", "-g", "daemon off;"]
 
-# Базовый образ для Maven и сборки приложения
+# Первый этап: сборка Maven проекта
 FROM maven:3.8.5-openjdk-11 AS build
 
 # Копируем проект в контейнер
 COPY . /app
 WORKDIR /app
 
-# Собираем приложение
+# Собираем Java-приложение
 RUN mvn clean package
 
-# Базовый образ для Nginx и Java Runtime
+# Второй этап: установка Nginx и Java Runtime
 FROM openjdk:11-jre-slim
 
 # Устанавливаем Nginx и Supervisor
@@ -29,14 +29,14 @@ RUN apt-get update && apt-get install -y nginx supervisor && apt-get clean
 # Копируем jar-файл из этапа сборки
 COPY --from=build /app/target/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWebApp-1.0.0-RELEASE.jar
 
-# Копируем конфигурацию для Nginx
-COPY index.html /usr/share/nginx/html/
+# Копируем ваш файл index.html в директорию Nginx
+COPY index.html /usr/share/nginx/html/index.html
 
-# Копируем конфигурацию supervisor
+# Копируем конфигурацию для Supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Открываем порт 80
+# Указываем, что Nginx будет работать на порту 80
 EXPOSE 80
 
-# Запуск supervisord для одновременного запуска Java и Nginx
+# Запуск Supervisor для управления Nginx и Java
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

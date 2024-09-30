@@ -29,8 +29,11 @@ RUN apk add --no-cache openjdk11 supervisor
 # Копируем собранный jar-файл из первого этапа
 COPY --from=build /app/target/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWebApp-1.0.0-RELEASE.jar
 
-# Копируем файл index.html в Nginx
-COPY index.html /usr/share/nginx/html/index.html
+# Копируем html файл в Nginx
+COPY index.html /usr/share/nginx/html/
+COPY shop.html /usr/share/nginx/html/
+COPY cart.html /usr/share/nginx/html/
+COPY orders.html /usr/share/nginx/html/
 
 # Копируем конфигурацию для Supervisor
 COPY supervisord.conf /etc/supervisord.conf

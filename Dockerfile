@@ -10,23 +10,27 @@
 # # Настраиваем Nginx на хост 0.0.0.0
 # CMD ["nginx", "-g", "daemon off;"]
 
-# Базовый образ для Nginx
-FROM nginx:alpine AS webserver
+# Первый этап: сборка Maven проекта
+FROM maven:3.8.5-openjdk-11 AS build
 
-# Копируем ваш index.html в директорию, откуда Nginx будет обслуживать файлы
-COPY index.html /usr/share/nginx/html/
+# Копируем проект в контейнер
+COPY . /app
+WORKDIR /app
 
-# Второй этап: установка Java и Supervisor
+# Собираем Java-приложение
+RUN mvn clean package
+
+# Второй этап: установка Nginx и Supervisor
 FROM openjdk:11-jre-slim
 
 # Устанавливаем Nginx и Supervisor
 RUN apt-get update && apt-get install -y nginx supervisor && apt-get clean
 
-# Копируем статические файлы из первого этапа
-COPY --from=webserver /usr/share/nginx/html /usr/share/nginx/html
+# Копируем jar-файл из этапа сборки
+COPY --from=build /app/target/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWebApp-1.0.0-RELEASE.jar
 
-# Копируем jar-файл вашего Java-приложения (бота)
-COPY target/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWebApp-1.0.0-RELEASE.jar
+# Копируем статические файлы для Nginx
+COPY index.html /usr/share/nginx/html/
 
 # Копируем конфигурацию для Supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -34,6 +38,7 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Открываем порт 80 для Nginx
 EXPOSE 80
 
-# Запуск Supervisor для управления Nginx и Java приложением
+# Запуск Supervisor для управления Nginx и Java-приложением
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
 

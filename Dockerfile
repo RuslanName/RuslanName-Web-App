@@ -26,11 +26,14 @@ FROM openjdk:11-jre-slim
 # Устанавливаем Nginx и Supervisor
 RUN apt-get update && apt-get install -y nginx supervisor && apt-get clean
 
-# Копируем jar-файл из этапа сборки
+# Копируем собранный jar-файл из первого этапа
 COPY --from=build /app/target/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWebApp-1.0.0-RELEASE.jar
 
-# Копируем статические файлы для Nginx
-COPY index.html /usr/share/nginx/html/
+# Копируем файл index.html
+COPY index.html /usr/share/nginx/html/index.html
+
+# Явно удаляем стандартную страницу Nginx, чтобы не было конфликта
+RUN rm /usr/share/nginx/html/index.nginx-debian.html
 
 # Копируем конфигурацию для Supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -40,5 +43,6 @@ EXPOSE 80
 
 # Запуск Supervisor для управления Nginx и Java-приложением
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
 
 

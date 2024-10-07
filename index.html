@@ -26,6 +26,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         #shop {
@@ -39,6 +40,7 @@
             justify-content: space-between;
             padding: 20px;
             background-color: var(--tg-theme-secondary-bg-color);
+            margin-bottom: 100px;
         }
 
         .product {
@@ -95,7 +97,7 @@
             margin: 0 10px;
         }
 
-        footer {
+/*         footer {
             display: flex;
             position: fixed;
             bottom: 0;
@@ -107,6 +109,17 @@
             box-shadow: none;
             z-index: 1000;
             mix-blend-mode: normal;
+        } */
+
+        footer {
+            display: flex;
+            width: 100%;
+            background-color: var(--tg-theme-footer-bg-color);
+            color: var(--tg-theme-footer-text-color);
+            justify-content: center;
+            padding: 10px 0;
+            box-shadow: none;
+            z-index: 1000;
         }
         
         footer button {

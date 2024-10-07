@@ -31,7 +31,7 @@ COPY --from=build /app/target/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWebA
 
 # Копируем html файл в Nginx
 COPY index.html /usr/share/nginx/html/
-COPY shop.html /usr/share/nginx/html/
+# COPY shop.html /usr/share/nginx/html/
 COPY cart.html /usr/share/nginx/html/
 COPY orders.html /usr/share/nginx/html/
 

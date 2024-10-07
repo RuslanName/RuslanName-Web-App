@@ -1,8 +1,8 @@
 package mainFiles.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import mainFiles.config.BotConfig;
+import mainFiles.model.registrationState.RegistrationState;
+import mainFiles.model.registrationState.RegistrationStateRepository;
 import mainFiles.model.user.User;
 import mainFiles.model.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +21,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
-import org.telegram.telegrambots.meta.api.objects.webapp.WebAppData;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+
 
 @Slf4j
 @Component
@@ -35,6 +35,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RegistrationStateRepository registrationStateRepository;
 
     @Autowired
     private UserProductsRepository userProductsRepository;
@@ -72,61 +75,67 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (update.hasMessage()) {
             Message message = update.getMessage();
             long chatId = message.getChatId();
+            String text = message.getText();
 
-            if (message.hasText() && message.getText().equals("/start")) {
+            if (text.equals("/start")) {
                 start(chatId);
             }
 
-            if (message.getWebAppData() != null) {
-                String webAppData = message.getWebAppData().getData();
+            else if (registrationStateRepository.existsById(chatId) && registrationStateRepository.findById(chatId).get().getUserName() == null) {
+                registration(chatId, "name", text);
+            }
 
-                if (webAppData != null) {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    try {
-                        Map<String, Object> data = objectMapper.readValue(webAppData, Map.class);
-
-                        if (data.containsKey("productId") && data.containsKey("quantity")) {
-                            int productId = Integer.parseInt(data.get("productId").toString());
-                            int quantity = Integer.parseInt(data.get("quantity").toString());
-
-                            addUserProductsDB(chatId, productId, quantity);
-                        }
-                    } catch (JsonProcessingException e) {
-                        log.error("Error parsing WebApp data", e);
-                    }
-                }
+            else if (registrationStateRepository.existsById(chatId) && registrationStateRepository.findById(chatId).get().getPhoneNumber() == null) {
+                registration(chatId, "phone", text);
             }
         }
     }
 
     private void start(long chatId) {
-        SendMessage message = new SendMessage();
-        message.setChatId(String.valueOf(chatId));
-        message.setText("Откройте приложение");
+        if (userRepository.findById(chatId).isPresent()) {
+            User user = userRepository.findById(chatId).get();
+            sendMessage(chatId, "Здравствуйте, " + user.getUserName() + ".");
+            sendShopButton(chatId);
+        }
 
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setResizeKeyboard(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(true);
+        else {
+            if (!registrationStateRepository.existsById(chatId)) {
+                RegistrationState registrationState = new RegistrationState();
+                registrationState.setChatId(chatId);
+                registrationStateRepository.save(registrationState);
+            }
 
-        List<KeyboardRow> keyboardRows = new ArrayList<>();
-        KeyboardRow row = new KeyboardRow();
+            sendMessage(chatId, "Здравствуйте! Вам нужно зарегистрироваться.");
+            sendMessage(chatId, "Шаг 1. Введите ваше имя (никнейм).");
+        }
+    }
 
-        KeyboardButton openAppButton = new KeyboardButton("Приложение");
-        openAppButton.setWebApp(new WebAppInfo("https://magazin-ruslanname.amvera.io"));
+    private void registration(long chatId, String step, String input) {
+        RegistrationState registrationState = registrationStateRepository.findById(chatId).get();
 
-        row.add(openAppButton);
-        keyboardRows.add(row);
+        if (step.equals("name")) {
+            registrationState.setUserName(input);
+            registrationStateRepository.save(registrationState);
+            sendMessage(chatId, "Шаг 2. Введите свой номер телефона без пробелов (начало +7 или 8).");
+        }
 
-        replyKeyboardMarkup.setKeyboard(keyboardRows);
-        message.setReplyMarkup(replyKeyboardMarkup);
+        else if (step.equals("phone")) {
+            if (!((input.startsWith("+7") || input.startsWith("8")) && input.length() > 11)) {
+                sendMessage(chatId, "Номер введен неправильно. Введите правильный номер.");
+                return;
+            }
 
-        executeFunction(message);
+            registrationState.setPhoneNumber(input);
+            registrationStateRepository.save(registrationState);
+
+            addUserDB(chatId, registrationState.getUserName(), registrationState.getPhoneNumber());
+        }
     }
 
     private void sendShopButton(long chatId) {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
-        message.setText("Регистрация завершена! Перейдите в магазин");
+        message.setText("Перейдите в магазин");
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setResizeKeyboard(true);
@@ -136,7 +145,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         KeyboardRow row = new KeyboardRow();
 
         KeyboardButton shopButton = new KeyboardButton("Магазин");
-        shopButton.setWebApp(new WebAppInfo("https://magazin-ruslanname.amvera.io/shop.html")); 
+        shopButton.setWebApp(new WebAppInfo("https://zippy-cheesecake-7a1392.netlify.app/shop.html"));
 
         row.add(shopButton);
         keyboardRows.add(row);
@@ -147,47 +156,23 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeFunction(message);
     }
 
-    private void addUserDB(long chatId, String userName, String firstName, String lastName, String phoneNumber) {
+    private void addUserDB(long chatId, String userName, String phoneNumber) {
         if (userRepository.findById(chatId).isEmpty()) {
             User user = new User();
             user.setChatId(chatId);
             user.setUserName(userName);
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
             user.setPhoneNumber(phoneNumber);
             user.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
 
             userRepository.save(user);
+
+            registrationStateRepository.deleteById(chatId);
+
+            sendShopButton(chatId);
         }
-    }
 
-    private void addUserProductsDB(long chatId, int productId, int quantity) {
-        UserProducts existingUserProducts = userProductsRepository.findByChatIdAndProductId(chatId, productId);
-
-        if (existingUserProducts != null) {
-            existingUserProducts.setQuantity(existingUserProducts.getQuantity() + quantity);
-            userProductsRepository.save(existingUserProducts);
-        } else {
-            UserProducts userProducts = new UserProducts();
-
-            if (userProductsRepository.findById(1).isEmpty()) {
-                userProducts.setId(1);
-            } else {
-                var userProducts_all = userProductsRepository.findAll();
-                int i = 0;
-
-                for (UserProducts userProducts_i : userProducts_all) {
-                    i++;
-                }
-
-                userProducts.setId(i + 1);
-            }
-
-            userProducts.setChatId(chatId);
-            userProducts.setProductId(productId);
-            userProducts.setQuantity(quantity);
-
-            userProductsRepository.save(userProducts);
+        else {
+            sendShopButton(chatId);
         }
     }
 

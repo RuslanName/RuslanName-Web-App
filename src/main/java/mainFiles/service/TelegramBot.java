@@ -145,7 +145,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         KeyboardRow row = new KeyboardRow();
 
         KeyboardButton shopButton = new KeyboardButton("Магазин");
-        shopButton.setWebApp(new WebAppInfo("https://magazin-ruslanname.amvera.io/shop.html"));
+        shopButton.setWebApp(new WebAppInfo("https://magazin-ruslanname.amvera.io"));
 
         row.add(shopButton);
         keyboardRows.add(row);

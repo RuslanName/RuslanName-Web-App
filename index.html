@@ -29,14 +29,21 @@
             overflow-x: hidden;
         }
 
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
         #shop {
+            flex: 1;
+            overflow-y: auto;
             padding-bottom: 70px;
         }
 
         .product-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
             justify-content: space-between;
             padding: 20px;
             background-color: var(--tg-theme-secondary-bg-color);
@@ -44,7 +51,7 @@
         }
 
         .product {
-            flex: 0 1 calc(50% - 10px);
+            flex: 0 1 calc(50% - 15px);
             background-color: var(--tg-theme-secondary-bg-color);
             padding: 10px;
             border-radius: 10px;

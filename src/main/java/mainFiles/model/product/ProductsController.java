@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/products")
 public class ProductsController {
+
     @Autowired
     private ProductsRepository productsRepository;
 
@@ -18,4 +19,5 @@ public class ProductsController {
         return (List<Product>) productsRepository.findAll();
     }
 }
+
 

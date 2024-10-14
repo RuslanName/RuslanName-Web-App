@@ -26,9 +26,6 @@ FROM nginx:alpine
 # Устанавливаем Supervisor
 RUN apk add --no-cache openjdk11 supervisor
 
-# Копируем application.properties в нужное место
-COPY src/main/resources/application.properties /app/resources/application.properties
-
 # Копируем собранный jar-файл из первого этапа
 COPY --from=build /app/target/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWebApp-1.0.0-RELEASE.jar
 

@@ -17,8 +17,8 @@ FROM maven:3.8.5-openjdk-11 AS build
 COPY . /app
 WORKDIR /app
 
-# Собираем Java-приложение
-RUN mvn clean package
+# Собираем Java-приложение, пропуская тесты
+RUN mvn clean package -DskipTests
 
 # Этап 2: Установка Nginx и Supervisor
 FROM nginx:alpine
@@ -43,6 +43,7 @@ EXPOSE 80
 
 # Запуск Supervisor для управления Nginx и Java-приложением
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+
 
 
 

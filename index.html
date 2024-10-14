@@ -179,12 +179,12 @@
     <script>
         async function loadProducts() {
             try {
-                const response = await fetch('http://localhost:8080/api/products'); 
+                const response = await fetch('http://localhost:8080/api/products_data'); // обновляем endpoint
                 const products = await response.json();
                 
                 const productGrid = document.getElementById('productGrid');
                 productGrid.innerHTML = '';
-  
+    
                 products.forEach(product => {
                     const productHTML = `
                         <div class="product" id="product${product.id}">

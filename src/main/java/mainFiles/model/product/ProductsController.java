@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products_data")
+@CrossOrigin(origins = "https://magazin-ruslanname.amvera.io")
 public class ProductsController {
 
     @Autowired

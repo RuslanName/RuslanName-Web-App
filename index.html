@@ -179,7 +179,7 @@
     <script>
         async function loadProducts() {
             try {
-                const response = await fetch('http://localhost:8080/api/products_data'); // обновляем endpoint
+                const response = await fetch('https://magazin-ruslanname.amvera.io/api/products_data'); // обновляем endpoint
                 const products = await response.json();
                 
                 const productGrid = document.getElementById('productGrid');

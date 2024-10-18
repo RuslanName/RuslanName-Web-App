@@ -8,6 +8,8 @@ import mainFiles.model.differentState.DifferentState;
 import mainFiles.model.differentState.DifferentStatesRepository;
 import mainFiles.model.product.ProductsRepository;
 import mainFiles.model.product.Product;
+import mainFiles.model.userCarts.UserCart;
+import mainFiles.model.userCarts.UserCartsRepository;
 import mainFiles.model.userOrders.UserOrdersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +48,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     private ProductsRepository productsRepository;
 
     @Autowired
-    private UserOrdersRepository userProductsRepository;
+    private UserCartsRepository userCartsRepository;
+
+    @Autowired
+    private UserOrdersRepository userOrdersRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -200,11 +205,26 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
 
             else if (messageText.contains(STATISTIC_KEYBOARD) && config.getAdminChatId() == chatId) {
-                var products = productsRepository.findAll();
-                String sendText = boldAndUnderline("ТОВАРЫ") + "\n\n";
+                String sendText = "";
 
-                for (Product product : products) {
-                    sendText += product.getId() + ". " + product.getName() + " - " + product.getQuantity() + "\n";
+                if (productsRepository.findById(1).isPresent()) {
+                    var products = productsRepository.findAll();
+                    sendText += boldAndUnderline("ТОВАРЫ") + "\n\n";
+
+                    for (Product product : products) {
+                        sendText += product.getId() + ". " + product.getName() + " - " + product.getQuantity() + "\n";
+                    }
+
+                    sendText += "\n";
+                }
+
+                if (userCartsRepository.findById(1).isPresent()) {
+                    var userCarts = userCartsRepository.findAll();
+                    sendText += boldAndUnderline("КОРЗИНА") + "\n\n";
+
+                    for (UserCart userCart : userCarts) {
+                        sendText += userCart.getId() + ". " + userCart.getChatId() + " - " + userCart.getProductId() + " (" + userCart.getQuantity() + ")\n";
+                    }
                 }
 
                 sendMessage(chatId, sendText);

@@ -446,22 +446,31 @@
         document.addEventListener("DOMContentLoaded", function() {
             loadProducts(); // Вызов после полной загрузки DOM
         });
-    </script>
 
-    <script>
+        function getChatId() {
+            if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
+                return Telegram.WebApp.initDataUnsafe.user.id;  // Получаем chatId пользователя
+            } else {
+                console.error('Ошибка: не удалось получить данные о пользователе через Telegram WebApp.');
+                return null;  // Вернем null, если данные недоступны
+            }
+        }
+
         async function addToCart(productId) {
             const addButton = document.getElementById(`add${productId}`);
             const cartControls = document.getElementById(`cart-controls${productId}`);
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
             const quantity = document.getElementById(`quantity${productId}`);
             const availableQuantity = +quantity.innerText.split(': ')[1];
-        
+            
             if (availableQuantity > 0) {
                 addButton.style.display = 'none';
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
         
-                const chatId = getChatId();  // Получение chatId (возможно, из Telegram WebApp)
+                const chatId = getChatId();  // Получение chatId
+                if (!chatId) return;  // Прерываем выполнение, если chatId не удалось получить
+        
                 const data = {
                     chatId: chatId,
                     productId: productId,
@@ -488,11 +497,6 @@
                 }
             }
         }
-        
-        function getChatId() {
-            // Получение chatId через Telegram WebApp (или другим способом, если чатId передается иначе)
-            return Telegram.WebApp.initDataUnsafe.user.id;  // пример получения chatId
-        }
 
         function updateCart(productId, delta) {
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
@@ -509,6 +513,7 @@
                 cartQuantity.innerText = newQuantity;
         
                 const chatId = getChatId(); // Получаем chatId
+                if (!chatId) return;  // Прерываем выполнение, если chatId не удалось получить
         
                 const data = {
                     chatId: chatId,

@@ -455,24 +455,43 @@
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
             const quantity = document.getElementById(`quantity${productId}`);
             const availableQuantity = +quantity.innerText.split(': ')[1];
-            
+        
             if (availableQuantity > 0) {
                 addButton.style.display = 'none';
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
-            
+        
+                const chatId = getChatId();  // Получение chatId (возможно, из Telegram WebApp)
                 const data = {
+                    chatId: chatId,
                     productId: productId,
                     quantity: 1
                 };
         
                 try {
-                    await Telegram.WebApp.sendData(JSON.stringify(data));
-                    console.log('Data sent successfully:', data);
+                    // Отправляем данные на ваш backend
+                    const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams(data)
+                    });
+        
+                    if (response.ok) {
+                        console.log('Product added to cart successfully');
+                    } else {
+                        console.error('Failed to add product to cart');
+                    }
                 } catch (error) {
                     console.error('Error sending data:', error);
                 }
             }
+        }
+        
+        function getChatId() {
+            // Получение chatId через Telegram WebApp (или другим способом, если чатId передается иначе)
+            return Telegram.WebApp.initDataUnsafe.user.id;  // пример получения chatId
         }
 
         function updateCart(productId, delta) {
@@ -483,10 +502,39 @@
             const newQuantity = currentQuantity + delta;
         
             if (newQuantity <= 0) {
+                // Скрываем контролы корзины, если количество стало 0
                 document.getElementById(`add${productId}`).style.display = 'block';
                 document.getElementById(`cart-controls${productId}`).style.display = 'none';
             } else if (newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
+        
+                const chatId = getChatId(); // Получаем chatId
+        
+                const data = {
+                    chatId: chatId,
+                    productId: productId,
+                    quantity: newQuantity
+                };
+        
+                // Отправляем данные на сервер для обновления количества товара в корзине
+                try {
+                    fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams(data)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Cart updated successfully');
+                        } else {
+                            console.error('Failed to update cart');
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error updating cart:', error);
+                }
             }
         }
 

@@ -457,6 +457,8 @@
             
             console.log('Telegram WebApp инициализирован:', Telegram.WebApp);
         
+            console.log('initDataUnsafe:', Telegram.WebApp.initDataUnsafe);  // Выведем все данные
+            
             if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
                 console.log('Данные пользователя найдены:', Telegram.WebApp.initDataUnsafe.user);
                 return Telegram.WebApp.initDataUnsafe.user.id;

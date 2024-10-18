@@ -449,16 +449,19 @@
 
         function getChatId() {
             console.log('Проверка инициализации Telegram WebApp...');
-            
+        
             if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
                 console.error('Ошибка: Telegram WebApp не инициализирован.');
                 return null;
             }
+        
+            // Явная инициализация WebApp
+            Telegram.WebApp.init();
             
             console.log('Telegram WebApp инициализирован:', Telegram.WebApp);
         
-            console.log('initDataUnsafe:', Telegram.WebApp.initDataUnsafe);  // Выведем все данные
-            
+            console.log('initDataUnsafe:', Telegram.WebApp.initDataUnsafe);  // Выводим все данные
+        
             if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
                 console.log('Данные пользователя найдены:', Telegram.WebApp.initDataUnsafe.user);
                 return Telegram.WebApp.initDataUnsafe.user.id;

@@ -447,7 +447,7 @@
             loadProducts(); // Вызов после полной загрузки DOM
         });
 
-        function getChatId() {
+        async function getChatId() {
             console.log('Проверка инициализации Telegram WebApp...');
         
             if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
@@ -457,10 +457,12 @@
         
             // Явная инициализация WebApp
             Telegram.WebApp.init();
-            
-            console.log('Telegram WebApp инициализирован:', Telegram.WebApp);
         
-            console.log('initDataUnsafe:', Telegram.WebApp.initDataUnsafe);  // Выводим все данные
+            // Добавление задержки, чтобы убедиться, что WebApp инициализирован
+            await new Promise(resolve => setTimeout(resolve, 100));
+        
+            console.log('Telegram WebApp инициализирован:', Telegram.WebApp);
+            console.log('initDataUnsafe:', Telegram.WebApp.initDataUnsafe);
         
             if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
                 console.log('Данные пользователя найдены:', Telegram.WebApp.initDataUnsafe.user);

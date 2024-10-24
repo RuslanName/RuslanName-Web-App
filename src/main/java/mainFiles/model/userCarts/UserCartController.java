@@ -1,11 +1,6 @@
-package mainFiles.model.userCarts;
-
-import mainFiles.service.UserCartService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/api/user_carts_data")
+@CrossOrigin(origins = "https://magazin-ruslanname.amvera.io")
 public class UserCartController {
 
     @Autowired
@@ -17,4 +12,3 @@ public class UserCartController {
         return "Product added to cart successfully!";
     }
 }
-

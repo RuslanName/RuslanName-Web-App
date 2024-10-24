@@ -455,20 +455,22 @@
                 return null;
             }
         
-            // Явная инициализация WebApp
-            Telegram.WebApp.init();
+            try {
+                // Явная инициализация WebApp
+                Telegram.WebApp.ready(); // Используйте ready() вместо init()
         
-            // Добавление задержки, чтобы убедиться, что WebApp инициализирован
-            await new Promise(resolve => setTimeout(resolve, 100));
+                console.log('Telegram WebApp инициализирован:', Telegram.WebApp);
+                console.log('initDataUnsafe:', Telegram.WebApp.initDataUnsafe);
         
-            console.log('Telegram WebApp инициализирован:', Telegram.WebApp);
-            console.log('initDataUnsafe:', Telegram.WebApp.initDataUnsafe);
-        
-            if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
-                console.log('Данные пользователя найдены:', Telegram.WebApp.initDataUnsafe.user);
-                return Telegram.WebApp.initDataUnsafe.user.id;
-            } else {
-                console.error('Ошибка: не удалось получить данные о пользователе через Telegram WebApp.');
+                if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
+                    console.log('Данные пользователя найдены:', Telegram.WebApp.initDataUnsafe.user);
+                    return Telegram.WebApp.initDataUnsafe.user.id;
+                } else {
+                    console.error('Ошибка: не удалось получить данные о пользователе через Telegram WebApp.');
+                    return null;
+                }
+            } catch (error) {
+                console.error('Ошибка при инициализации WebApp:', error);
                 return null;
             }
         }
@@ -487,14 +489,14 @@
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
         
-                const chatId = getChatId();  // Получение chatId
+                const chatId = await getChatId();  // Ожидание результата асинхронной функции
                 if (!chatId) {
                     console.error('Ошибка: chatId не получен.');
                     return;  // Прерываем выполнение, если chatId не удалось получить
                 }
         
                 const data = {
-                    chatId: chatId,
+                    chatId: chatId,  // Теперь это реальное значение chatId, а не Promise
                     productId: productId,
                     quantity: 1
                 };
@@ -511,19 +513,19 @@
                     });
         
                     if (response.ok) {
-                        console.log('Product added to cart successfully');
+                        console.log('Товар успешно добавлен в корзину');
                     } else {
-                        console.error('Failed to add product to cart, статус:', response.status);
+                        console.error('Ошибка при добавлении товара в корзину, статус:', response.status);
                     }
                 } catch (error) {
-                    console.error('Error sending data:', error);
+                    console.error('Ошибка при отправке данных:', error);
                 }
             } else {
                 console.error('Товар недоступен, количество:', availableQuantity);
             }
         }
 
-        function updateCart(productId, delta) {
+        async function updateCart(productId, delta) {
             console.log('Обновление корзины, productId:', productId, 'delta:', delta);
         
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
@@ -539,15 +541,15 @@
                 console.log('Товар удален из корзины');
             } else if (newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
-                
-                const chatId = getChatId();  // Получение chatId
+        
+                const chatId = await getChatId();  // Обязательно ждём результат вызова getChatId
                 if (!chatId) {
                     console.error('Ошибка: chatId не получен.');
                     return;  // Прерываем выполнение, если chatId не удалось получить
                 }
         
                 const data = {
-                    chatId: chatId,
+                    chatId: chatId,  // Теперь chatId содержит значение, а не Promise
                     productId: productId,
                     quantity: newQuantity
                 };
@@ -555,20 +557,20 @@
                 console.log('Отправка обновленных данных на сервер:', data);
         
                 try {
-                    fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/add', {
+                    const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/add', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
                         body: new URLSearchParams(data)
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            console.log('Корзина обновлена успешно');
-                        } else {
-                            console.error('Ошибка при обновлении корзины, статус:', response.status);
-                        }
                     });
+        
+                    if (response.ok) {
+                        console.log('Корзина обновлена успешно');
+                    } else {
+                        const errorText = await response.text();
+                        console.error('Ошибка при обновлении корзины, статус:', response.status, errorText);
+                    }
                 } catch (error) {
                     console.error('Ошибка при отправке данных:', error);
                 }
@@ -576,6 +578,7 @@
                 console.error('Недостаточно товара, доступно:', availableQuantity, 'запрашиваемое количество:', newQuantity);
             }
         }
+
 
         function applyTheme() {
             const themeColor = Telegram.WebApp.themeParams.bg_color;

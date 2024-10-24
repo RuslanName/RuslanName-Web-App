@@ -443,8 +443,8 @@
             }
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            loadProducts(); // Вызов после полной загрузки DOM
+        document.addEventListener('DOMContentLoaded', function () {
+            Telegram.WebApp.init();
         });
         
         function getChatId() {

@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user_carts_data")
-@CrossOrigin(origins = "https://magazin-ruslanname.amvera.io")
 public class UserCartController {
 
     @Autowired

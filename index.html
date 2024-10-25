@@ -463,14 +463,15 @@
             }
         
             try {
-                // Явная инициализация WebApp
-                Telegram.WebApp.ready(); // Используйте ready() вместо init()
-        
+                Telegram.WebApp.ready();
                 console.log('Telegram WebApp инициализирован:', Telegram.WebApp);
+        
+                // Отладочный вывод initData и initDataUnsafe
+                console.log('initData:', Telegram.WebApp.initData);
                 console.log('initDataUnsafe:', Telegram.WebApp.initDataUnsafe);
         
                 if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
-                    console.log('Данные пользователя найдены:', Telegram.WebApp.initDataUnsafe.user);
+                    console.log('Данные пользователя:', Telegram.WebApp.initDataUnsafe.user);
                     return Telegram.WebApp.initDataUnsafe.user.id;
                 } else {
                     console.error('Ошибка: не удалось получить данные о пользователе через Telegram WebApp.');

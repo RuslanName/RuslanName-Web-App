@@ -20,7 +20,7 @@ public class UserCartService {
         UserCart existingCart = userCartsRepository.findByChatIdAndProductId(chatId, productId);
         if (existingCart != null) {
             int newQuantity = existingCart.getQuantity() + quantityChange;
-
+    
             if (newQuantity > 0) {
                 // Если количество больше 0, обновляем количество
                 existingCart.setQuantity(newQuantity);
@@ -37,14 +37,14 @@ public class UserCartService {
             newCart.setChatId(chatId);
             newCart.setProductId(productId);
             newCart.setQuantity(quantityChange);
-
+    
             // Получаем максимальный ID
             if (userCartsRepository.findById(1).isEmpty()) {
                 newCart.setId(1);
             } else {
                 var carts = userCartsRepository.findAll();
                 int maxId = 0;
-
+    
                 for (UserCart cart : carts) {
                     if (cart.getId() > maxId) {
                         maxId = cart.getId();
@@ -52,7 +52,7 @@ public class UserCartService {
                 }
                 newCart.setId(maxId + 1); // Устанавливаем новый ID
             }
-
+    
             userCartsRepository.save(newCart);
         }
     }

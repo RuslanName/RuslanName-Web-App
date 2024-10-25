@@ -13,7 +13,7 @@ public class UserCartController {
 
     @PostMapping("/add")
     public String addProductToCart(@RequestParam long chatId, @RequestParam int productId, @RequestParam int quantity) {
-        userCartService.addProductToCart(chatId, productId, quantity);
+        userCartService.updateProductQuantity(chatId, productId, quantity);
         return "Product added to cart successfully!";
     }
 }

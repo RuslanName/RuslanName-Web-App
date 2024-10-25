@@ -467,10 +467,15 @@
                 console.log('Telegram WebApp инициализирован:', Telegram.WebApp);
         
                 // Отладочный вывод initData и initDataUnsafe
-                const initData = Telegram.WebApp.initData;
-                console.log("Init Data:", initData);
-                console.log('initDataUnsafe:', Telegram.WebApp.initDataUnsafe);
-        
+                console.log('Тип initDataUnsafe:', typeof Telegram.WebApp.initDataUnsafe);
+                console.log('Содержимое initDataUnsafe:', JSON.stringify(Telegram.WebApp.initDataUnsafe, null, 2));
+
+                console.log('Версия Telegram WebApp:', Telegram.WebApp.version);
+                
+                if (!Telegram.WebApp.isVersionAtLeast('6.1')) {
+                    console.warn('Проверьте, что версия API WebApp не устарела.');
+                }
+                
                 if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
                     console.log('Данные пользователя:', Telegram.WebApp.initDataUnsafe.user);
                     return Telegram.WebApp.initDataUnsafe.user.id;

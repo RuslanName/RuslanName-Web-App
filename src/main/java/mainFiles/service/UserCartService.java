@@ -3,6 +3,7 @@ package mainFiles.service;
 import mainFiles.model.userCarts.UserCart;
 import mainFiles.model.userCarts.UserCartsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,6 +11,9 @@ public class UserCartService {
 
     @Autowired
     private UserCartsRepository userCartsRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     public void updateProductQuantity(long chatId, int productId, int quantityChange) {
         // Проверяем, есть ли уже такой продукт в корзине пользователя

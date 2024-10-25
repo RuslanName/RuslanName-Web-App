@@ -231,19 +231,19 @@
                 const chatId = await getChatId();
                 if (!chatId) {
                     console.error('Ошибка: chatId не получен.');
-                    return; 
+                    return;
                 }
         
                 const data = {
                     chatId: chatId,
                     productId: productId,
-                    quantityChange: 1  // Положительное значение для добавления
+                    quantityChange: 1  // Передаем +1 при добавлении
                 };
         
                 console.log('Отправка данных на сервер:', data);
         
                 try {
-                    const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/add', {
+                    const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -274,7 +274,7 @@
             const newQuantity = currentQuantity + delta;
         
             if (newQuantity <= 0) {
-                // Удаляем товар из корзины, если количество стало 0
+                // Скрываем контролы корзины, если количество стало 0
                 document.getElementById(`add${productId}`).style.display = 'block';
                 document.getElementById(`cart-controls${productId}`).style.display = 'none';
                 console.log('Товар удален из корзины');
@@ -284,13 +284,13 @@
                 const chatId = await getChatId();
                 if (!chatId) {
                     console.error('Ошибка: chatId не получен.');
-                    return; 
+                    return;
                 }
         
                 const data = {
                     chatId: chatId,
                     productId: productId,
-                    quantity: newQuantity  // Убедитесь, что это поле правильно
+                    quantityChange: delta  // Передаем + или -
                 };
         
                 console.log('Отправка обновленных данных на сервер:', data);

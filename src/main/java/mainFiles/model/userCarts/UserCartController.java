@@ -11,7 +11,7 @@ public class UserCartController {
     @Autowired
     private UserCartService userCartService;
 
-    @PostMapping("/add")
+    @PostMapping("/update")
     public String addProductToCart(@RequestParam long chatId, @RequestParam int productId, @RequestParam int quantity) {
         userCartService.updateProductQuantity(chatId, productId, quantity);
         return "Product added to cart successfully!";

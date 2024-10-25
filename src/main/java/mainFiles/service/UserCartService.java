@@ -23,19 +23,28 @@ public class UserCartService {
         } else {
             // Если товара нет, создаем новую запись
             UserCart newCart = new UserCart();
+            
+            // Получаем максимальный ID
+            if (userCartsRepository.findById(1).isEmpty()) {
+                newCart.setId(1);
+            } else {
+                var carts = userCartsRepository.findAll();
+                int maxId = 0;
 
-            // Получаем максимальный ID существующих записей
-            List<UserCart> existingCarts = userCartsRepository.findAll();
-            long maxId = existingCarts.stream()
-                                       .mapToLong(UserCart::getId)
-                                       .max()
-                                       .orElse(0); // Если корзина пуста, начинаем с 0
+                for (UserCart cart : carts) {
+                    if (cart.getId() > maxId) {
+                        maxId = cart.getId();
+                    }
+                }
+                newCart.setId(maxId + 1); // Устанавливаем новый ID
+            }
 
-            newCart.setId(maxId + 1); // Устанавливаем новый ID
             newCart.setChatId(chatId);
             newCart.setProductId(productId);
             newCart.setQuantity(quantity);
             userCartsRepository.save(newCart);
         }
     }
+
+    // Дополнительные методы для работы с корзиной, если нужно
 }

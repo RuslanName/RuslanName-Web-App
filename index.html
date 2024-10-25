@@ -228,22 +228,22 @@
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
         
-                const chatId = await getChatId();  // Ожидание результата асинхронной функции
+                const chatId = await getChatId();
                 if (!chatId) {
                     console.error('Ошибка: chatId не получен.');
-                    return;  // Прерываем выполнение, если chatId не удалось получить
+                    return;
                 }
         
                 const data = {
-                    chatId: chatId,  // Теперь это реальное значение chatId, а не Promise
+                    chatId: chatId,
                     productId: productId,
-                    quantity: 1
+                    quantityChange: 1 // Используем количество для увеличения
                 };
         
                 console.log('Отправка данных на сервер:', data);
         
                 try {
-                    const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/add', {
+                    const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -264,6 +264,7 @@
             }
         }
 
+
         async function updateCart(productId, delta) {
             console.log('Обновление корзины, productId:', productId, 'delta:', delta);
         
@@ -274,41 +275,70 @@
             const newQuantity = currentQuantity + delta;
         
             if (newQuantity <= 0) {
-                // Скрываем контролы корзины, если количество стало 0
-                document.getElementById(`add${productId}`).style.display = 'block';
-                document.getElementById(`cart-controls${productId}`).style.display = 'none';
-                console.log('Товар удален из корзины');
-            } else if (newQuantity <= availableQuantity) {
-                cartQuantity.innerText = newQuantity;
-        
-                const chatId = await getChatId();  // Обязательно ждём результат вызова getChatId
+                // Удаляем товар из корзины
+                const chatId = await getChatId();
                 if (!chatId) {
                     console.error('Ошибка: chatId не получен.');
-                    return;  // Прерываем выполнение, если chatId не удалось получить
+                    return;
                 }
         
                 const data = {
-                    chatId: chatId,  // Теперь chatId содержит значение, а не Promise
+                    chatId: chatId,
                     productId: productId,
-                    quantity: newQuantity
+                    quantityChange: -currentQuantity // Удаляем весь товар
                 };
         
-                console.log('Отправка обновленных данных на сервер:', data);
+                console.log('Отправка данных на сервер для удаления:', data);
         
                 try {
-                    const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/add', {
+                    const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
                         body: new URLSearchParams(data)
                     });
-
+        
+                    if (response.ok) {
+                        console.log('Товар удален из корзины');
+                        document.getElementById(`add${productId}`).style.display = 'block';
+                        document.getElementById(`cart-controls${productId}`).style.display = 'none';
+                    } else {
+                        console.error('Ошибка при удалении товара из корзины, статус:', response.status);
+                    }
+                } catch (error) {
+                    console.error('Ошибка при отправке данных:', error);
+                }
+            } else if (newQuantity <= availableQuantity) {
+                cartQuantity.innerText = newQuantity;
+        
+                const chatId = await getChatId();
+                if (!chatId) {
+                    console.error('Ошибка: chatId не получен.');
+                    return;
+                }
+        
+                const data = {
+                    chatId: chatId,
+                    productId: productId,
+                    quantityChange: delta // Обновляем количество
+                };
+        
+                console.log('Отправка обновленных данных на сервер:', data);
+        
+                try {
+                    const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams(data)
+                    });
+        
                     if (response.ok) {
                         console.log('Корзина обновлена успешно');
                     } else {
-                        const errorText = await response.text();
-                        console.error('Ошибка при обновлении корзины, статус:', response.status, errorText);
+                        console.error('Ошибка при обновлении корзины, статус:', response.status);
                     }
                 } catch (error) {
                     console.error('Ошибка при отправке данных:', error);

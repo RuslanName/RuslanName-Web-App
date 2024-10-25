@@ -5,6 +5,8 @@ import mainFiles.model.userCarts.UserCartsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserCartService {
 
@@ -21,13 +23,19 @@ public class UserCartService {
         } else {
             // Если товара нет, создаем новую запись
             UserCart newCart = new UserCart();
+
+            // Получаем максимальный ID существующих записей
+            List<UserCart> existingCarts = userCartsRepository.findAll();
+            long maxId = existingCarts.stream()
+                                       .mapToLong(UserCart::getId)
+                                       .max()
+                                       .orElse(0); // Если корзина пуста, начинаем с 0
+
+            newCart.setId(maxId + 1); // Устанавливаем новый ID
             newCart.setChatId(chatId);
             newCart.setProductId(productId);
             newCart.setQuantity(quantity);
             userCartsRepository.save(newCart);
         }
     }
-
-    // Дополнительные методы для работы с корзиной, если нужно
 }
-

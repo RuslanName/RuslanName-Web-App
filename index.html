@@ -444,7 +444,14 @@
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            loadProducts(); // Вызов после полной загрузки DOM
+            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+                Telegram.WebApp.ready();
+                console.log("Telegram Web App initialized successfully");
+            } else {
+                console.error("Telegram Web App not available");
+            }
+            
+            loadProducts(); // Вызов функции для загрузки товаров после инициализации WebApp
         });
 
         async function getChatId() {

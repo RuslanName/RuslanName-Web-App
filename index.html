@@ -214,7 +214,7 @@
             }
         }
 
-       async function addToCart(productId) {
+        async function addToCart(productId) {
             console.log('Добавление товара в корзину, productId:', productId);
         
             const addButton = document.getElementById(`add${productId}`);
@@ -234,11 +234,11 @@
                     return;  // Прерываем выполнение, если chatId не удалось получить
                 }
         
-                // Изменение количество на +1
+                // Изменение количества на +1
                 const data = {
                     chatId: chatId,
                     productId: productId,
-                    quantityChange: 1  // Используем quantityChange для добавления
+                    quantity: 1  // Убедитесь, что ключ quantity корректен для API
                 };
         
                 console.log('Отправка данных на сервер:', data);
@@ -247,15 +247,16 @@
                     const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Content-Type': 'application/json',  // Передача данных в формате JSON
                         },
-                        body: new URLSearchParams(data)
+                        body: JSON.stringify(data)  // Передача данных в теле запроса в формате JSON
                     });
         
                     if (response.ok) {
                         console.log('Товар успешно добавлен в корзину');
                     } else {
-                        console.error('Ошибка при добавлении товара в корзину, статус:', response.status);
+                        const errorText = await response.text();
+                        console.error('Ошибка при добавлении товара в корзину, статус:', response.status, errorText);
                     }
                 } catch (error) {
                     console.error('Ошибка при отправке данных:', error);

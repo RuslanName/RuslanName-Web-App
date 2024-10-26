@@ -228,16 +228,17 @@
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
         
-                const chatId = await getChatId();
+                const chatId = await getChatId();  // Ожидание результата асинхронной функции
                 if (!chatId) {
                     console.error('Ошибка: chatId не получен.');
-                    return;
+                    return;  // Прерываем выполнение, если chatId не удалось получить
                 }
         
+                // Изменение количество на +1
                 const data = {
                     chatId: chatId,
                     productId: productId,
-                    quantityChange: 1  // Передаем +1 при добавлении
+                    quantityChange: 1  // Используем quantityChange для добавления
                 };
         
                 console.log('Отправка данных на сервер:', data);
@@ -274,7 +275,7 @@
             const newQuantity = currentQuantity + delta;
         
             if (newQuantity <= 0) {
-                // Скрываем контролы корзины, если количество стало 0
+                // Удаляем товар из корзины, если количество стало 0
                 document.getElementById(`add${productId}`).style.display = 'block';
                 document.getElementById(`cart-controls${productId}`).style.display = 'none';
                 console.log('Товар удален из корзины');
@@ -284,13 +285,13 @@
                 const chatId = await getChatId();
                 if (!chatId) {
                     console.error('Ошибка: chatId не получен.');
-                    return;
+                    return; 
                 }
         
                 const data = {
                     chatId: chatId,
                     productId: productId,
-                    quantityChange: delta  // Передаем + или -
+                    quantity: newQuantity  // Убедитесь, что это поле правильно
                 };
         
                 console.log('Отправка обновленных данных на сервер:', data);

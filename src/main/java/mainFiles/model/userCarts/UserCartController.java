@@ -19,8 +19,8 @@ public class UserCartController {
         return "Product added to cart successfully!";
     }
 
-    @GetMapping("/cart")
-    public List<UserCart> getCartByChatId(@RequestParam long chatId) {
-        return userCartService.getCartItemsByChatId(chatId);
+    @GetMapping("/load")
+    public List<UserCart> getUserCart(@RequestParam long chatId) {
+        return userCartService.getUserCartByChatId(chatId);
     }
 }

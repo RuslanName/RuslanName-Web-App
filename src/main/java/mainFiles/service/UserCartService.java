@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserCartService {
 
@@ -18,10 +20,9 @@ public class UserCartService {
     public void updateProductQuantity(long chatId, int productId, int quantityChange) {
         // Проверяем, есть ли уже такой продукт в корзине пользователя
         UserCart existingCart = userCartsRepository.findByChatIdAndProductId(chatId, productId);
-        
         if (existingCart != null) {
-            int newQuantity = existingCart.getQuantity() + quantityChange; // Измените эту строку
-            
+            int newQuantity = existingCart.getQuantity() + quantityChange;
+
             if (newQuantity > 0) {
                 // Если количество больше 0, обновляем количество
                 existingCart.setQuantity(newQuantity);
@@ -38,14 +39,14 @@ public class UserCartService {
             newCart.setChatId(chatId);
             newCart.setProductId(productId);
             newCart.setQuantity(quantityChange);
-    
+
             // Получаем максимальный ID
             if (userCartsRepository.findById(1).isEmpty()) {
                 newCart.setId(1);
             } else {
                 var carts = userCartsRepository.findAll();
                 int maxId = 0;
-    
+
                 for (UserCart cart : carts) {
                     if (cart.getId() > maxId) {
                         maxId = cart.getId();
@@ -53,7 +54,7 @@ public class UserCartService {
                 }
                 newCart.setId(maxId + 1); // Устанавливаем новый ID
             }
-    
+
             userCartsRepository.save(newCart);
         }
     }
@@ -61,7 +62,7 @@ public class UserCartService {
     public List<UserCart> getUserCartByChatId(long chatId) {
         return userCartsRepository.findByChatId(chatId);
     }
-    
+
     private void updateDatabaseSequences(String tableName) {
         String tempTable = "temp_" + tableName;
         String createTempTableQuery = String.format(

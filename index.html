@@ -227,9 +227,9 @@
                 addButton.style.display = 'none';
                 cartControls.style.display = 'flex';
         
-                const currentQuantity = +cartQuantity.innerText || 0;
+                const currentQuantity = +cartQuantity.innerText || 0; // По умолчанию 0
                 const newQuantity = currentQuantity + 1;
-                cartQuantity.innerText = newQuantity;
+                cartQuantity.innerText = newQuantity; // Обновляем отображаемое количество
         
                 const chatId = await getChatId();
                 if (!chatId) {
@@ -240,7 +240,7 @@
                 const data = {
                     chatId: chatId,
                     productId: productId,
-                    quantityChange: 1
+                    quantityChange: 1 // Увеличиваем на 1
                 };
         
                 console.log('Отправка данных на сервер:', data);

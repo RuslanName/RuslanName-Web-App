@@ -20,7 +20,7 @@ public class UserCartService {
     UserCart existingCart = userCartsRepository.findByChatIdAndProductId(chatId, productId);
     
     if (existingCart != null) {
-        int newQuantity = existingCart.getQuantity() + quantityChange;
+        int newQuantity = Math.max(0, quantityChange); 
 
         if (newQuantity > 0) {
             // Если количество больше 0, обновляем количество

@@ -214,19 +214,26 @@
             }
         }
 
- async function addToCart(productId) {
+        async function addToCart(productId) {
             console.log('Добавление товара в корзину, productId:', productId);
         
-            const addButton = document.getElementById(add${productId});
-            const cartControls = document.getElementById(cart-controls${productId});
-            const cartQuantity = document.getElementById(cart-quantity${productId});
-            const quantity = document.getElementById(quantity${productId});
+            const addButton = document.getElementById(`add${productId}`);
+            const cartControls = document.getElementById(`cart-controls${productId}`);
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
             const availableQuantity = +quantity.innerText.split(': ')[1];
         
+            // Если товар доступен
             if (availableQuantity > 0) {
                 addButton.style.display = 'none';
                 cartControls.style.display = 'flex';
-                cartQuantity.innerText = 1;
+        
+                // Получаем текущее количество в корзине, если оно уже добавлено
+                const currentQuantity = +cartQuantity.innerText || 0; // По умолчанию 0
+        
+                // Увеличиваем количество на 1
+                const newQuantity = currentQuantity + 1;
+                cartQuantity.innerText = newQuantity; // Обновляем отображаемое количество
         
                 const chatId = await getChatId();
                 if (!chatId) {
@@ -237,7 +244,7 @@
                 const data = {
                     chatId: chatId,
                     productId: productId,
-                    quantityChange: 1 // Убедитесь, что ключ корректен для API
+                    quantityChange: 1 // Увеличиваем на 1
                 };
         
                 console.log('Отправка данных на сервер:', data);

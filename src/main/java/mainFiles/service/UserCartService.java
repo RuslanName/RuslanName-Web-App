@@ -58,6 +58,10 @@ public class UserCartService {
         }
     }
 
+    public List<UserCart> getUserCartByChatId(long chatId) {
+        return userCartsRepository.findByChatId(chatId);
+    }
+    
     private void updateDatabaseSequences(String tableName) {
         String tempTable = "temp_" + tableName;
         String createTempTableQuery = String.format(

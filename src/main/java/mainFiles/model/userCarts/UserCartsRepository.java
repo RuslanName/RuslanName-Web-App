@@ -10,6 +10,6 @@ import java.util.List;
 public interface UserCartsRepository extends CrudRepository<UserCart, Integer> {
     UserCart findByChatIdAndProductId(long chatId, int productId);
 
-    @Query("SELECT uc FROM UserCart uc WHERE uc.chatId = ?1")
-    List<UserCart> findByChatId(long chatId);
+    @Query("SELECT uc FROM userCartsData uc WHERE uc.chatId = ?1")
+    List<UserCart> findByChatId(Long chatId);
 }

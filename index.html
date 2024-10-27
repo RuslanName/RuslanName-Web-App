@@ -138,11 +138,31 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <script>
+        async function getChatId() {
+            if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
+                console.error('Ошибка: Telegram WebApp не инициализирован.');
+                return null;
+            }
+        
+            try {
+                Telegram.WebApp.ready();
+                if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
+                    return Telegram.WebApp.initDataUnsafe.user.id;
+                } else {
+                    console.error('Ошибка: не удалось получить данные о пользователе через Telegram WebApp.');
+                    return null;
+                }
+            } catch (error) {
+                console.error('Ошибка при инициализации WebApp:', error);
+                return null;
+            }
+        }
+        
         async function loadProducts() {
             try {
                 const response = await fetch('https://magazin-ruslanname.amvera.io/api/products_data');
                 const products = await response.json();
-                
+        
                 const productGrid = document.getElementById('productGrid');
                 productGrid.innerHTML = '';
         
@@ -163,18 +183,21 @@
                     `;
                     productGrid.insertAdjacentHTML('beforeend', productHTML);
                 });
+
+                await loadUserCart();
         
-                // После загрузки товаров загрузите данные корзины
-                loadUserCart();
-                
             } catch (error) {
                 console.error('Ошибка при загрузке товаров:', error);
             }
         }
         
         async function loadUserCart() {
-            const chatId = /* укажите текущий chatId пользователя */;
-            
+            const chatId = await getChatId();
+            if (!chatId) {
+                console.error('Ошибка: chatId не получен.');
+                return;
+            }
+        
             try {
                 const response = await fetch(`https://magazin-ruslanname.amvera.io/api/user_carts_data/load?chatId=${chatId}`);
                 const cartItems = await response.json();
@@ -184,65 +207,18 @@
                     const cartControls = document.getElementById(`cart-controls${item.productId}`);
                     const cartQuantity = document.getElementById(`cart-quantity${item.productId}`);
         
-                    // Отображаем контролы корзины и устанавливаем количество из корзины
                     if (productElement) {
                         document.getElementById(`add${item.productId}`).style.display = "none";
                         cartControls.style.display = "block";
                         cartQuantity.textContent = item.quantity;
                     }
                 });
-                
+        
             } catch (error) {
                 console.error('Ошибка при загрузке корзины:', error);
             }
         }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-                Telegram.WebApp.ready();
-                console.log("Telegram Web App initialized successfully");
-            } else {
-                console.error("Telegram Web App not available");
-            }
-            
-            loadProducts(); // Вызов функции для загрузки товаров после инициализации WebApp
-        });
-
-        async function getChatId() {
-            console.log('Проверка инициализации Telegram WebApp...');
         
-            if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
-                console.error('Ошибка: Telegram WebApp не инициализирован.');
-                return null;
-            }
-        
-            try {
-                Telegram.WebApp.ready();
-                console.log('Telegram WebApp инициализирован:', Telegram.WebApp);
-        
-                // Отладочный вывод initData и initDataUnsafe
-                console.log('Тип initDataUnsafe:', typeof Telegram.WebApp.initDataUnsafe);
-                console.log('Содержимое initDataUnsafe:', JSON.stringify(Telegram.WebApp.initDataUnsafe, null, 2));
-
-                console.log('Версия Telegram WebApp:', Telegram.WebApp.version);
-                
-                if (!Telegram.WebApp.isVersionAtLeast('6.1')) {
-                    console.warn('Проверьте, что версия API WebApp не устарела.');
-                }
-                
-                if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
-                    console.log('Данные пользователя:', Telegram.WebApp.initDataUnsafe.user);
-                    return Telegram.WebApp.initDataUnsafe.user.id;
-                } else {
-                    console.error('Ошибка: не удалось получить данные о пользователе через Telegram WebApp.');
-                    return null;
-                }
-            } catch (error) {
-                console.error('Ошибка при инициализации WebApp:', error);
-                return null;
-            }
-        }
-
         async function addToCart(productId) {
             console.log('Добавление товара в корзину, productId:', productId);
         
@@ -257,34 +233,24 @@
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
         
-                const chatId = await getChatId();  // Ожидание результата асинхронной функции
-                if (!chatId) {
-                    console.error('Ошибка: chatId не получен.');
-                    return;  // Прерываем выполнение, если chatId не удалось получить
-                }
+                const chatId = await getChatId();
+                if (!chatId) return;
         
                 const data = {
-                    chatId: chatId,  // Теперь это реальное значение chatId, а не Promise
+                    chatId: chatId,
                     productId: productId,
                     quantity: 1
                 };
         
-                console.log('Отправка данных на сервер:', data);
-        
                 try {
                     const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: new URLSearchParams(data)
                     });
         
-                    if (response.ok) {
-                        console.log('Товар успешно добавлен в корзину');
-                    } else {
-                        console.error('Ошибка при добавлении товара в корзину, статус:', response.status);
-                    }
+                    if (!response.ok) console.error('Ошибка при добавлении товара в корзину:', response.status);
+        
                 } catch (error) {
                     console.error('Ошибка при отправке данных:', error);
                 }
@@ -292,7 +258,7 @@
                 console.error('Товар недоступен, количество:', availableQuantity);
             }
         }
-
+        
         async function updateCart(productId, delta) {
             console.log('Обновление корзины, productId:', productId, 'delta:', delta);
         
@@ -303,39 +269,29 @@
             const newQuantity = currentQuantity + delta;
         
             if (newQuantity <= 0) {
-                // Скрываем контролы корзины, если количество стало 0
                 document.getElementById(`add${productId}`).style.display = 'block';
                 document.getElementById(`cart-controls${productId}`).style.display = 'none';
                 console.log('Товар удален из корзины');
             } else if (newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
         
-                const chatId = await getChatId();  // Обязательно ждём результат вызова getChatId
-                if (!chatId) {
-                    console.error('Ошибка: chatId не получен.');
-                    return;  // Прерываем выполнение, если chatId не удалось получить
-                }
+                const chatId = await getChatId();
+                if (!chatId) return;
         
                 const data = {
-                    chatId: chatId,  // Теперь chatId содержит значение, а не Promise
+                    chatId: chatId,
                     productId: productId,
                     quantity: newQuantity
                 };
         
-                console.log('Отправка обновленных данных на сервер:', data);
-        
                 try {
                     const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: new URLSearchParams(data)
                     });
-
-                    if (response.ok) {
-                        console.log('Корзина обновлена успешно');
-                    } else {
+        
+                    if (!response.ok) {
                         const errorText = await response.text();
                         console.error('Ошибка при обновлении корзины, статус:', response.status, errorText);
                     }

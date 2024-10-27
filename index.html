@@ -183,16 +183,18 @@
                     `;
                     productGrid.insertAdjacentHTML('beforeend', productHTML);
                 });
-
-                await loadUserCart();
         
+                // После загрузки товаров загрузите данные корзины
+                loadUserCart();
+                
             } catch (error) {
                 console.error('Ошибка при загрузке товаров:', error);
             }
         }
         
         async function loadUserCart() {
-            const chatId = await getChatId();
+            const chatId = await getChatId(); // Получаем chatId пользователя
+            
             if (!chatId) {
                 console.error('Ошибка: chatId не получен.');
                 return;
@@ -207,17 +209,19 @@
                     const cartControls = document.getElementById(`cart-controls${item.productId}`);
                     const cartQuantity = document.getElementById(`cart-quantity${item.productId}`);
         
+                    // Отображаем контролы корзины и устанавливаем количество из корзины
                     if (productElement) {
                         document.getElementById(`add${item.productId}`).style.display = "none";
                         cartControls.style.display = "block";
                         cartQuantity.textContent = item.quantity;
                     }
                 });
-        
+                
             } catch (error) {
                 console.error('Ошибка при загрузке корзины:', error);
             }
         }
+
         
         async function addToCart(productId) {
             console.log('Добавление товара в корзину, productId:', productId);

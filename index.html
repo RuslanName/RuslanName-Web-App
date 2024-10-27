@@ -138,6 +138,17 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+                Telegram.WebApp.ready();
+                console.log("Telegram Web App initialized successfully");
+            } else {
+                console.error("Telegram Web App not available");
+            }
+            
+            loadProducts();
+        });
+        
         async function getChatId() {
             if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
                 console.error('Ошибка: Telegram WebApp не инициализирован.');
@@ -184,7 +195,6 @@
                     productGrid.insertAdjacentHTML('beforeend', productHTML);
                 });
         
-                // После загрузки товаров загрузите данные корзины
                 loadUserCart();
                 
             } catch (error) {
@@ -193,7 +203,7 @@
         }
 
         async function loadUserCart() {
-            const chatId = await getChatId(); // Получаем chatId пользователя
+            const chatId = await getChatId();
             
             if (!chatId) {
                 console.error('Ошибка: chatId не получен.');

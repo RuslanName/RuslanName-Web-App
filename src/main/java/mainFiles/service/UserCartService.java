@@ -17,44 +17,86 @@ public class UserCartService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public void updateProductQuantity(long chatId, int productId, int quantityChange) {
-        // Проверяем, есть ли уже такой продукт в корзине пользователя
+    // public void updateProductQuantity(long chatId, int productId, int quantityChange) {
+    //     // Проверяем, есть ли уже такой продукт в корзине пользователя
+    //     UserCart existingCart = userCartsRepository.findByChatIdAndProductId(chatId, productId);
+    //     if (existingCart != null) {
+    //         int newQuantity = existingCart.getQuantity() + quantityChange;
+    
+    //         if (newQuantity > 0) {
+    //             // Если количество больше 0, обновляем количество
+    //             existingCart.setQuantity(newQuantity);
+    //             userCartsRepository.save(existingCart);
+    //         } else {
+    //             // Если количество стало 0 или меньше, удаляем товар из корзины
+    //             userCartsRepository.delete(existingCart);
+    //             // Обновляем последовательности, если нужно
+    //             updateDatabaseSequences("user_carts_data");
+    //         }
+    //     } else if (quantityChange > 0) {
+    //         // Если товара нет и мы хотим добавить количество, создаем новую запись
+    //         UserCart newCart = new UserCart();
+    //         newCart.setChatId(chatId);
+    //         newCart.setProductId(productId);
+    //         newCart.setQuantity(quantityChange); // Добавляем количество
+    
+    //         // Получаем максимальный ID
+    //         if (userCartsRepository.findById(1).isEmpty()) {
+    //             newCart.setId(1);
+    //         } else {
+    //             var carts = userCartsRepository.findAll();
+    //             int maxId = 0;
+    
+    //             for (UserCart cart : carts) {
+    //                 if (cart.getId() > maxId) {
+    //                     maxId = cart.getId();
+    //                 }
+    //             }
+    //             newCart.setId(maxId + 1);
+    //         }
+    
+    //         userCartsRepository.save(newCart);
+    //     }
+    // }
+
+        public void updateProductQuantity(long chatId, int productId, int quantityChange) {
         UserCart existingCart = userCartsRepository.findByChatIdAndProductId(chatId, productId);
         if (existingCart != null) {
             int newQuantity = existingCart.getQuantity() + quantityChange;
-
+    
             if (newQuantity > 0) {
-                // Если количество больше 0, обновляем количество
                 existingCart.setQuantity(newQuantity);
                 userCartsRepository.save(existingCart);
-            } else {
-                // Если количество стало 0 или меньше, удаляем товар из корзины
+            } 
+                
+            else {
                 userCartsRepository.delete(existingCart);
-                // Обновляем последовательности, если нужно
                 updateDatabaseSequences("user_carts_data");
             }
-        } else if (quantityChange > 0) {
-            // Если товара нет и мы хотим добавить количество, создаем новую запись
+        } 
+        
+        else if (quantityChange > 0) {
             UserCart newCart = new UserCart();
             newCart.setChatId(chatId);
             newCart.setProductId(productId);
             newCart.setQuantity(quantityChange);
-
-            // Получаем максимальный ID
+    
             if (userCartsRepository.findById(1).isEmpty()) {
                 newCart.setId(1);
-            } else {
+            }
+            
+            else {
                 var carts = userCartsRepository.findAll();
                 int maxId = 0;
-
+    
                 for (UserCart cart : carts) {
                     if (cart.getId() > maxId) {
                         maxId = cart.getId();
                     }
                 }
-                newCart.setId(maxId + 1); // Устанавливаем новый ID
+                newCart.setId(maxId + 1);
             }
-
+    
             userCartsRepository.save(newCart);
         }
     }
@@ -85,6 +127,4 @@ public class UserCartService {
                 tableName, tableName);
         jdbcTemplate.execute(resetSequenceQuery);
     }
-
-    // Дополнительные методы для работы с корзиной, если нужно
 }

@@ -343,21 +343,39 @@
             const availableQuantity = +quantity.innerText.split(': ')[1];
             const newQuantity = currentQuantity + delta;
         
+            const chatId = await getChatId();
+            if (!chatId) return;
+        
+            const data = {
+                chatId: chatId,
+                productId: productId,
+                quantity: delta
+            };
+        
             if (newQuantity <= 0) {
+                // Если новое количество меньше или равно 0, удаляем товар из интерфейса и отправляем запрос на удаление
                 document.getElementById(`add${productId}`).style.display = 'block';
                 document.getElementById(`cart-controls${productId}`).style.display = 'none';
                 console.log('Товар удален из корзины');
+        
+                // Отправка запроса на обновление корзины в бот, чтобы удалить товар
+                try {
+                    const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams(data)
+                    });
+        
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('Ошибка при обновлении корзины, статус:', response.status, errorText);
+                    }
+                } catch (error) {
+                    console.error('Ошибка при отправке данных:', error);
+                }
             } else if (newQuantity <= availableQuantity) {
+                // Обновляем количество в интерфейсе и отправляем запрос на обновление
                 cartQuantity.innerText = newQuantity;
-        
-                const chatId = await getChatId();
-                if (!chatId) return;
-        
-                const data = {
-                    chatId: chatId,
-                    productId: productId,
-                    quantity: delta
-                };
         
                 try {
                     const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {

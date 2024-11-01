@@ -165,9 +165,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     else {
                         sendMessage(chatId, sendText);
+                        sendMessage(chatId, "Введите id товара");
                     }
-
-                    sendMessage(chatId, "Введите id товара");
                 }
 
                 else if (text.contains(DELETE_PRODUCT_KEYBOARD) && config.getAdminChatId() == chatId) {
@@ -187,9 +186,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     else {
                         sendMessage(chatId, sendText);
+                        sendMessage(chatId, "Введите id товара");
                     }
-
-                    sendMessage(chatId, "Введите id товара");
                 }
 
                 else if (text.contains(ADD_PRODUCT_QUANTITY_KEYBOARD) && config.getAdminChatId() == chatId) {
@@ -209,9 +207,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     else {
                         sendMessage(chatId, sendText);
+                        sendMessage(chatId, "Шаг 1. Введите id товара");
                     }
-
-                    sendMessage(chatId, "Шаг 1. Введите id товара");
                 }
 
                 else if (text.contains(UPDATE_PRODUCT_QUANTITY_KEYBOARD) && config.getAdminChatId() == chatId) {
@@ -231,9 +228,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     else {
                         sendMessage(chatId, sendText);
+                        sendMessage(chatId, "Шаг 1. Введите id товара");
                     }
-
-                    sendMessage(chatId, "Шаг 1. Введите id товара");
                 }
 
                 else if (text.contains(ORDER_STATUS_KEYBOARD) && config.getAdminChatId() == chatId) {
@@ -381,7 +377,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             differentStatesRepository.save(differentState);
 
             addUserDB(chatId, input, null);
-            sendMessage(chatId, "Регистрация завершена!");
+            sendMessage(chatId, "Регистрация завершена");
 
             if (chatId == config.getAdminChatId()) {
                 sendAdminPanel(chatId, "Старт");
@@ -393,7 +389,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             differentStatesRepository.save(differentState);
 
             addUserDB(chatId, null, input);
-            sendMessage(chatId, "Регистрация завершена!");
+            sendMessage(chatId, "Регистрация завершена");
 
             if (chatId == config.getAdminChatId()) {
                 sendAdminPanel(chatId, "Старт");
@@ -657,13 +653,13 @@ public class TelegramBot extends TelegramLongPollingBot {
                     userCartsRepository.deleteById(productId);
                 }
             }
-
-            deleteState(chatId);
-            updateDatabaseSequences("products_data");
-            updateDatabaseSequences("user_carts_data");
-
-            sendMessage(chatId, "Товар c id " + id + " удалён");
         }
+
+        deleteState(chatId);
+        updateDatabaseSequences("products_data");
+        updateDatabaseSequences("user_carts_data");
+
+        sendMessage(chatId, "Товар c ID " + id + " удалён");
     }
 
     private void replaceVisibilityProductDB(Long chatId, int id) {
@@ -675,17 +671,18 @@ public class TelegramBot extends TelegramLongPollingBot {
             if (productId == id) {
                 if (product.getVisibility()) {
                     product.setVisibility(false);
+                    productsRepository.save(product);
                     sendMessage(chatId, "Товар с ID " + id + " скрыт");
+                    break;
                 }
 
                 else {
                     product.setVisibility(true);
+                    productsRepository.save(product);
                     sendMessage(chatId, "Товар с ID " + id + " раскрыт");
+                    break;
                 }
-
-                productsRepository.save(product);
             }
-
             deleteState(chatId);
         }
     }
@@ -698,13 +695,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (productId == id) {
                 product.setQuantity(product.getQuantity() + quantity);
-
                 productsRepository.save(product);
+                sendMessage(chatId, "Количество товара с ID " + id + " увеличено на " + quantity);
+                break;
             }
-
             deleteState(chatId);
-
-            sendMessage(chatId, "Количество товара с ID " + id + " увеличено на " + quantity);
         }
     }
 
@@ -716,13 +711,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (productId == id) {
                 product.setQuantity(quantity);
-
                 productsRepository.save(product);
+                sendMessage(chatId, "Количество товара с ID " + id + " изменено на " + quantity);
             }
-
             deleteState(chatId);
-
-            sendMessage(chatId, "Количество товара с ID " + id + " изменено на " + quantity);
         }
     }
 
@@ -778,6 +770,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void updateDatabaseSequences(String tableName) {
         String tempTable = "temp_" + tableName;
+
         String createTempTableQuery = String.format(
                 "CREATE TEMP TABLE %s AS " +
                         "SELECT id, ROW_NUMBER() OVER (ORDER BY id) AS new_id " +
@@ -792,11 +785,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         String dropTempTableQuery = String.format("DROP TABLE %s;", tempTable);
         jdbcTemplate.execute(dropTempTableQuery);
-
-        String resetSequenceQuery = String.format(
-                "UPDATE %s SET id = (SELECT COALESCE(MAX(id), 0) + ROW_NUMBER() OVER (ORDER BY id) FROM %s) WHERE id > 0;",
-                tableName, tableName);
-        jdbcTemplate.execute(resetSequenceQuery);
     }
 
     private boolean isValidEmail(String input) {

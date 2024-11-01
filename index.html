@@ -222,7 +222,7 @@
                     const productHTML = `
                         <div class="product" id="product${product.id}">
                             <h3>${product.name}</h3>
-                            <img src="${product.image || 'https://cdn-icons-png.flaticon.com/512/3595/3595455.png'}" alt="${product.name}">
+                            <img src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
                             <p><span id="price${product.id}">${product.price}</span> руб.</p>
                             <p id="quantity${product.id}">В наличии: ${product.quantity}</p>
                             <button id="add${product.id}" onclick="addToCart('${product.id}')">Добавить</button>
@@ -235,7 +235,7 @@
                     `;
                     productGrid.insertAdjacentHTML('beforeend', productHTML);
                 });
-        
+
                 loadUserCart();
         
             } catch (error) {

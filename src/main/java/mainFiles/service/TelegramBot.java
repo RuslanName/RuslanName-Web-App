@@ -130,20 +130,20 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 else if (differentStatesRepository.findById(chatId).get().getAction().equals("AddProduct")) {
                     if (differentStatesRepository.findById(chatId).get().getProductName() == null) {
-                        addProduct(chatId, "Name", text);
+                        addProductDB(chatId, "Name", text);
                     }
 
                     else if (differentStatesRepository.findById(chatId).get().getProductQuantity() == null) {
-                        addProduct(chatId, "Quantity", text);
+                        addProductDB(chatId, "Quantity", text);
                     }
 
                     else if (differentStatesRepository.findById(chatId).get().getProductPrice() == null) {
-                        addProduct(chatId, "Price", text);
+                        addProductDB(chatId, "Price", text);
                     }
                 }
 
                 else if (differentStatesRepository.findById(chatId).get().getAction().equals("DeleteProduct")) {
-                    deleteProduct(chatId, text);
+                    deleteProductDB(chatId, Integer.parseInt(text));
                 }
             }
 
@@ -195,7 +195,18 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             else if (messageText.contains(DELETE_PRODUCT_KEYBOARD) && config.getAdminChatId() == chatId) {
                 deleteProduct(chatId);
-                sendMessage(chatId, "Введите имя товара");
+
+                String sendText = "";
+
+                var products = productsRepository.findAll();
+                sendText += boldAndUnderline("ТОВАРЫ") + "\n\n";
+
+                for (Product product : products) {
+                    sendText += product.getId() + ". " + product.getName() + " - " + "\n";
+                }
+
+                sendMessage(chatId, sendText);
+                sendMessage(chatId, "Введите id товара");
             }
 
             else if (messageText.contains(ORDER_STATUS_KEYBOARD) && config.getAdminChatId() == chatId) {
@@ -245,7 +256,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             else {
                 User user = userRepository.findById(chatId).get();
                 sendMessage(chatId, "Здравствуйте, " + user.getUsername());
-                sendShopButton(chatId);
+//                sendShopButton(chatId);
             }
         }
 
@@ -290,7 +301,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
 
             else {
-                sendShopButton(chatId);
+//                sendShopButton(chatId);
             }
         }
     }
@@ -304,7 +315,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void addProduct(long chatId, String step, String input) {
+    private void addProductDB(long chatId, String step, String input) {
         DifferentState differentState = differentStatesRepository.findById(chatId).get();
 
         if (step.equals("Name")) {
@@ -348,43 +359,53 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void deleteProduct(Long chatId, String text) {
+    private void deleteProductDB(Long chatId, int id) {
         var products = productsRepository.findAll();
+        var userCarts = userCartsRepository.findAll();
 
         for (Product product : products) {
-            if (product.getName().equals(text)) {
-                productsRepository.deleteById(product.getId());
+            int productId = product.getId();
+
+            if (productId == id) {
+                productsRepository.deleteById(productId);
+            }
+
+            for (UserCart userCart : userCarts) {
+                if (userCart.getId() == productId) {
+                    userCartsRepository.deleteById(productId);
+                }
             }
 
             deleteState(chatId);
             updateDatabaseSequences("products_data");
+            updateDatabaseSequences("user_carts_data");
 
             sendMessage(chatId, "Товар успешно удалён!");
         }
     }
 
-    private void sendShopButton(long chatId) {
-        SendMessage message = new SendMessage();
-        message.setChatId(String.valueOf(chatId));
-        message.setText("Перейдите в магазин");
-
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setResizeKeyboard(true);
-
-        List<KeyboardRow> keyboardRows = new ArrayList<>();
-        KeyboardRow row = new KeyboardRow();
-
-        KeyboardButton shopButton = new KeyboardButton(SHOP_KEYBOARD);
-        shopButton.setWebApp(new WebAppInfo("https://magazin-ruslanname.amvera.io"));
-
-        row.add(shopButton);
-        keyboardRows.add(row);
-
-        replyKeyboardMarkup.setKeyboard(keyboardRows);
-        message.setReplyMarkup(replyKeyboardMarkup);
-
-        executeFunction(message);
-    }
+//    private void sendShopButton(long chatId) {
+//        SendMessage message = new SendMessage();
+//        message.setChatId(String.valueOf(chatId));
+//        message.setText("Перейдите в магазин");
+//
+//        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+//        replyKeyboardMarkup.setResizeKeyboard(true);
+//
+//        List<KeyboardRow> keyboardRows = new ArrayList<>();
+//        KeyboardRow row = new KeyboardRow();
+//
+//        KeyboardButton shopButton = new KeyboardButton(SHOP_KEYBOARD);
+//        shopButton.setWebApp(new WebAppInfo("https://magazin-ruslanname.amvera.io"));
+//
+//        row.add(shopButton);
+//        keyboardRows.add(row);
+//
+//        replyKeyboardMarkup.setKeyboard(keyboardRows);
+//        message.setReplyMarkup(replyKeyboardMarkup);
+//
+//        executeFunction(message);
+//    }
 
     private void sendAdminPanel(long chatId, String action) {
         SendMessage message = new SendMessage();
@@ -419,13 +440,13 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         keyboardRows.add(row_2);
 
-        var row_3 = new KeyboardRow();
-
-        KeyboardButton shopButton = new KeyboardButton(SHOP_KEYBOARD);
-        shopButton.setWebApp(new WebAppInfo("https://magazin-ruslanname.amvera.io"));
-        row_3.add(shopButton);
-
-        keyboardRows.add(row_3);
+//        var row_3 = new KeyboardRow();
+//
+//        KeyboardButton shopButton = new KeyboardButton(SHOP_KEYBOARD);
+//        shopButton.setWebApp(new WebAppInfo("https://magazin-ruslanname.amvera.io"));
+//        row_3.add(shopButton);
+//
+//        keyboardRows.add(row_3);
 
         keyboardMarkup.setKeyboard(keyboardRows);
         message.setReplyMarkup(keyboardMarkup);

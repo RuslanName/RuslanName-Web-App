@@ -40,6 +40,17 @@
             background: var(--tg-theme-secondary-bg-color);
             flex-grow: 1;
         }
+
+        .product {
+            flex: 0 1 calc(50% - 5px);
+            background-color: var(--tg-theme-secondary-bg-color);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+        }
         
         .product-grid {
             display: flex;
@@ -48,17 +59,6 @@
             justify-content: space-between;
             padding: 10px;
             background-color: var(--tg-theme-secondary-bg-color);
-        }
-
-        .product {
-            flex: 0 1 calc(50% - 10px);
-            background-color: var(--tg-theme-secondary-bg-color);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            box-sizing: border-box;
-            margin-bottom: 5px;
         }
 
         .product img {
@@ -95,6 +95,12 @@
             justify-content: center;
             align-items: center;
             margin-top: 10px;
+            flex-direction: row;
+        }
+
+        .cart-controls span {
+            font-size: 16px;
+            margin: 0 10px;
         }
 
         cart-controls button {
@@ -105,11 +111,6 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-        }
-
-        .cart-controls span {
-            font-size: 16px;
-            margin: 0 10px;
         }
 
         footer {
@@ -147,6 +148,18 @@
 
     <!-- <div id="shop">
         <div id="productGrid" class="product-grid">
+            <div class="product" id="product1">
+                <h3>Пример товара</h3>
+                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Пример товара">
+                <p><span id="price1">1000</span> руб.</p>
+                <p id="quantity1">В наличии: 10</p>
+                <button id="add1" onclick="addToCart('1')">Добавить</button>
+                <div id="cart-controls1" class="cart-controls" style="display:none;">
+                    <button onclick="updateCart('1', -1)">-</button>
+                    <span id="cart-quantity1">0</span>
+                    <button onclick="updateCart('1', 1)">+</button>
+                </div>
+            </div>
             <div class="product" id="product1">
                 <h3>Пример товара</h3>
                 <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Пример товара">

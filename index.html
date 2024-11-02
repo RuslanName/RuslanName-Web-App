@@ -95,7 +95,7 @@
             justify-content: center;
             align-items: center;
             margin-top: 10px;
-            flex-direction: row;
+            /* flex-direction: row; */
         }
 
         .cart-controls span {
@@ -257,7 +257,7 @@
                                 <p><span id="price${product.id}">${product.price}</span> руб.</p>
                                 <p id="quantity${product.id}">В наличии: ${product.quantity}</p>
                                 <button id="add${product.id}" onclick="addToCart('${product.id}')">Добавить</button>
-                                <div id="cart-controls${product.id}" class="cart-controls" style="display:none;">
+                                <div id="cart-controls${product.id}" class="cart-controls" style="display:none; display: flex; justify-content: center; align-items: center;">
                                     <button onclick="updateCart('${product.id}', -1)">-</button>
                                     <span id="cart-quantity${product.id}">0</span>
                                     <button onclick="updateCart('${product.id}', 1)">+</button>

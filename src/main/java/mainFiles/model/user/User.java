@@ -14,16 +14,20 @@ public class User {
 
     @Id
     private Long chatId;
-    private String username;
-    private String phoneNumber;
+    private String userName;
+    private String firstName;
+    private String lastName;
+    private String userData;
     private Timestamp registeredAt;
 
     @Override
     public String toString() {
         return "User {" +
                 "chatId = \"" + chatId + "\"" +
-                ", userName = \"" + username + "\"" +
-                ", phoneNumber = \"" + phoneNumber + "\"" +
+                ", userName = \"" + userName + "\"" +
+                ", firstName = \"" + firstName + "\"" +
+                ", lastName = \"" + lastName + "\"" +
+                ", userData = \"" + userData + "\"" +
                 ", registeredAt = \"" + registeredAt + "\"" +
                 "}";
     }

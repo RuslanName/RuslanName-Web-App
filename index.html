@@ -217,17 +217,17 @@
             try {
                 const response = await fetch('https://magazin-ruslanname.amvera.io/api/products_data');
                 const products = await response.json();
-
+        
                 const productGrid = document.getElementById('productGrid');
                 productGrid.innerHTML = '';
-
+        
                 products
                     .filter(product => product.visibility)
                     .forEach(product => {
                         const productHTML = `
                             <div class="product" id="product${product.id}">
                                 <h3>${product.name}</h3>
-                                <img src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
+                                <img src="https://magazin-ruslanname.amvera.io${product.iconPath}" alt="${product.name}">
                                 <p><span id="price${product.id}">${product.price}</span> руб.</p>
                                 <p id="quantity${product.id}">В наличии: ${product.quantity}</p>
                                 <button id="add${product.id}" onclick="addToCart('${product.id}')">Добавить</button>
@@ -240,9 +240,9 @@
                         `;
                         productGrid.insertAdjacentHTML('beforeend', productHTML);
                     });
-
+        
                 loadUserCart();
-
+        
             } catch (error) {
                 console.error('Ошибка при загрузке товаров:', error);
             }

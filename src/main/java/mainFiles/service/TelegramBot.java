@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -306,7 +307,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 else if (differentStatesRepository.existsById(chatId)) {
                     if (differentStatesRepository.findById(chatId).get().getAction().equals("Registration")) {
                         if (differentStatesRepository.findById(chatId).get().getUserData() == null) {
-                            registration(chatId, text);
+                            registration(message, text);
                         }
                     }
 
@@ -357,7 +358,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             else {
                 User user = userRepository.findById(chatId).get();
-                sendMessage(chatId, "Здравствуйте, " + user.getUsername());
+                sendMessage(chatId, "Здравствуйте, " + user.getUserName());
             }
         }
 
@@ -368,7 +369,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void registration(long chatId, String input) {
+    private void registration(Message message, String input) {
+        long chatId = message.getChatId();
+
         DifferentState differentState = differentStatesRepository.findById(chatId).get();
 
         if (isValidPhoneNumber(input)) {
@@ -376,7 +379,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             differentState.setUserData(input);
             differentStatesRepository.save(differentState);
 
-            addUserDB(chatId, input, null);
+            addUserDB(message, input);
             sendMessage(chatId, "Регистрация завершена");
 
             if (chatId == config.getAdminChatId()) {
@@ -388,7 +391,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             differentState.setUserData(input);
             differentStatesRepository.save(differentState);
 
-            addUserDB(chatId, null, input);
+            addUserDB(message, input);
             sendMessage(chatId, "Регистрация завершена");
 
             if (chatId == config.getAdminChatId()) {
@@ -562,7 +565,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         User user = userRepository.findById(chatId).get();
 
         if (action.equals("Старт")) {
-            message.setText("Добро пожаловать, администратор " + user.getUsername());
+            message.setText("Добро пожаловать, администратор " + user.getUserName());
         }
 
         else {
@@ -594,12 +597,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeFunction(message);
     }
 
-    private void addUserDB(long chatId, String userName, String phoneNumber) {
+    private void addUserDB(Message message, String userData) {
+        var chat = message.getChat();
+        long chatId = message.getChatId();
+
         if (userRepository.findById(chatId).isEmpty()) {
             User user = new User();
             user.setChatId(chatId);
-            user.setUsername(userName);
-            user.setPhoneNumber(phoneNumber);
+            user.setUserName(chat.getUserName());
+            user.setFirstName(chat.getFirstName());
+            user.setLastName(chat.getLastName());
+            user.setUserData(userData);
             user.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
 
             userRepository.save(user);
@@ -766,6 +774,12 @@ public class TelegramBot extends TelegramLongPollingBot {
             input = "+7" + input;
         }
         return input;
+    }
+
+    @Transactional
+    private int getNextId(String tableName) {
+        String selectMaxIdQuery = String.format("SELECT COALESCE(MAX(id), 0) + 1 FROM %s;", tableName);
+        return jdbcTemplate.queryForObject(selectMaxIdQuery, Integer.class);
     }
 
     private void updateDatabaseSequences(String tableName) {

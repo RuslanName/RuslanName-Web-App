@@ -99,8 +99,8 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Копируем конфигурацию для Supervisor
 COPY supervisord.conf /etc/supervisord.conf
 
-# Создаем директорию для базы данных
-RUN mkdir -p /data && chmod -R 755 /data
+# Создаем директорию для базы данных и изображений
+RUN mkdir -p /data/product_icons && chmod -R 755 /data
 
 # Открываем порты для Nginx и Java приложения
 EXPOSE 80

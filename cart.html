@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -75,3 +75,331 @@
 </script>
 </html>
 
+ -->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Корзина</title>
+    <style>
+        :root {
+            --tg-theme-bg-color: #ffffff !important;
+            --tg-theme-text-color: #000000 !important;
+            --tg-theme-secondary-bg-color: #ffffff !important;
+            --tg-theme-button-color: #0088cc !important;
+            --tg-button-text-color: #ffffff !important;
+            --tg-theme-footer-bg-color: #ffffff !important;
+            --tg-theme-footer-text-color: #000000 !important;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #cart {
+            background: var(--tg-theme-secondary-bg-color);
+            flex-grow: 1;
+            padding-top: 60px;
+            padding-bottom: 60px;
+            overflow-y: auto;
+        }
+
+        .product {
+            flex: 0 1 calc(50% - 5px);
+            background-color: var(--tg-theme-secondary-bg-color);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+            max-width: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .product:hover {
+            transform: scale(1.05);
+        }
+
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: var(--tg-theme-secondary-bg-color);
+        }
+
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+            margin-bottom: 5px;
+        }
+
+        .product h3 {
+            margin: 5px 0;
+            padding: 0;
+            font-size: 1.2em;
+            color: #333333;
+        }
+
+        .product button {
+            padding: 10px 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 0;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .product button:hover {
+            background-color: #005f99;
+        }
+
+        .cart-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .cart-controls button {
+            padding: 10px 10px;
+        }
+
+        .cart-controls span {
+            font-size: 16px;
+            margin: 0 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-buttons {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+
+        .quantity-buttons button {
+            width: 30px;
+            height: 30px;
+        }
+
+        .top-footer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--tg-theme-footer-bg-color);
+            color: var(--tg-theme-footer-text-color);
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            box-shadow: none;
+            z-index: 1000;
+        }
+
+        .top-footer button {
+            flex: 1;
+            margin: 0 5px;
+            padding: 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .top-footer button:hover {
+            background-color: #005f99;
+            opacity: 0.8;
+        }
+
+        .checkout-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--tg-theme-footer-bg-color);
+            color: var(--tg-theme-footer-text-color);
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            box-shadow: none;
+            z-index: 999;
+        }
+
+        .checkout-footer span {
+            margin-left: 10px;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkout-footer button {
+            flex-grow: 1;
+            margin: 0 5px;
+            padding: 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkout-footer button:hover {
+            background-color: #005f99;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-footer">
+        <button onclick="location.href='index.html'">Магазин</button>
+        <button onclick="location.href='orders.html'">Заказы</button>
+    </div>
+
+    <div id="cart">
+        <div id="productGrid" class="product-grid"></div>        
+    </div>    
+
+    <div class="checkout-footer">
+        <span id="total-price" style="flex: 0 0 auto; text-align: center; border: 1px solid #000; border-radius: 5px; padding: 14px;">0 ₽</span>
+        <button onclick="location.href='checkout.html'">Перейти к оформлению</button>
+    </div>              
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <script>
+        async function checkUserCart(chatId) {
+            try {
+                const response = await fetch(`https://magazin-ruslanname.amvera.io/api/get_cart?chatId=${chatId}`);
+                const data = await response.json();
+                loadCartItems(data);
+            } catch (error) {
+                console.error('Ошибка при получении корзины пользователя:', error);
+            }
+        }
+
+        function loadCartItems(cartItems) {
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = '';
+            let totalPrice = 0;
+
+            cartItems.forEach(item => {
+                const productHTML = `
+                    <div class="product" id="cart-product${item.id}">
+                        <h3>${item.name}</h3>
+                        <img src="${item.iconPath}" alt="${item.name}">
+                        <p><span id="cart-price${item.id}">${item.price}</span> руб.</p>
+                        <p id="cart-quantity${item.id}">Количество: <span id="cart-amount${item.id}">${item.quantity}</span></p>
+                        <div class="cart-controls">
+                            <button onclick="updateCart('${item.id}', -1)">-</button>
+                            <span id="cart-quantity${item.id}-display">${item.quantity}</span>
+                            <button onclick="updateCart('${item.id}', 1)">+</button>
+                        </div>
+                    </div>
+                `;
+                productGrid.insertAdjacentHTML('beforeend', productHTML);
+                totalPrice += item.price * item.quantity;
+            });
+
+            updateTotalPrice(totalPrice); 
+        }
+
+        async function updateCart(productId, change) {
+            const chatId = await getChatId();
+            const quantityElement = document.getElementById(`cart-quantity${productId}`);
+            const amountElement = document.getElementById(`cart-amount${productId}`);
+            const priceElement = document.getElementById(`cart-price${productId}`);
+            const price = parseFloat(priceElement.innerText);
+
+            let currentQuantity = parseInt(amountElement.innerText);
+            currentQuantity += change;
+
+            if (currentQuantity < 0) {
+                currentQuantity = 0; 
+            }
+
+            amountElement.innerText = currentQuantity; 
+            await updateCartInDB(chatId, productId, currentQuantity); 
+            
+            const totalPrice = calculateTotalPrice();
+            updateTotalPrice(totalPrice); 
+        }
+
+        function calculateTotalPrice() {
+            let total = 0;
+            const cartItems = document.querySelectorAll('.product');
+            cartItems.forEach(item => {
+                const price = parseFloat(item.querySelector('p').innerText);
+                const quantity = parseInt(item.querySelector('span').innerText);
+                total += price * quantity;
+            });
+            return total;
+        }
+
+
+        async function updateCartInDB(chatId, productId, quantity) {
+            try {
+                await fetch(`https://magazin-ruslanname.amvera.io/api/update_cart`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ chatId, productId, quantity })
+                });
+            } catch (error) {
+                console.error('Ошибка при обновлении корзины:', error);
+            }
+        }
+
+        function calculateTotalPrice() {
+            let total = 0;
+            const cartItems = document.querySelectorAll('.product');
+            cartItems.forEach(item => {
+                const price = parseFloat(item.querySelector('p').innerText);
+                const quantity = parseInt(item.querySelector('span').innerText);
+                total += price * quantity;
+            });
+            return total;
+        }
+
+        async function getChatId() {
+            const chatId = Telegram.WebApp.initDataUnsafe.user.id;
+            return chatId;
+        }
+
+        window.addEventListener('load', async () => {
+            const chatId = await getChatId();
+            await checkUserCart(chatId);
+        });
+    </script>
+</body>
+</html>

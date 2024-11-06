@@ -1,82 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Корзина</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background: var(--tg-theme-bg-color);
-            color: var(--tg-theme-text-color);
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
-
-        #main {
-            max-width: 400px;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: var(--tg-theme-secondary-bg-color);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        button {
-            padding: 10px 15px;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-button-text-color);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            opacity: 0.9;
-        }
-
-        .button-group {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-<div id="main">
-    <h1>Корзина</h1>
-    <p>Ваша корзина пока пуста.</p>
-    <div class="button-group">
-        <button onclick="goToShop()">Магазин</button>
-        <button onclick="location.href='orders.html'">Заказы</button>
-    </div>
-</div>
-</body>
-
-<script>
-    function goToShop() {
-        // const isAuthenticated = localStorage.getItem('isAuthenticated');
-        
-        // if (isAuthenticated === 'true') {
-        //     window.location.href = 'shop.html'; // Перенаправляем на страницу магазина
-        // } else {
-        //     window.location.href = 'auth.html'; // Перенаправляем на страницу авторизации
-        // }
-        window.location.href = "index.html"; 
-    }
-</script>
-</html>
-
- -->
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -305,19 +226,19 @@
                 console.error("Telegram Web App not available");
             }
 
-            // const chatId = await getChatId();
-            // if (!chatId) {
-            //     document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
-            //     document.querySelector("footer").style.display = "none";
-            //     return;
-            // }
+            const chatId = await getChatId();
+            if (!chatId) {
+                document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
+                document.querySelector("footer").style.display = "none";
+                return;
+            }
 
-            // const isRegistered = await checkUserRegistration(chatId);
-            // if (!isRegistered) {
-            //     document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
-            //     document.querySelector("footer").style.display = "none";
-            //     return;
-            // }
+            const isRegistered = await checkUserRegistration(chatId);
+            if (!isRegistered) {
+                document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
+                document.querySelector("footer").style.display = "none";
+                return;
+            }
 
             loadProducts();
         });
@@ -402,16 +323,16 @@
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
             const newQuantity = parseInt(cartQuantity.innerText) + delta;
             if (newQuantity < 1) return;
-
+        
             cartQuantity.innerText = newQuantity;
-
+        
             const chatId = await getChatId();
             const data = {
                 chatId: chatId,
                 productId: productId,
-                quantity: newQuantity
+                quantity: delta 
             };
-
+        
             try {
                 await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
                     method: 'POST',
@@ -450,7 +371,6 @@
             }
         }
 
-
         function applyTheme() {
             const themeColor = Telegram.WebApp.themeParams.bg_color;
             const themeTextColor = Telegram.WebApp.themeParams.text_color;
@@ -470,3 +390,82 @@
     </script>
 </body>
 </html>
+
+<!-- <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Корзина</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        #main {
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: var(--tg-theme-secondary-bg-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="main">
+    <h1>Корзина</h1>
+    <p>Ваша корзина пока пуста.</p>
+    <div class="button-group">
+        <button onclick="goToShop()">Магазин</button>
+        <button onclick="location.href='orders.html'">Заказы</button>
+    </div>
+</div>
+</body>
+
+<script>
+    function goToShop() {
+        // const isAuthenticated = localStorage.getItem('isAuthenticated');
+        
+        // if (isAuthenticated === 'true') {
+        //     window.location.href = 'shop.html'; // Перенаправляем на страницу магазина
+        // } else {
+        //     window.location.href = 'auth.html'; // Перенаправляем на страницу авторизации
+        // }
+        window.location.href = "index.html"; 
+    }
+</script>
+</html>
+
+ -->

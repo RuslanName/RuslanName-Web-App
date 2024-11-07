@@ -390,7 +390,8 @@
         }
 
         function calculateTotalPrice() {
-            const totalPriceElement = document.getElementById('totalPrice');
+            const totalPriceElement = document.getElementById('total-price');
+        
             if (!totalPriceElement) {
                 console.error("Элемент для отображения итоговой суммы не найден.");
                 return;
@@ -409,7 +410,7 @@
                 }
             });
         
-            totalPriceElement.innerText = `Итоговая сумма: ${totalPrice} руб.`;
+            totalPriceElement.innerText = `${totalPrice} ₽`;
         }
 
         function applyTheme() {

@@ -358,10 +358,10 @@
 
         async function updateCart(productId, delta) {
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const newQuantity = parseInt(cartQuantity.innerText) + delta;
+            let newQuantity = parseInt(cartQuantity.innerText) + delta;
             const availableQuantity = parseInt(document.getElementById(`quantity${productId}`).getAttribute('data-available'));
 
-            if (newQuantity >= 1 && newQuantity <= availableQuantity) {
+            if (newQuantity >= 0 && newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
 
                 const chatId = await getChatId();
@@ -377,6 +377,12 @@
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: new URLSearchParams(data)
                     });
+
+                    if (newQuantity === 0) {
+                        document.getElementById(`add${productId}`).style.display = 'inline-block';
+                        document.getElementById(`cart-controls${productId}`).style.display = 'none';
+                    }
+
                     calculateTotalPrice();
                 } catch (error) {
                     console.error('Ошибка при обновлении корзины:', error);
@@ -390,15 +396,14 @@
 
             cartItems.forEach(cartControl => {
                 const productId = cartControl.id.split('cart-controls')[1];
-                const cartQuantity = parseInt(document.getElementById(`cart-quantity${productId}`).innerText);
-                const productPrice = parseInt(document.getElementById(`price${productId}`).innerText);
+                const cartQuantity = parseInt(document.getElementById(`cart-quantity${productId}`).innerText) || 0;
+                const productPrice = parseInt(document.getElementById(`price${productId}`).innerText) || 0;
 
                 totalPrice += cartQuantity * productPrice;
             });
 
             document.getElementById('totalPrice').innerText = totalPrice + ' руб.';
         }
-
 
         function applyTheme() {
             const themeColor = Telegram.WebApp.themeParams.bg_color;

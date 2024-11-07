@@ -336,53 +336,52 @@
         }
         
         async function updateCart(productId, delta) {
-            console.log('Обновление корзины, productId:', productId, 'delta:', delta);
-        
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const quantity = document.getElementById(`quantity${productId}`);
-            const currentQuantity = +cartQuantity.innerText;
-            const availableQuantity = +quantity.innerText.split(': ')[1];
-            const newQuantity = currentQuantity + delta;
-        
-            if (newQuantity < 0) {
-                console.error('Количество товара не может быть отрицательным');
-                return;
-            }
-        
-            if (newQuantity === 0) {
-                document.getElementById(`add${productId}`).style.display = 'block';
-                document.getElementById(`cart-controls${productId}`).style.display = 'none';
-                console.log('Товар удален из корзины');
-            } else if (newQuantity > availableQuantity) {
-                console.error('Недостаточно товара, доступно:', availableQuantity, 'запрашиваемое количество:', newQuantity);
-                return;
-            } else {
+            let newQuantity = parseInt(cartQuantity.innerText) + delta;
+            const availableQuantity = parseInt(document.getElementById(`quantity${productId}`).getAttribute('data-available'));
+
+            if (newQuantity >= 0 && newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
-            }
-        
-            const chatId = await getChatId();
-            if (!chatId) return;
-        
-            const data = {
-                chatId: chatId,
-                productId: productId,
-                quantity: delta
-            };
-        
-            try {
-                const response = await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams(data)
-                });
-        
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('Ошибка при обновлении корзины, статус:', response.status, errorText);
+
+                const chatId = await getChatId();
+                const data = {
+                    chatId: chatId,
+                    productId: productId,
+                    quantity: delta
+                };
+
+                try {
+                    await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams(data)
+                    });
+
+                    if (newQuantity === 0) {
+                        document.getElementById(`add${productId}`).style.display = 'inline-block';
+                        document.getElementById(`cart-controls${productId}`).style.display = 'none';
+                    }
+
+                    calculateTotalPrice();
+                } catch (error) {
+                    console.error('Ошибка при обновлении корзины:', error);
                 }
-            } catch (error) {
-                console.error('Ошибка при отправке данных:', error);
             }
+        }
+
+        function calculateTotalPrice() {
+            const cartItems = document.querySelectorAll('.cart-controls');
+            let totalPrice = 0;
+
+            cartItems.forEach(cartControl => {
+                const productId = cartControl.id.split('cart-controls')[1];
+                const cartQuantity = parseInt(document.getElementById(`cart-quantity${productId}`).innerText) || 0;
+                const productPrice = parseInt(document.getElementById(`price${productId}`).innerText) || 0;
+
+                totalPrice += cartQuantity * productPrice;
+            });
+
+            document.getElementById('totalPrice').innerText = totalPrice + ' руб.';
         }
 
         function applyTheme() {

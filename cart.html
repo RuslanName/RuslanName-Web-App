@@ -275,16 +275,16 @@
                     console.error('Ошибка: chatId не получен.');
                     return;
                 }
-
+        
                 const productsResponse = await fetch(`https://magazin-ruslanname.amvera.io/api/products_data/user/${chatId}`);
                 const products = await productsResponse.json();
-
+        
                 const cartResponse = await fetch(`https://magazin-ruslanname.amvera.io/api/user_carts_data/load?chatId=${chatId}`);
                 const cartItems = await cartResponse.json();
-
+        
                 const productGrid = document.getElementById('productGrid');
                 productGrid.innerHTML = '';
-
+        
                 products.forEach(product => {
                     const productHTML = `
                         <div class="product" id="product${product.id}">
@@ -302,47 +302,46 @@
                     `;
                     productGrid.insertAdjacentHTML('beforeend', productHTML);
                 });
-
+        
                 cartItems.forEach(item => {
                     const addButton = document.getElementById(`add${item.productId}`);
                     const cartControls = document.getElementById(`cart-controls${item.productId}`);
                     const cartQuantity = document.getElementById(`cart-quantity${item.productId}`);
-
+        
                     if (addButton) {
                         addButton.style.display = "none";
                     }
-
+        
                     if (cartControls) {
                         cartControls.style.display = "flex"; 
                         cartQuantity.textContent = item.quantity;
                     }
                 });
-
+        
                 calculateTotalPrice();
             } catch (error) {
                 console.error('Ошибка при загрузке товаров или корзины:', error);
             }
         }
-
-
+        
         async function addToCart(productId) {
             const addButton = document.getElementById(`add${productId}`);
             const cartControls = document.getElementById(`cart-controls${productId}`);
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
             const availableQuantity = parseInt(document.getElementById(`quantity${productId}`).getAttribute('data-available'));
-
+        
             if (availableQuantity > 0) {
                 addButton.style.display = 'none';
                 cartControls.style.display = 'flex';
                 cartQuantity.innerText = 1;
-
+        
                 const chatId = await getChatId();
                 const data = {
                     chatId: chatId,
                     productId: productId,
                     quantity: 1
                 };
-
+        
                 try {
                     await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
                         method: 'POST',
@@ -355,34 +354,34 @@
                 }
             }
         }
-
+        
         async function updateCart(productId, delta) {
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
             let newQuantity = parseInt(cartQuantity.innerText) + delta;
             const availableQuantity = parseInt(document.getElementById(`quantity${productId}`).getAttribute('data-available'));
-
+        
             if (newQuantity >= 0 && newQuantity <= availableQuantity) {
                 cartQuantity.innerText = newQuantity;
-
+        
                 const chatId = await getChatId();
                 const data = {
                     chatId: chatId,
                     productId: productId,
                     quantity: delta
                 };
-
+        
                 try {
                     await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: new URLSearchParams(data)
                     });
-
+        
                     if (newQuantity === 0) {
                         document.getElementById(`add${productId}`).style.display = 'inline-block';
                         document.getElementById(`cart-controls${productId}`).style.display = 'none';
                     }
-
+        
                     calculateTotalPrice();
                 } catch (error) {
                     console.error('Ошибка при обновлении корзины:', error);
@@ -390,30 +389,27 @@
             }
         }
 
-        async function calculateTotalPrice() {
-            try {
-                const cartItems = document.querySelectorAll('.cart-controls');
-                let totalPrice = 0;
-
-                cartItems.forEach(item => {
-                    const productId = item.id.replace('cart-controls', '');
-                    const priceElement = document.getElementById(`price${productId}`);
-                    const quantityElement = document.getElementById(`cart-quantity${productId}`);
-
-                    if (priceElement && quantityElement) {
-                        const price = parseFloat(priceElement.innerText);
-                        const quantity = parseInt(quantityElement.innerText);
-                        totalPrice += price * quantity;
-                    }
-                });
-
-                const totalElement = document.getElementById('totalPrice');
-                if (totalElement) {
-                    totalElement.innerText = `${totalPrice.toFixed(2)} руб.`;
-                }
-            } catch (error) {
-                console.error('Ошибка при подсчете итоговой суммы:', error);
+        function calculateTotalPrice() {
+            const totalPriceElement = document.getElementById('totalPrice');
+            if (!totalPriceElement) {
+                console.error("Элемент для отображения итоговой суммы не найден.");
+                return;
             }
+        
+            let totalPrice = 0;
+            document.querySelectorAll('.product').forEach(product => {
+                const productId = product.id.replace('product', '');
+                const quantityElement = document.getElementById(`cart-quantity${productId}`);
+                const priceElement = document.getElementById(`price${productId}`);
+        
+                if (quantityElement && priceElement) {
+                    const quantity = parseInt(quantityElement.innerText) || 0;
+                    const price = parseFloat(priceElement.innerText) || 0;
+                    totalPrice += quantity * price;
+                }
+            });
+        
+            totalPriceElement.innerText = `Итоговая сумма: ${totalPrice} руб.`;
         }
 
         function applyTheme() {

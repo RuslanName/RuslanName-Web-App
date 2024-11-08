@@ -24,8 +24,19 @@ public class UserCartController {
         return "Product added to cart successfully!";
     }
 
+    @PostMapping("/update_selection")
+    public String updateProductSelection(
+            @RequestParam long chatId,
+            @RequestParam int productId,
+            @RequestParam boolean selected) {
+
+        userCartService.updateProductSelection(chatId, productId, selected);
+        return "Product selection updated successfully!";
+    }
+
     @GetMapping("/load")
     public List<UserCart> getUserCart(@RequestParam long chatId) {
         return userCartService.getUserCartByChatId(chatId);
     }
 }
+

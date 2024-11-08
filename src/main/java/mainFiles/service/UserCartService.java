@@ -22,21 +22,26 @@ public class UserCartService {
         UserCart existingCart = userCartsRepository.findByChatIdAndProductId(chatId, productId);
         if (existingCart != null) {
             int newQuantity = existingCart.getQuantity() + quantityChange;
-    
+
             if (newQuantity > 0) {
                 existingCart.setQuantity(newQuantity);
                 userCartsRepository.save(existingCart);
-            } else {
+            }
+
+            else {
                 userCartsRepository.delete(existingCart);
                 updateDatabaseSequences("user_carts_data");
             }
-        } else if (quantityChange > 0) {
+        }
+
+        else if (quantityChange > 0) {
             UserCart newCart = new UserCart();
             newCart.setChatId(chatId);
             newCart.setProductId(productId);
             newCart.setQuantity(quantityChange);
+            newCart.setSelected(true);
             newCart.setId(getNextId("user_carts_data"));
-    
+
             userCartsRepository.save(newCart);
         }
     }

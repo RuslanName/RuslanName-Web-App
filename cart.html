@@ -275,20 +275,20 @@
                     console.error('Ошибка: chatId не получен.');
                     return;
                 }
-        
+
                 const productsResponse = await fetch(`https://magazin-ruslanname.amvera.io/api/products_data/user/${chatId}`);
                 const products = await productsResponse.json();
-        
+
                 const cartResponse = await fetch(`https://magazin-ruslanname.amvera.io/api/user_carts_data/load?chatId=${chatId}`);
                 const cartItems = await cartResponse.json();
-        
+
                 const productGrid = document.getElementById('productGrid');
                 productGrid.innerHTML = '';
-        
+
                 products.forEach(product => {
                     const productHTML = `
                         <div class="product" id="product${product.id}">
-                            <h3>${product.name}</h3>
+                            <h3>${product.name} <input type="checkbox" id="select${product.id}" onclick="toggleSelection('${product.id}')"></h3>
                             <img src="https://magazin-ruslanname.amvera.io${product.iconPath}" alt="${product.name}">
                             <p><span id="price${product.id}">${product.price}</span> руб.</p>
                             <p id="quantity${product.id}" data-available="${product.quantity}">В наличии: ${product.quantity}</p>
@@ -302,28 +302,42 @@
                     `;
                     productGrid.insertAdjacentHTML('beforeend', productHTML);
                 });
-        
+
                 cartItems.forEach(item => {
                     const addButton = document.getElementById(`add${item.productId}`);
                     const cartControls = document.getElementById(`cart-controls${item.productId}`);
                     const cartQuantity = document.getElementById(`cart-quantity${item.productId}`);
-        
+                    const selectCheckbox = document.getElementById(`select${item.productId}`);
+
                     if (addButton) {
                         addButton.style.display = "none";
                     }
-        
+
                     if (cartControls) {
                         cartControls.style.display = "flex"; 
                         cartQuantity.textContent = item.quantity;
                     }
+
+                    if (selectCheckbox) {
+                        selectCheckbox.checked = item.selected;
+                    }
                 });
-        
+
                 calculateTotalPrice();
             } catch (error) {
                 console.error('Ошибка при загрузке товаров или корзины:', error);
             }
         }
-        
+
+        function toggleSelection(productId) {
+            const selectCheckbox = document.getElementById(`select${productId}`);
+            const isSelected = selectCheckbox.checked;
+
+            updateCartSelection(productId, isSelected);
+
+            calculateTotalPrice();
+        }
+
         async function addToCart(productId) {
             const addButton = document.getElementById(`add${productId}`);
             const cartControls = document.getElementById(`cart-controls${productId}`);
@@ -357,6 +371,7 @@
         
         async function updateCart(productId, delta) {
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const productElement = document.getElementById(`product${productId}`);
             let newQuantity = parseInt(cartQuantity.innerText) + delta;
             const availableQuantity = parseInt(document.getElementById(`quantity${productId}`).getAttribute('data-available'));
         
@@ -378,8 +393,7 @@
                     });
         
                     if (newQuantity === 0) {
-                        document.getElementById(`add${productId}`).style.display = 'inline-block';
-                        document.getElementById(`cart-controls${productId}`).style.display = 'none';
+                        productElement.remove();
                     }
         
                     calculateTotalPrice();
@@ -389,27 +403,47 @@
             }
         }
 
+        async function updateCartSelection(productId, isSelected) {
+            const chatId = await getChatId();
+            const data = {
+                chatId: chatId,
+                productId: productId,
+                selected: isSelected
+            };
+
+            try {
+                await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update_selection', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(data)
+                });
+            } catch (error) {
+                console.error('Ошибка при обновлении статуса выбора товара:', error);
+            }
+        }
+
         function calculateTotalPrice() {
             const totalPriceElement = document.getElementById('total-price');
-        
+
             if (!totalPriceElement) {
                 console.error("Элемент для отображения итоговой суммы не найден.");
                 return;
             }
-        
+
             let totalPrice = 0;
             document.querySelectorAll('.product').forEach(product => {
                 const productId = product.id.replace('product', '');
                 const quantityElement = document.getElementById(`cart-quantity${productId}`);
                 const priceElement = document.getElementById(`price${productId}`);
-        
-                if (quantityElement && priceElement) {
+                const selectCheckbox = document.getElementById(`select${productId}`);
+
+                if (quantityElement && priceElement && selectCheckbox && selectCheckbox.checked) {
                     const quantity = parseInt(quantityElement.innerText) || 0;
                     const price = parseFloat(priceElement.innerText) || 0;
                     totalPrice += quantity * price;
                 }
             });
-        
+
             totalPriceElement.innerText = `${totalPrice} ₽`;
         }
 

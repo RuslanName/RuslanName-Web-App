@@ -5,6 +5,7 @@ import mainFiles.model.userCarts.UserCartsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,20 +35,7 @@ public class UserCartService {
             newCart.setChatId(chatId);
             newCart.setProductId(productId);
             newCart.setQuantity(quantityChange);
-    
-            if (userCartsRepository.findById(1).isEmpty()) {
-                newCart.setId(1);
-            } else {
-                var carts = userCartsRepository.findAll();
-                int maxId = 0;
-    
-                for (UserCart cart : carts) {
-                    if (cart.getId() > maxId) {
-                        maxId = cart.getId();
-                    }
-                }
-                newCart.setId(maxId + 1);
-            }
+            newCart.setId(getNextId("user_carts_data"));
     
             userCartsRepository.save(newCart);
         }
@@ -55,6 +43,20 @@ public class UserCartService {
 
     public List<UserCart> getUserCartByChatId(long chatId) {
         return userCartsRepository.findByChatId(chatId);
+    }
+
+    public void updateProductSelection(long chatId, int productId, boolean selected) {
+        UserCart existingCart = userCartsRepository.findByChatIdAndProductId(chatId, productId);
+        if (existingCart != null) {
+            existingCart.setSelected(selected);
+            userCartsRepository.save(existingCart);
+        }
+    }
+
+    @Transactional
+    private int getNextId(String tableName) {
+        String selectMaxIdQuery = String.format("SELECT COALESCE(MAX(id), 0) + 1 FROM %s;", tableName);
+        return jdbcTemplate.queryForObject(selectMaxIdQuery, Integer.class);
     }
 
     private void updateDatabaseSequences(String tableName) {

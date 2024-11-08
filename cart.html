@@ -7,15 +7,16 @@
     <title>Корзина</title>
     <style>
         :root {
-           --tg-theme-bg-color: #ffffff !important;
-           --tg-theme-text-color: #000000 !important;
-           --tg-theme-secondary-bg-color: #ffffff !important;
-           --tg-theme-button-color: #0088cc !important;
-           --tg-button-text-color: #ffffff !important;
-           --tg-theme-footer-bg-color: #ffffff !important;
-           --tg-theme-footer-text-color: #000000 !important;
+            --tg-theme-bg-color: #ffffff !important;
+            --tg-theme-text-color: #000000 !important;
+            --tg-theme-secondary-bg-color: #ffffff !important;
+            --tg-theme-button-color: #0088cc !important;
+            --tg-button-text-color: #ffffff !important;
+            --tg-theme-footer-bg-color: #ffffff !important;
+            --tg-theme-footer-text-color: #000000 !important;
+            --tg-checkbox-toggle-color: #333333 !important;
         }
-       
+
         body {
             margin: 0;
             padding: 0;
@@ -39,8 +40,8 @@
             object-fit: cover;
             object-position: center;
         }
-       
-       .product {
+
+        .product {
             position: relative;
             flex: 0 1 calc(50% - 5px);
             background-color: var(--tg-theme-secondary-bg-color);
@@ -55,48 +56,49 @@
         }
 
         .product button {
-           padding: 10px 15px;
-           background-color: var(--tg-theme-button-color);
-           color: var(--tg-button-text-color);
-           border: none;
-           border-radius: 5px;
-           cursor: pointer;
-           font-size: 16px;
-           margin: 5px 0;
-           width: 100%;
-           transition: background-color 0.3s ease;
-       }
-       
-       .product-grid {
-           display: flex;
-           flex-wrap: wrap;
-           gap: 10px;
-           justify-content: space-between;
-           padding: 10px;
-           background-color: var(--tg-theme-secondary-bg-color);
-       }
-       
-       .product img {
-           width: 100%;
-           height: 200px;
-           object-fit: cover;
-           object-position: center;
-           margin-bottom: 5px;
-       }
+            padding: 10px 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 0;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
 
-       .product-checkbox:checked {
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: var(--tg-theme-secondary-bg-color);
+        }
+
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+            margin-bottom: 5px;
+        }
+
+        .product-checkbox:checked {
             background-color: var(--tg-theme-button-color);
             border-color: var(--tg-theme-button-color);
         }
-       
-       .product h3 {
-           margin: 5px 0;
-           padding: 0;
-           font-size: 1.2em;
-           color: #333333;
-       }
 
-        .product-checkbox, .product input[type="checkbox"] {
+        .product h3 {
+            margin: 5px 0;
+            padding: 0;
+            font-size: 1.2em;
+            color: var(--tg-checkbox-toggle-color);
+        }
+
+        .product-checkbox,
+        .product input[type="checkbox"] {
             position: absolute;
             top: 10px;
             right: 10px;
@@ -109,19 +111,19 @@
         }
 
         .product input[type="checkbox"]:checked {
-           background-color: var(--tg-theme-button-color);
-           border-color: var(--tg-theme-button-color);
-       }
-
-       .product:hover, .product.touched {
-            transform: scale(1.1);
+            background-color: var(--tg-theme-button-color);
+            border-color: var(--tg-theme-button-color);
         }
-       
-       .product button:hover {
-           background-color: #005f99;
-       }
 
-       #cart {
+        .product:hover {
+            transform: scale(1.05);
+        }
+
+        .product button:hover {
+            background-color: var(--tg-theme-button-color);
+        }
+
+        #cart {
             background: var(--tg-theme-secondary-bg-color);
             flex-grow: 1;
             padding-top: 60px;
@@ -135,66 +137,66 @@
             align-items: center;
             margin-top: 10px;
         }
-       
+
         .cart-controls button {
             padding: 10px 10px;
         }
-       
+
         .cart-controls span {
             font-size: 16px;
             margin: 0 10px;
         }
-       
+
         .cart-item {
             display: flex;
             align-items: center;
         }
 
-       .quantity-buttons {
+        .quantity-buttons {
             display: flex;
             flex-direction: column;
             margin-left: 10px;
         }
-       
-       .quantity-buttons button {
-           width: 30px;
-           height: 30px;
-       }
-       
-       .top-footer {
-           position: fixed;
-           top: 0;
-           left: 0;
-           width: 100%;
-           background-color: var(--tg-theme-footer-bg-color);
-           color: var(--tg-theme-footer-text-color);
-           display: flex;
-           justify-content: center;
-           padding: 10px 0;
-           box-shadow: none;
-           z-index: 1000;
-       }
-       
-       .top-footer button {
-           flex: 1;
-           margin: 0 5px;
-           padding: 15px;
-           background-color: var(--tg-theme-button-color);
-           color: var(--tg-button-text-color);
-           border: none;
-           border-radius: 5px;
-           cursor: pointer;
-           font-size: 16px;
-           text-align: center;
-           transition: background-color 0.3s ease;
-       }
-       
-       .top-footer button:hover {
-           background-color: #005f99;
-           opacity: 0.8;
-       }
 
-       .checkout-footer {
+        .quantity-buttons button {
+            width: 30px;
+            height: 30px;
+        }
+
+        .top-footer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--tg-theme-footer-bg-color);
+            color: var(--tg-theme-footer-text-color);
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            box-shadow: none;
+            z-index: 1000;
+        }
+
+        .top-footer button {
+            flex: 1;
+            margin: 0 5px;
+            padding: 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .top-footer button:hover {
+            background-color: #005f99;
+            opacity: 0.8;
+        }
+
+        .checkout-footer {
             position: fixed;
             bottom: 0;
             left: 0;
@@ -207,14 +209,14 @@
             box-shadow: none;
             z-index: 999;
         }
-       
+
         .checkout-footer span {
             margin-left: 10px;
             font-size: 16px;
             display: flex;
             flex-direction: column;
         }
-       
+
         .checkout-footer button {
             flex-grow: 1;
             margin: 0 5px;
@@ -228,7 +230,7 @@
             text-align: center;
             transition: background-color 0.3s ease;
         }
-       
+
         .checkout-footer button:hover {
             background-color: #005f99;
             opacity: 0.8;
@@ -249,7 +251,6 @@
         <span id="total-price" style="flex: 0 0 auto; text-align: center; border: 1px solid #000; border-radius: 5px; padding: 14px;">0 ₽</span>
         <button onclick="location.href='checkout.html'">Перейти к оформлению</button>
     </div>
-                   
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
@@ -262,19 +263,19 @@
                 console.error("Telegram Web App not available");
             }
 
-            // const chatId = await getChatId();
-            // if (!chatId) {
-            //     document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
-            //     document.querySelector("footer").style.display = "none";
-            //     return;
-            // }
+            const chatId = await getChatId();
+            if (!chatId) {
+                document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
+                document.querySelector("footer").style.display = "none";
+                return;
+            }
 
-            // const isRegistered = await checkUserRegistration(chatId);
-            // if (!isRegistered) {
-            //     document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
-            //     document.querySelector("footer").style.display = "none";
-            //     return;
-            // }
+            const isRegistered = await checkUserRegistration(chatId);
+            if (!isRegistered) {
+                document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
+                document.querySelector("footer").style.display = "none";
+                return;
+            }
 
             loadProducts();
         });
@@ -304,6 +305,65 @@
             }
         }
 
+        // async function loadProducts() {
+        //     try {
+        //         const chatId = await getChatId();
+        //         if (!chatId) {
+        //             console.error('Ошибка: chatId не получен.');
+        //             return;
+        //         }
+
+        //         const productsResponse = await fetch(`https://magazin-ruslanname.amvera.io/api/products_data/user/${chatId}`);
+        //         const products = await productsResponse.json();
+
+        //         const cartResponse = await fetch(`https://magazin-ruslanname.amvera.io/api/user_carts_data/load?chatId=${chatId}`);
+        //         const cartItems = await cartResponse.json();
+
+        //         const productGrid = document.getElementById('productGrid');
+                
+        //         productGrid.innerHTML = '';
+                
+        //         products.forEach(product => {
+        //             const productHTML = `
+        //                 <div class="product" id="product${product.id}">
+        //                     <h3>${product.name}</h3>
+        //                     <div class="product-image-wrapper">
+        //                         <img src="https://magazin-ruslanname.amvera.io${product.iconPath}" alt="${product.name}">
+        //                         <input type="checkbox" class="product-checkbox" id="select${product.id}" onclick="toggleSelection('${product.id}')">
+        //                     </div>
+        //                     <p><span id="price${product.id}">${product.price}</span> ₽</p>
+        //                     <p id="quantity${product.id}" data-available="${product.quantity}">В наличии: ${product.quantity}</p>
+        //                     <button id="add${product.id}" onclick="addToCart('${product.id}')">Добавить</button>
+        //                     <div id="cart-controls${product.id}" class="cart-controls" style="display:none;">
+        //                         <button onclick="updateCart('${product.id}', -1)">-</button>
+        //                         <span id="cart-quantity${product.id}">0</span>
+        //                         <button onclick="updateCart('${product.id}', 1)">+</button>
+        //                     </div>
+        //                 </div>
+        //             `;
+        //             productGrid.insertAdjacentHTML('beforeend', productHTML);
+        //         });
+
+        //         cartItems.forEach(item => {
+        //             const addButton = document.getElementById(`add${item.productId}`);
+        //             const cartControls = document.getElementById(`cart-controls${item.productId}`);
+        //             const cartQuantity = document.getElementById(`cart-quantity${item.productId}`);
+        //             const selectCheckbox = document.getElementById(`select${item.productId}`);
+
+        //             if (addButton) addButton.style.display = "none";
+        //             if (cartControls) {
+        //                 cartControls.style.display = "flex"; 
+        //                 cartQuantity.textContent = item.quantity;
+        //             }
+        //             if (selectCheckbox) selectCheckbox.checked = item.selected;
+        //         });
+
+        //         calculateTotalPrice();
+        //     } catch (error) {
+        //         console.error('Ошибка при загрузке товаров или корзины:', error);
+        //     }
+        // }
+
         async function loadProducts() {
             try {
                 const chatId = await getChatId();
@@ -324,7 +384,7 @@
                 
                 products.forEach(product => {
                     const productHTML = `
-                        <div class="product" id="product${product.id}">
+                        <div class="product" id="product${product.id}" onmouseover="scaleProduct(${product.id}, true)" onmouseout="scaleProduct(${product.id}, false)">
                             <h3>${product.name}</h3>
                             <div class="product-image-wrapper">
                                 <img src="https://magazin-ruslanname.amvera.io${product.iconPath}" alt="${product.name}">
@@ -341,6 +401,26 @@
                         </div>
                     `;
                     productGrid.insertAdjacentHTML('beforeend', productHTML);
+
+                    const productElement = document.getElementById(`product${product.id}`);
+                    if (productElement) {
+                        let touchStartX = 0;
+                        let touchEndX = 0;
+
+                        productElement.addEventListener('touchstart', (e) => {
+                            touchStartX = e.changedTouches[0].screenX;
+                        });
+
+                        productElement.addEventListener('touchend', (e) => {
+                            touchEndX = e.changedTouches[0].screenX;
+
+                            if (touchEndX - touchStartX > 50) {
+                                scaleProduct(product.id, true);
+                            } else if (touchStartX - touchEndX > 50) {
+                                scaleProduct(product.id, false);
+                            }
+                        });
+                    }
                 });
 
                 cartItems.forEach(item => {
@@ -398,14 +478,11 @@
         async function updateCartQuantity(productId, delta) {
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
             const productElement = document.getElementById(`product${productId}`);
-            let newQuantity = parseInt(cartQuantity.innerText) + delta;
+            const currentQuantity = parseInt(cartQuantity.innerText);
+            const newQuantity = currentQuantity + delta;
             const availableQuantity = parseInt(document.getElementById(`quantity${productId}`).getAttribute('data-available'));
 
             if (newQuantity >= 0 && newQuantity <= availableQuantity) {
-                if (newQuantity === 0) productElement.style.display = 'none';
-                
-                cartQuantity.innerText = newQuantity;
-                
                 const chatId = await getChatId();
                 const data = {
                     chatId: chatId,
@@ -422,13 +499,14 @@
 
                     if (newQuantity === 0) {
                         productElement.remove();
+                    } else {
+                        cartQuantity.innerText = newQuantity;
                     }
 
                     calculateTotalPrice();
                 } catch (error) {
                     console.error('Ошибка при обновлении корзины:', error);
-                    
-                    if (newQuantity === 0) productElement.style.display = 'flex';
+                    if (currentQuantity === 0) productElement.style.display = 'flex';
                 }
             }
         }
@@ -480,32 +558,17 @@
             totalPriceElement.innerText = `${totalPrice} ₽`;
         }
 
-        const products = document.querySelectorAll('.product');
-
-        products.forEach(product => {
-            let touchStarted = false;
-
-            product.addEventListener('touchstart', () => {
-                touchStarted = true;
-                product.classList.add('touched');
-            });
-
-            product.addEventListener('touchmove', (event) => {
-                if (touchStarted) {
-                    product.classList.add('touched');
+        function scaleProduct(productId, scale) {
+            const productElement = document.getElementById(`product${productId}`);
+            if (productElement) {
+                if (scale) {
+                    productElement.style.transform = 'scale(1.1)';
+                    productElement.style.transition = 'transform 0.3s ease';
+                } else {
+                    productElement.style.transform = 'scale(1)';
                 }
-            });
-
-            product.addEventListener('touchend', () => {
-                touchStarted = false;
-                product.classList.remove('touched');
-            });
-
-            product.addEventListener('touchcancel', () => {
-                touchStarted = false;
-                product.classList.remove('touched');
-            });
-        });
+            }
+        }
 
         function applyTheme() {
             const themeColor = Telegram.WebApp.themeParams.bg_color;
@@ -513,19 +576,20 @@
             const themeButtonColor = Telegram.WebApp.themeParams.button_color;
             const themeFooterBgColor = Telegram.WebApp.themeParams.footer_bg_color;
             const themeFooterTextColor = Telegram.WebApp.themeParams.footer_text_color;
-        
+
             document.documentElement.style.setProperty('--tg-theme-bg-color', themeColor);
             document.documentElement.style.setProperty('--tg-theme-text-color', themeTextColor);
             document.documentElement.style.setProperty('--tg-theme-button-color', themeButtonColor);
             document.documentElement.style.setProperty('--tg-theme-footer-bg-color', themeFooterBgColor);
             document.documentElement.style.setProperty('--tg-theme-footer-text-color', themeFooterTextColor);
         }
-        
+
         Telegram.WebApp.onThemeChanged = applyTheme;
         applyTheme();
     </script>
 </body>
 </html>
+
 
 <!-- <!DOCTYPE html>
 <html lang="ru">

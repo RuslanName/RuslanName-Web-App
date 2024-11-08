@@ -16,6 +16,7 @@ public class UserCart {
     private Long chatId;
     private int productId;
     private int quantity;
+    private boolean selected;
 
     @Override
     public String toString() {
@@ -26,5 +27,9 @@ public class UserCart {
                 ", productId = \"" + productId + "\"" +
                 ", quantity = \"" + quantity + "\"" +
                 '}';
+    }
+
+    public boolean getSelected() {
+        return selected;
     }
 }

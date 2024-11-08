@@ -27,8 +27,101 @@
             flex-direction: column;
             min-height: 100vh;
         }
+
+        .product-image-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .product-image-wrapper img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+        }
        
-        #cart {
+       .product {
+            position: relative;
+            flex: 0 1 calc(50% - 5px);
+            background-color: var(--tg-theme-secondary-bg-color);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+            max-width: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .product button {
+           padding: 10px 15px;
+           background-color: var(--tg-theme-button-color);
+           color: var(--tg-button-text-color);
+           border: none;
+           border-radius: 5px;
+           cursor: pointer;
+           font-size: 16px;
+           margin: 5px 0;
+           width: 100%;
+           transition: background-color 0.3s ease;
+       }
+       
+       .product-grid {
+           display: flex;
+           flex-wrap: wrap;
+           gap: 10px;
+           justify-content: space-between;
+           padding: 10px;
+           background-color: var(--tg-theme-secondary-bg-color);
+       }
+       
+       .product img {
+           width: 100%;
+           height: 200px;
+           object-fit: cover;
+           object-position: center;
+           margin-bottom: 5px;
+       }
+
+       .product-checkbox:checked {
+            background-color: var(--tg-theme-button-color);
+            border-color: var(--tg-theme-button-color);
+        }
+       
+       .product h3 {
+           margin: 5px 0;
+           padding: 0;
+           font-size: 1.2em;
+           color: #333333;
+       }
+
+        .product-checkbox, .product input[type="checkbox"] {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transform: scale(1.5);
+            z-index: 1;
+            cursor: pointer;
+            background-color: var(--tg-theme-secondary-bg-color);
+            border: 2px solid var(--tg-theme-button-color);
+            border-radius: 4px;
+        }
+
+        .product input[type="checkbox"]:checked {
+           background-color: var(--tg-theme-button-color);
+           border-color: var(--tg-theme-button-color);
+       }
+
+       .product:hover, .product.touched {
+            transform: scale(1.1);
+        }
+       
+       .product button:hover {
+           background-color: #005f99;
+       }
+
+       #cart {
             background: var(--tg-theme-secondary-bg-color);
             flex-grow: 1;
             padding-top: 60px;
@@ -57,148 +150,11 @@
             align-items: center;
         }
 
-        .checkout-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: var(--tg-theme-footer-bg-color);
-            color: var(--tg-theme-footer-text-color);
-            display: flex;
-            align-items: center;
-            padding: 10px 0;
-            box-shadow: none;
-            z-index: 999;
-        }
-       
-        .checkout-footer span {
-            margin-left: 10px;
-            font-size: 16px;
-            display: flex;
-            flex-direction: column;
-        }
-       
-        .checkout-footer button {
-            flex-grow: 1;
-            margin: 0 5px;
-            padding: 15px;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-button-text-color);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            text-align: center;
-            transition: background-color 0.3s ease;
-        }
-       
-        .checkout-footer button:hover {
-            background-color: #005f99;
-            opacity: 0.8;
-        }
-       
-        .quantity-buttons {
+       .quantity-buttons {
             display: flex;
             flex-direction: column;
             margin-left: 10px;
         }
-
-        .product-image-wrapper {
-            position: relative;
-            width: 100%;
-        }
-
-        .product-image-wrapper img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            object-position: center;
-        }
-       
-       .product {
-            position: relative;
-            flex: 0 1 calc(50% - 5px);
-            background-color: var(--tg-theme-secondary-bg-color);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            box-sizing: border-box;
-            margin-bottom: 5px;
-            max-width: 100%;
-            transition: transform 0.3s ease;
-        }
-
-        .product.touched {
-            transform: scale(1.1);
-        }
-
-        .product-checkbox, .product input[type="checkbox"] {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            transform: scale(1.5);
-            z-index: 1;
-            cursor: pointer;
-            background-color: var(--tg-theme-secondary-bg-color);
-            border: 2px solid var(--tg-theme-button-color);
-            border-radius: 4px;
-        }
-
-        .product-checkbox:checked {
-            background-color: var(--tg-theme-button-color);
-            border-color: var(--tg-theme-button-color);
-        }
-       
-       .product:hover {
-           transform: scale(1.05);
-       }
-       
-       .product-grid {
-           display: flex;
-           flex-wrap: wrap;
-           gap: 10px;
-           justify-content: space-between;
-           padding: 10px;
-           background-color: var(--tg-theme-secondary-bg-color);
-       }
-       
-       .product img {
-           width: 100%;
-           height: 200px;
-           object-fit: cover;
-           object-position: center;
-           margin-bottom: 5px;
-       }
-       
-       .product h3 {
-           margin: 5px 0;
-           padding: 0;
-           font-size: 1.2em;
-           color: #333333;
-       }
-       
-       .product input[type="checkbox"]:checked {
-           background-color: var(--tg-theme-button-color);
-           border-color: var(--tg-theme-button-color);
-       }
-       
-       .product button {
-           padding: 10px 15px;
-           background-color: var(--tg-theme-button-color);
-           color: var(--tg-button-text-color);
-           border: none;
-           border-radius: 5px;
-           cursor: pointer;
-           font-size: 16px;
-           margin: 5px 0;
-           width: 100%;
-           transition: background-color 0.3s ease;
-       }
-       
-       .product button:hover {
-           background-color: #005f99;
-       }
        
        .quantity-buttons button {
            width: 30px;
@@ -237,6 +193,46 @@
            background-color: #005f99;
            opacity: 0.8;
        }
+
+       .checkout-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--tg-theme-footer-bg-color);
+            color: var(--tg-theme-footer-text-color);
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            box-shadow: none;
+            z-index: 999;
+        }
+       
+        .checkout-footer span {
+            margin-left: 10px;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+       
+        .checkout-footer button {
+            flex-grow: 1;
+            margin: 0 5px;
+            padding: 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+       
+        .checkout-footer button:hover {
+            background-color: #005f99;
+            opacity: 0.8;
+        }
    </style>
 </head>
 <body>
@@ -266,19 +262,19 @@
                 console.error("Telegram Web App not available");
             }
 
-            const chatId = await getChatId();
-            if (!chatId) {
-                document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
-                document.querySelector("footer").style.display = "none";
-                return;
-            }
+            // const chatId = await getChatId();
+            // if (!chatId) {
+            //     document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
+            //     document.querySelector("footer").style.display = "none";
+            //     return;
+            // }
 
-            const isRegistered = await checkUserRegistration(chatId);
-            if (!isRegistered) {
-                document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
-                document.querySelector("footer").style.display = "none";
-                return;
-            }
+            // const isRegistered = await checkUserRegistration(chatId);
+            // if (!isRegistered) {
+            //     document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
+            //     document.querySelector("footer").style.display = "none";
+            //     return;
+            // }
 
             loadProducts();
         });
@@ -334,7 +330,7 @@
                                 <img src="https://magazin-ruslanname.amvera.io${product.iconPath}" alt="${product.name}">
                                 <input type="checkbox" class="product-checkbox" id="select${product.id}" onclick="toggleSelection('${product.id}')">
                             </div>
-                            <p><span id="price${product.id}">${product.price}</span> руб.</p>
+                            <p><span id="price${product.id}">${product.price}</span> ₽</p>
                             <p id="quantity${product.id}" data-available="${product.quantity}">В наличии: ${product.quantity}</p>
                             <button id="add${product.id}" onclick="addToCart('${product.id}')">Добавить</button>
                             <div id="cart-controls${product.id}" class="cart-controls" style="display:none;">
@@ -353,18 +349,12 @@
                     const cartQuantity = document.getElementById(`cart-quantity${item.productId}`);
                     const selectCheckbox = document.getElementById(`select${item.productId}`);
 
-                    if (addButton) {
-                        addButton.style.display = "none";
-                    }
-
+                    if (addButton) addButton.style.display = "none";
                     if (cartControls) {
                         cartControls.style.display = "flex"; 
                         cartQuantity.textContent = item.quantity;
                     }
-
-                    if (selectCheckbox) {
-                        selectCheckbox.checked = item.selected;
-                    }
+                    if (selectCheckbox) selectCheckbox.checked = item.selected;
                 });
 
                 calculateTotalPrice();
@@ -373,81 +363,79 @@
             }
         }
 
-        function toggleSelection(productId) {
-            const selectCheckbox = document.getElementById(`select${productId}`);
-            const isSelected = selectCheckbox.checked;
+        // async function AddCartQuantity(productId) {
+        //     const addButton = document.getElementById(`add${productId}`);
+        //     const cartControls = document.getElementById(`cart-controls${productId}`);
+        //     const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+        //     const availableQuantity = parseInt(document.getElementById(`quantity${productId}`).getAttribute('data-available'));
 
-            updateCartSelection(productId, isSelected);
+        //     if (availableQuantity > 0) {
+        //         addButton.style.display = 'none';
+        //         cartControls.style.display = 'flex';
+        //         cartQuantity.innerText = 1;
 
-            calculateTotalPrice();
-        }
+        //         const chatId = await getChatId();
+        //         const data = {
+        //             chatId: chatId,
+        //             productId: productId,
+        //             quantity: 1,
+        //             selected: true 
+        //         };
 
-        async function addToCart(productId) {
-            const addButton = document.getElementById(`add${productId}`);
-            const cartControls = document.getElementById(`cart-controls${productId}`);
-            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
-            const availableQuantity = parseInt(document.getElementById(`quantity${productId}`).getAttribute('data-available'));
-        
-            if (availableQuantity > 0) {
-                addButton.style.display = 'none';
-                cartControls.style.display = 'flex';
-                cartQuantity.innerText = 1;
-        
-                const chatId = await getChatId();
-                const data = {
-                    chatId: chatId,
-                    productId: productId,
-                    quantity: 1
-                };
-        
-                try {
-                    await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams(data)
-                    });
-                    calculateTotalPrice();
-                } catch (error) {
-                    console.error('Ошибка при добавлении товара в корзину:', error);
-                }
-            }
-        }
-        
-        async function updateCart(productId, delta) {
+        //         try {
+        //             await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
+        //                 method: 'POST',
+        //                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        //                 body: new URLSearchParams(data)
+        //             });
+        //             calculateTotalPrice();
+        //         } catch (error) {
+        //             console.error('Ошибка при добавлении товара в корзину:', error);
+        //         }
+        //     }
+        // }
+
+        async function updateCartQuantity(productId, delta) {
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
             const productElement = document.getElementById(`product${productId}`);
             let newQuantity = parseInt(cartQuantity.innerText) + delta;
             const availableQuantity = parseInt(document.getElementById(`quantity${productId}`).getAttribute('data-available'));
-        
+
             if (newQuantity >= 0 && newQuantity <= availableQuantity) {
+                if (newQuantity === 0) productElement.style.display = 'none';
+                
                 cartQuantity.innerText = newQuantity;
-        
+                
                 const chatId = await getChatId();
                 const data = {
                     chatId: chatId,
                     productId: productId,
                     quantity: delta
                 };
-        
+
                 try {
                     await fetch('https://magazin-ruslanname.amvera.io/api/user_carts_data/update', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: new URLSearchParams(data)
                     });
-        
+
                     if (newQuantity === 0) {
                         productElement.remove();
                     }
-        
+
                     calculateTotalPrice();
                 } catch (error) {
                     console.error('Ошибка при обновлении корзины:', error);
+                    
+                    if (newQuantity === 0) productElement.style.display = 'flex';
                 }
             }
         }
 
-        async function updateCartSelection(productId, isSelected) {
+        async function toggleSelection(productId) {
+            const selectCheckbox = document.getElementById(`select${productId}`);
+            const isSelected = selectCheckbox.checked;
             const chatId = await getChatId();
             const data = {
                 chatId: chatId,
@@ -461,11 +449,12 @@
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: new URLSearchParams(data)
                 });
+                calculateTotalPrice();
             } catch (error) {
                 console.error('Ошибка при обновлении статуса выбора товара:', error);
             }
         }
-
+        
         function calculateTotalPrice() {
             const totalPriceElement = document.getElementById('total-price');
 
@@ -490,6 +479,7 @@
 
             totalPriceElement.innerText = `${totalPrice} ₽`;
         }
+
         const products = document.querySelectorAll('.product');
 
         products.forEach(product => {

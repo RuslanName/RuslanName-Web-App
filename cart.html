@@ -14,96 +14,96 @@
            --tg-button-text-color: #ffffff !important;
            --tg-theme-footer-bg-color: #ffffff !important;
            --tg-theme-footer-text-color: #000000 !important;
-       }
+        }
        
-       body {
-           margin: 0;
-           padding: 0;
-           box-sizing: border-box;
-           background: var(--tg-theme-bg-color);
-           color: var(--tg-theme-text-color);
-           font-family: Arial, sans-serif;
-           display: flex;
-           flex-direction: column;
-           min-height: 100vh;
-       }
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
        
-       #cart {
-           background: var(--tg-theme-secondary-bg-color);
-           flex-grow: 1;
-           padding-top: 60px;
-           padding-bottom: 60px;
-           overflow-y: auto;
-       }
+        #cart {
+            background: var(--tg-theme-secondary-bg-color);
+            flex-grow: 1;
+            padding-top: 60px;
+            padding-bottom: 60px;
+            overflow-y: auto;
+        }
 
-       .cart-controls {
-           display: flex;
-           justify-content: center;
-           align-items: center;
-           margin-top: 10px;
-       }
+        .cart-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
        
-       .cart-controls button {
-           padding: 10px 10px;
-       }
+        .cart-controls button {
+            padding: 10px 10px;
+        }
        
-       .cart-controls span {
-           font-size: 16px;
-           margin: 0 10px;
-       }
+        .cart-controls span {
+            font-size: 16px;
+            margin: 0 10px;
+        }
        
-       .cart-item {
-           display: flex;
-           align-items: center;
-       }
+        .cart-item {
+            display: flex;
+            align-items: center;
+        }
 
-               .checkout-footer {
-           position: fixed;
-           bottom: 0;
-           left: 0;
-           width: 100%;
-           background-color: var(--tg-theme-footer-bg-color);
-           color: var(--tg-theme-footer-text-color);
-           display: flex;
-           align-items: center;
-           padding: 10px 0;
-           box-shadow: none;
-           z-index: 999;
-       }
+        .checkout-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--tg-theme-footer-bg-color);
+            color: var(--tg-theme-footer-text-color);
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            box-shadow: none;
+            z-index: 999;
+        }
        
-       .checkout-footer span {
-           margin-left: 10px;
-           font-size: 16px;
-           display: flex;
-           flex-direction: column;
-       }
+        .checkout-footer span {
+            margin-left: 10px;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+        }
        
-       .checkout-footer button {
-           flex-grow: 1;
-           margin: 0 5px;
-           padding: 15px;
-           background-color: var(--tg-theme-button-color);
-           color: var(--tg-button-text-color);
-           border: none;
-           border-radius: 5px;
-           cursor: pointer;
-           font-size: 16px;
-           text-align: center;
-           transition: background-color 0.3s ease;
-       }
+        .checkout-footer button {
+            flex-grow: 1;
+            margin: 0 5px;
+            padding: 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
        
-       .checkout-footer button:hover {
-           background-color: #005f99;
-           opacity: 0.8;
-       }
+        .checkout-footer button:hover {
+            background-color: #005f99;
+            opacity: 0.8;
+        }
        
-       .quantity-buttons {
-           display: flex;
-           flex-direction: column;
-           margin-left: 10px;
-       }
+        .quantity-buttons {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
 
-       .product-image-wrapper {
+        .product-image-wrapper {
             position: relative;
             width: 100%;
         }
@@ -246,40 +246,7 @@
     </div>
     
     <div id="cart">
-        <div id="productGrid" class="product-grid">
-            <!-- Пример товара -->
-            <div class="product" id="product1">
-                <h3>Название товара</h3>
-                <div class="product-image-wrapper">
-                    <img src="https://avatars.mds.yandex.net/i?id=64d960adf6de6779962c2893c1352414_l-7973815-images-thumbs&n=13" alt="Название товара">
-                    <input type="checkbox" class="product-checkbox" id="select1" onclick="toggleSelection('1')">
-                </div>
-                <p><span id="price1">1000</span> руб.</p>
-                <p id="quantity1" data-available="10">В наличии: 10</p>
-                <button id="add1" onclick="addToCart('1')">Добавить</button>
-                <div id="cart-controls1" class="cart-controls" style="display:none;">
-                    <button onclick="updateCart('1', -1)">-</button>
-                    <span id="cart-quantity1">0</span>
-                    <button onclick="updateCart('1', 1)">+</button>
-                </div>
-            </div>
-            <!-- Конец примера товара -->
-            <div class="product" id="product1">
-                <h3>Название товара</h3>
-                <div class="product-image-wrapper">
-                    <img src="https://avatars.mds.yandex.net/i?id=64d960adf6de6779962c2893c1352414_l-7973815-images-thumbs&n=13" alt="Название товара">
-                    <input type="checkbox" class="product-checkbox" id="select1" onclick="toggleSelection('1')">
-                </div>
-                <p><span id="price1">1000</span> руб.</p>
-                <p id="quantity1" data-available="10">В наличии: 10</p>
-                <button id="add1" onclick="addToCart('1')">Добавить</button>
-                <div id="cart-controls1" class="cart-controls" style="display:none;">
-                    <button onclick="updateCart('1', -1)">-</button>
-                    <span id="cart-quantity1">0</span>
-                    <button onclick="updateCart('1', 1)">+</button>
-                </div>
-            </div>
-        </div>        
+        <div id="productGrid" class="product-grid"></div>        
     </div>
     
     <div class="checkout-footer">
@@ -523,19 +490,29 @@
 
             totalPriceElement.innerText = `${totalPrice} ₽`;
         }
-
         const products = document.querySelectorAll('.product');
 
         products.forEach(product => {
+            let touchStarted = false;
+
             product.addEventListener('touchstart', () => {
+                touchStarted = true;
                 product.classList.add('touched');
             });
 
+            product.addEventListener('touchmove', (event) => {
+                if (touchStarted) {
+                    product.classList.add('touched');
+                }
+            });
+
             product.addEventListener('touchend', () => {
+                touchStarted = false;
                 product.classList.remove('touched');
             });
 
-            product.addEventListener('touchmove', () => {
+            product.addEventListener('touchcancel', () => {
+                touchStarted = false;
                 product.classList.remove('touched');
             });
         });

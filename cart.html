@@ -28,7 +28,7 @@
             }
         }
 
-       body {
+        body {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -56,7 +56,7 @@
         
         .product {
             position: relative;
-            flex: 0 1 calc(50% - 10px); /* Делаем отступы между товарами */
+            flex: 1 1 calc(50% - 10px); /* Убираем сдвиг и даем достаточно места */
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -131,17 +131,6 @@
         .product input[type="checkbox"]:checked {
             background-color: var(--tg-theme-button-color);
             border-color: var(--tg-theme-footer-text-color);
-        }
-        
-        .product:hover {
-            transform: scale(1.02);
-            opacity: 1;
-            transition: transform 0.2s ease, opacity 0.2s ease;
-        }
-        
-        .product:active {
-            transform: none;
-            opacity: 1;
         }
         
         #cart {
@@ -245,12 +234,12 @@
         
         @media (max-width: 768px) {
             .product {
-                flex: 1 1 48%;
+                flex: 1 1 48%; /* Равномерное распределение товаров по ширине */
             }
         
-            /* Убираем мерцание товаров */
+            /* Убираем эффект подсвечивания товаров */
             .product:hover {
-                transform: scale(1); /* Убираем эффект масштабирования при наведении */
+                transform: none; /* Убираем эффект масштабирования */
                 opacity: 1;
             }
         }

@@ -39,7 +39,7 @@
             flex-direction: column;
             min-height: 100vh;
             width: 100%;
-            overflow-x: hidden;
+            overflow-x: hidden; /* Убираем горизонтальную прокрутку */
         }
         
         .product-image-wrapper {
@@ -56,13 +56,13 @@
         
         .product {
             position: relative;
-            flex: 1 1 calc(50% - 10px);
+            flex: 1 1 calc(50% - 10px); /* Используем правильную ширину, чтобы товары влезали */
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
-            margin: 0 5px 10px 5px;
-            max-width: calc(50% - 10px);
+            margin-bottom: 10px;
+            max-width: 100%;
             transition: transform 0.3s ease;
         }
         
@@ -71,23 +71,23 @@
         .checkout-footer button {
             background-color: var(--tg-theme-button-color);
             color: var(--tg-theme-footer-text-color);
-            padding: 15px 20px;
+            padding: 15px 20px; /* Увеличиваем padding для высоты */
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
             margin: 5px 0;
             width: 100%;
-            height: 50px;
+            height: 50px; /* Фиксированная высота кнопок */
             transition: background-color 0.2s ease, color 0.2s ease;
         }
         
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             padding: 10px;
-            justify-content: center;
+            width: 100%;
         }
         
         .product img {
@@ -101,6 +101,11 @@
         .product-checkbox:checked {
             background-color: var(--tg-theme-button-color);
             border-color: var(--tg-theme-button-color);
+        }
+        
+        .product .cart-controls button:active + img,
+        .product .cart-controls button:focus + img {
+            transform: scale(1.1);
         }
         
         .product h3 {
@@ -128,11 +133,15 @@
             border-color: var(--tg-theme-footer-text-color);
         }
         
-        .product:hover,
+        .product:hover {
+            transform: scale(1.02);
+            opacity: 1;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        
         .product:active {
             transform: none;
             opacity: 1;
-            transition: none;
         }
         
         #cart {
@@ -193,14 +202,13 @@
             width: 100%;
             display: flex;
             align-items: center;
-            justify-content: center;
             padding: 10px 0;
             box-shadow: none;
             z-index: 999;
         }
         
         .checkout-footer span {
-            margin-left: 0;
+            margin-left: 10px;
             font-size: 16px;
             display: flex;
             flex-direction: column;
@@ -210,6 +218,10 @@
         .top-footer button {
             flex: 1;
             margin: 0 5px;
+        }
+        
+        .checkout-footer span {
+            margin-left: 10px;
         }
         
         body,
@@ -237,11 +249,17 @@
         
         @media (max-width: 768px) {
             .product {
-                flex: 1 1 48%;
+                flex: 1 1 48%; /* Делаем товары в 2 колонки на мобильных устройствах */
+            }
+        
+            /* Убираем мерцание товаров */
+            .product:hover {
+                transform: scale(1); /* Убираем эффект масштабирования при наведении */
+                opacity: 1;
             }
         
             .checkout-footer span {
-                margin-left: 0;
+                margin-left: 5px; /* Выровнял отступ у итоговой суммы с кнопками футера */
             }
         }
    </style>

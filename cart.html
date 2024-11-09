@@ -56,15 +56,17 @@
         
         .product {
             position: relative;
-            flex: 1 1 calc(50% - 10px);
+            flex: 0 1 calc(50% - 5px);
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
-            margin-bottom: 10px;
+            box-sizing: border-box;
+            margin-bottom: 5px;
             max-width: 100%;
             transition: transform 0.3s ease;
         }
+
         
         .product button,
         .top-footer button,
@@ -82,7 +84,7 @@
         }
 
         .product button {
-            height: 35px;
+            height: 40px;
         }
 
         .top-footer button,
@@ -91,11 +93,11 @@
         }
         
         .product-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            display: flex;
+            flex-wrap: wrap;
             gap: 10px;
+            justify-content: space-between;
             padding: 10px;
-            width: 100%;
         }
         
         .product img {

@@ -50,17 +50,19 @@
             height: 200px;
             object-fit: cover;
             object-position: center;
+            transition: transform 0.3s ease;
         }
         
         .product {
             position: relative;
-            flex: 1 1 calc(50% - 10px); /* Настроено для 2-х колонок с отступом */
+            flex: 0 1 calc(50% - 10px);
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
             margin-bottom: 10px;
-            transition: transform 0.3s ease;
+            max-width: 100%;
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
         
         .product button,
@@ -68,22 +70,14 @@
         .checkout-footer button {
             background-color: var(--tg-theme-button-color);
             color: var(--tg-theme-footer-text-color);
-            padding: 10px 15px;
+            padding: 15px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            margin: 5px 0;
+            text-align: center;
             width: 100%;
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-        
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            padding: 10px;
-            width: 100%;
+            transition: background-color 0.3s ease;
         }
         
         .product img {
@@ -97,36 +91,6 @@
         .product-checkbox:checked {
             background-color: var(--tg-theme-button-color);
             border-color: var(--tg-theme-button-color);
-        }
-        
-        .product .cart-controls button:active + img,
-        .product .cart-controls button:focus + img {
-            transform: scale(1.1);
-        }
-        
-        .product h3 {
-            margin: 5px 0;
-            padding: 0;
-            font-size: 1.2em;
-        }
-        
-        .product-checkbox,
-        .product input[type="checkbox"] {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            transform: scale(1.5);
-            z-index: 1;
-            cursor: pointer;
-            background-color: var(--tg-theme-secondary-bg-color);
-            border: 2px solid var(--tg-theme-footer-text-color);
-            color: var(--tg-theme-button-color);
-            border-radius: 4px;
-        }
-        
-        .product input[type="checkbox"]:checked {
-            background-color: var(--tg-theme-button-color);
-            border-color: var(--tg-theme-footer-text-color);
         }
         
         .product:hover {
@@ -179,51 +143,66 @@
             height: 30px;
         }
         
-        /* Футер */
-        .top-footer,
-        .checkout-footer {
-            display: flex;
-            justify-content: space-around;
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
             padding: 10px;
             width: 100%;
-            background-color: var(--tg-theme-footer-bg-color);
-            color: var(--tg-theme-footer-text-color);
-            z-index: 1000;
         }
         
         .top-footer {
             position: fixed;
             top: 0;
             left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
             box-shadow: none;
-            flex-direction: row;
+            z-index: 1000;
+            background-color: var(--tg-theme-footer-bg-color);
+            color: var(--tg-theme-footer-text-color);
         }
         
         .checkout-footer {
             position: fixed;
             bottom: 0;
             left: 0;
-            box-shadow: none;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
+            padding: 10px 0;
+            background-color: var(--tg-theme-footer-bg-color);
+            color: var(--tg-theme-footer-text-color);
+            box-shadow: none;
+            z-index: 999;
+        }
+        
+        .checkout-footer span {
+            margin-left: 10px;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
         }
         
         .checkout-footer button, .top-footer button {
             flex: 1;
             margin: 0 5px;
-        }
-        
-        footer button {
-            flex: 1;
-            margin: 0 5px;
             padding: 15px;
             background-color: var(--tg-theme-button-color);
-            color: var(--tg-button-text-color);
+            color: var(--tg-theme-footer-text-color);
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            text-align: center;
             transition: background-color 0.3s ease;
+        }
+        
+        .checkout-footer button:hover, .top-footer button:hover {
+            opacity: 0.9;
+            color: var(--tg-theme-footer-bg-color); 
         }
         
         body, .product, .product-grid, .top-footer, .checkout-footer {
@@ -241,21 +220,24 @@
             color: var(--tg-theme-footer-bg-color); 
         }
         
-        /* Мобильная адаптация */
         @media (max-width: 768px) {
             .product {
-                flex: 1 1 48%; /* Обновлено для двух колонок на мобильном */
+                flex: 1 1 48%;
+                max-width: 48%;
+                padding: 8px;
             }
         
-            .top-footer,
-            .checkout-footer {
+            .product img {
+                height: 180px;
+            }
+        
+            .top-footer, .checkout-footer {
+                padding: 15px 10px;
                 flex-direction: column;
-                padding: 10px 0;
             }
         
-            footer button {
-                padding: 10px 0;
-                font-size: 14px;
+            .checkout-footer button, .top-footer button {
+                margin: 5px 0;
             }
         }
    </style>

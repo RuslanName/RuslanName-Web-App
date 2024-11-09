@@ -7,21 +7,25 @@
     <title>Корзина</title>
     <style>
         :root {
-            --tg-theme-bg-color-light: #ffffff;
-            --tg-theme-text-color-light: #000000;
-            --tg-theme-secondary-bg-color-light: #f8f9fa;
-            --tg-theme-button-color-light: #0088cc;
-            --tg-theme-footer-bg-color-light: #ffffff;
-            --tg-theme-footer-text-color-light: #000000;
-            --tg-checkbox-toggle-color-light: #333333;
-        
-            --tg-theme-bg-color-dark: #1a1a1a;
-            --tg-theme-text-color-dark: #ffffff;
-            --tg-theme-secondary-bg-color-dark: #2c2c2c;
-            --tg-theme-button-color-dark: #3b82f6;
-            --tg-theme-footer-bg-color-dark: #1a1a1a;
-            --tg-theme-footer-text-color-dark: #ffffff;
-            --tg-checkbox-toggle-color-dark: #cccccc;
+            --tg-theme-bg-color: var(--tg-theme-bg-color-light);
+            --tg-theme-text-color: var(--tg-theme-text-color-light);
+            --tg-theme-secondary-bg-color: var(--tg-theme-secondary-bg-color-light);
+            --tg-theme-button-color: var(--tg-theme-button-color-light);
+            --tg-theme-footer-bg-color: var(--tg-theme-footer-bg-color-light);
+            --tg-theme-footer-text-color: var(--tg-theme-footer-text-color-light);
+            --tg-checkbox-toggle-color: var(--tg-checkbox-toggle-color-light);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --tg-theme-bg-color: var(--tg-theme-bg-color-dark);
+                --tg-theme-text-color: var(--tg-theme-text-color-dark);
+                --tg-theme-secondary-bg-color: var(--tg-theme-secondary-bg-color-dark);
+                --tg-theme-button-color: var(--tg-theme-button-color-dark);
+                --tg-theme-footer-bg-color: var(--tg-theme-footer-bg-color-dark);
+                --tg-theme-footer-text-color: var(--tg-theme-footer-text-color-dark);
+                --tg-checkbox-toggle-color: var(--tg-checkbox-toggle-color-dark);
+            }
         }
 
         body {
@@ -48,13 +52,6 @@
             object-position: center;
         }
 
-        @media (max-width: 768px) {
-            .product:hover,
-            .product:active {
-                transform: none;
-            }
-        }
-
         .product {
             position: relative;
             flex: 0 1 calc(50% - 5px);
@@ -62,13 +59,16 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
-            box-sizing: border-box;
             margin-bottom: 5px;
             max-width: 100%;
-            transition: opacity 0.3s ease;
+            transition: transform 0.3s ease;
         }
 
-        .product button {
+        .product button,
+        .top-footer button,
+        .checkout-footer button {
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-theme-footer-text-color);
             padding: 10px 15px;
             border: none;
             border-radius: 5px;
@@ -76,7 +76,7 @@
             font-size: 16px;
             margin: 5px 0;
             width: 100%;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
 
         .product-grid {
@@ -95,16 +95,24 @@
             margin-bottom: 5px;
         }
 
+        .product-image-wrapper img {
+            transition: transform 0.3s ease;
+        }
+
         .product-checkbox:checked {
             background-color: var(--tg-theme-button-color);
             border-color: var(--tg-theme-button-color);
+        }
+
+        .product .cart-controls button:active + img,
+        .product .cart-controls button:focus + img {
+            transform: scale(1.1);
         }
 
         .product h3 {
             margin: 5px 0;
             padding: 0;
             font-size: 1.2em;
-            color: var(--tg-checkbox-toggle-color);
         }
 
         .product-checkbox,
@@ -116,25 +124,28 @@
             z-index: 1;
             cursor: pointer;
             background-color: var(--tg-theme-secondary-bg-color);
-            border: 2px solid var(--tg-theme-button-color);
+            border: 2px solid var(--tg-theme-footer-text-color);
+            color: var(--tg-theme-button-color);
             border-radius: 4px;
         }
 
         .product input[type="checkbox"]:checked {
             background-color: var(--tg-theme-button-color);
-            border-color: var(--tg-theme-button-color);
+            border-color: var(--tg-theme-footer-text-color);
         }
 
         .product:hover {
-            transform: scale(1.05);
+            transform: scale(1.02);
+            opacity: 1;
+            transition: transform 0.2s ease, opacity 0.2s ease;
         }
 
-        .product button:hover {
-            background-color: var(--tg-theme-button-color);
+        .product:active {
+            transform: none;
+            opacity: 1;
         }
 
         #cart {
-            background: var(--tg-theme-secondary-bg-color);
             flex-grow: 1;
             padding-top: 60px;
             padding-bottom: 60px;
@@ -185,23 +196,6 @@
             z-index: 1000;
         }
 
-        .top-footer button {
-            flex: 1;
-            margin: 0 5px;
-            padding: 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            text-align: center;
-            transition: background-color 0.3s ease;
-        }
-
-        .top-footer button:hover {
-            background-color: #005f99;
-            opacity: 0.8;
-        }
-
         .checkout-footer {
             position: fixed;
             bottom: 0;
@@ -221,31 +215,25 @@
             flex-direction: column;
         }
 
-        .checkout-footer button {
-            flex-grow: 1;
-            margin: 0 5px;
-            padding: 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            text-align: center;
-            transition: background-color 0.3s ease;
-        }
-
-        .checkout-footer button:hover {
-            background-color: #005f99;
-            opacity: 0.8;
-        }
-
-        .product, .product-grid, .top-footer, .checkout-footer {
+        body, .product, .product-grid, .top-footer, .checkout-footer {
             background-color: var(--tg-theme-secondary-bg-color);
             color: var(--tg-theme-text-color);
         }
 
         .product button, .top-footer button, .checkout-footer button {
             background-color: var(--tg-theme-button-color);
-            color: var(--tg-button-text-color);
+            color: var(--tg-theme-footer-text-color);
+        }
+
+        .product button:hover, .top-footer button:hover, .checkout-footer button:hover {
+            opacity: 0.9;
+            color: var(--tg-theme-footer-bg-color); 
+        }
+
+        @media (max-width: 768px) {
+            .product {
+                flex: 1 1 48%;
+            }
         }
    </style>
 </head>
@@ -325,10 +313,16 @@
                     return;
                 }
 
-                const productsResponse = await fetch(`https://magazin-ruslanname.amvera.io/api/products_data/user/${chatId}`);
-                const products = await productsResponse.json();
+                const [productsResponse, cartResponse] = await Promise.all([
+                    fetch(`https://magazin-ruslanname.amvera.io/api/products_data/user/${chatId}`),
+                    fetch(`https://magazin-ruslanname.amvera.io/api/user_carts_data/load?chatId=${chatId}`)
+                ]);
 
-                const cartResponse = await fetch(`https://magazin-ruslanname.amvera.io/api/user_carts_data/load?chatId=${chatId}`);
+                if (!productsResponse.ok || !cartResponse.ok) {
+                    throw new Error('Ошибка при получении данных о продуктах или корзине.');
+                }
+
+                const products = await productsResponse.json();
                 const cartItems = await cartResponse.json();
 
                 const productGrid = document.getElementById('productGrid');
@@ -355,8 +349,7 @@
 
                     const productElement = document.getElementById(`product${product.id}`);
                     if (productElement) {
-                        let touchStartX = 0;
-                        let touchEndX = 0;
+                        let touchStartX, touchEndX;
 
                         productElement.addEventListener('touchstart', (e) => {
                             touchStartX = e.changedTouches[0].screenX;
@@ -371,12 +364,10 @@
                 });
 
                 cartItems.forEach(item => {
-                    const addButton = document.getElementById(`add${item.productId}`);
                     const cartControls = document.getElementById(`cart-controls${item.productId}`);
                     const cartQuantity = document.getElementById(`cart-quantity${item.productId}`);
                     const selectCheckbox = document.getElementById(`select${item.productId}`);
 
-                    if (addButton) addButton.style.display = "none";
                     if (cartControls) {
                         cartControls.style.display = "flex"; 
                         cartQuantity.textContent = item.quantity;
@@ -486,8 +477,9 @@
         }
 
         function applyTheme() {
-            const isDarkTheme = Telegram.WebApp.colorScheme === 'dark';
-        
+            const isTelegram = typeof Telegram !== "undefined" && Telegram.WebApp;
+            const isDarkTheme = isTelegram ? Telegram.WebApp.colorScheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+
             document.documentElement.style.setProperty('--tg-theme-bg-color', isDarkTheme ? 'var(--tg-theme-bg-color-dark)' : 'var(--tg-theme-bg-color-light)');
             document.documentElement.style.setProperty('--tg-theme-text-color', isDarkTheme ? 'var(--tg-theme-text-color-dark)' : 'var(--tg-theme-text-color-light)');
             document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', isDarkTheme ? 'var(--tg-theme-secondary-bg-color-dark)' : 'var(--tg-theme-secondary-bg-color-light)');
@@ -496,8 +488,11 @@
             document.documentElement.style.setProperty('--tg-theme-footer-text-color', isDarkTheme ? 'var(--tg-theme-footer-text-color-dark)' : 'var(--tg-theme-footer-text-color-light)');
             document.documentElement.style.setProperty('--tg-checkbox-toggle-color', isDarkTheme ? 'var(--tg-checkbox-toggle-color-dark)' : 'var(--tg-checkbox-toggle-color-light)');
         }
-        
-        Telegram.WebApp.onThemeChanged = applyTheme;
+
+        if (typeof Telegram !== "undefined" && Telegram.WebApp) {
+            Telegram.WebApp.onThemeChanged = applyTheme;
+        }
+
         applyTheme();
     </script>
 </body>

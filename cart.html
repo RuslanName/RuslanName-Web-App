@@ -38,8 +38,8 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            width: 100%;
-            overflow-x: hidden; /* Убираем горизонтальную прокрутку */
+            width: 100%; /* Убираем возможный выход за пределы экрана */
+            overflow-x: hidden; /* Избегаем горизонтальной прокрутки */
         }
         
         .product-image-wrapper {
@@ -56,7 +56,7 @@
         
         .product {
             position: relative;
-            flex: 1 1 calc(50% - 10px); /* Используем правильную ширину, чтобы товары влезали */
+            flex: 1 1 calc(50% - 10px); /* Делаем отступы между товарами */
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -71,14 +71,13 @@
         .checkout-footer button {
             background-color: var(--tg-theme-button-color);
             color: var(--tg-theme-footer-text-color);
-            padding: 15px 20px; /* Увеличиваем padding для высоты */
+            padding: 10px 15px; /* Оставляем прежний размер кнопок */
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
             margin: 5px 0;
             width: 100%;
-            height: 50px; /* Фиксированная высота кнопок */
             transition: background-color 0.2s ease, color 0.2s ease;
         }
         
@@ -220,8 +219,9 @@
             margin: 0 5px;
         }
         
-        .checkout-footer span {
-            margin-left: 10px;
+        .checkout-footer span,
+        .checkout-footer button {
+            margin-left: 0; /* Убираем лишний отступ у кнопок */
         }
         
         body,
@@ -244,22 +244,22 @@
         .top-footer button:hover,
         .checkout-footer button:hover {
             opacity: 0.9;
-            color: var(--tg-theme-footer-bg-color); 
+            color: var(--tg-theme-footer-bg-color);
         }
         
         @media (max-width: 768px) {
             .product {
-                flex: 1 1 48%; /* Делаем товары в 2 колонки на мобильных устройствах */
+                flex: 1 1 48%; /* Убираем сдвиг */
             }
         
-            /* Убираем мерцание товаров */
+            /* Убираем эффект подсвечивания при нажатии */
             .product:hover {
                 transform: scale(1); /* Убираем эффект масштабирования при наведении */
                 opacity: 1;
             }
         
             .checkout-footer span {
-                margin-left: 5px; /* Выровнял отступ у итоговой суммы с кнопками футера */
+                margin-left: 10px; /* Выровнял отступ итоговой суммы */
             }
         }
    </style>

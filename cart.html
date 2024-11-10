@@ -7,11 +7,12 @@
     <title>Корзина</title>
     <style>
         :root {
+            /* Light Theme Colors */
             --tg-theme-bg-color-light: #ffffff;
             --tg-theme-text-color-light: #000000;
             --tg-theme-secondary-bg-color-light: #f8f9fa;
             --tg-theme-button-color-light: #0088cc;
-            --tg-theme-footer-bg-color-light: #ffffff;
+            --tg-theme-footer-bg-color-light: #e0e0e0; /* Светло-серый */
             --tg-theme-footer-text-color-light: #000000;
             --tg-checkbox-toggle-color-light: #0088cc;
         
@@ -20,11 +21,12 @@
             --tg-theme-text-color-dark: #e0e0e0;
             --tg-theme-secondary-bg-color-dark: #2c2c2c;
             --tg-theme-button-color-dark: #005f99;
-            --tg-theme-footer-bg-color-dark: #1a1a1a;
+            --tg-theme-footer-bg-color-dark: #003366; /* Темно-синий */
             --tg-theme-footer-text-color-dark: #e0e0e0;
             --tg-checkbox-toggle-color-dark: #005f99;
         }
         
+        /* Default Theme (inherits based on color scheme) */
         :root {
             --tg-theme-bg-color: var(--tg-theme-bg-color-light);
             --tg-theme-text-color: var(--tg-theme-text-color-light);
@@ -35,6 +37,7 @@
             --tg-checkbox-toggle-color: var(--tg-checkbox-toggle-color-light);
         }
         
+        /* Dark Theme Media Query */
         @media (prefers-color-scheme: dark) {
             :root {
                 --tg-theme-bg-color: var(--tg-theme-bg-color-dark);
@@ -171,7 +174,7 @@
             transform: scale(1.5);
             z-index: 1;
             cursor: pointer;
-            background-color: var(--tg-theme-secondary-bg-color);
+            background-color: var(--tg-theme-button-color);
             border: 2px solid var(--tg-theme-button-color);
             border-radius: 4px;
         }
@@ -216,8 +219,8 @@
        
        .product button {
            padding: 10px 15px;
-           background-color: var(--tg-theme-button-color);
-           color: var(--tg-button-text-color);
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
            border: none;
            border-radius: 5px;
            cursor: pointer;
@@ -241,8 +244,8 @@
            top: 0;
            left: 0;
            width: 100%;
-           background-color: var(--tg-theme-footer-bg-color);
-           color: var(--tg-theme-footer-text-color);
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
            display: flex;
            justify-content: center;
            padding: 10px 0;
@@ -268,6 +271,10 @@
            background-color: #005f99;
            opacity: 0.8;
        }
+
+        .price-total {
+            background-color: var(--tg-theme-bg-color);
+        }
 
 /*         :root {
             --tg-theme-bg-color: var(--tg-theme-bg-color-light);

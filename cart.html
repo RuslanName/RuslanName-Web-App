@@ -7,13 +7,44 @@
     <title>Корзина</title>
     <style>
         :root {
-           --tg-theme-bg-color: #ffffff !important;
-           --tg-theme-text-color: #000000 !important;
-           --tg-theme-secondary-bg-color: #ffffff !important;
-           --tg-theme-button-color: #0088cc !important;
-           --tg-button-text-color: #ffffff !important;
-           --tg-theme-footer-bg-color: #ffffff !important;
-           --tg-theme-footer-text-color: #000000 !important;
+            --tg-theme-bg-color-light: #ffffff;
+            --tg-theme-text-color-light: #000000;
+            --tg-theme-secondary-bg-color-light: #f8f9fa;
+            --tg-theme-button-color-light: #0088cc;
+            --tg-theme-footer-bg-color-light: #ffffff;
+            --tg-theme-footer-text-color-light: #000000;
+            --tg-checkbox-toggle-color-light: #0088cc;
+        
+            /* Dark Theme Colors */
+            --tg-theme-bg-color-dark: #1a1a1a;
+            --tg-theme-text-color-dark: #e0e0e0;
+            --tg-theme-secondary-bg-color-dark: #2c2c2c;
+            --tg-theme-button-color-dark: #005f99;
+            --tg-theme-footer-bg-color-dark: #1a1a1a;
+            --tg-theme-footer-text-color-dark: #e0e0e0;
+            --tg-checkbox-toggle-color-dark: #005f99;
+        }
+        
+        :root {
+            --tg-theme-bg-color: var(--tg-theme-bg-color-light);
+            --tg-theme-text-color: var(--tg-theme-text-color-light);
+            --tg-theme-secondary-bg-color: var(--tg-theme-secondary-bg-color-light);
+            --tg-theme-button-color: var(--tg-theme-button-color-light);
+            --tg-theme-footer-bg-color: var(--tg-theme-footer-bg-color-light);
+            --tg-theme-footer-text-color: var(--tg-theme-footer-text-color-light);
+            --tg-checkbox-toggle-color: var(--tg-checkbox-toggle-color-light);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --tg-theme-bg-color: var(--tg-theme-bg-color-dark);
+                --tg-theme-text-color: var(--tg-theme-text-color-dark);
+                --tg-theme-secondary-bg-color: var(--tg-theme-secondary-bg-color-dark);
+                --tg-theme-button-color: var(--tg-theme-button-color-dark);
+                --tg-theme-footer-bg-color: var(--tg-theme-footer-bg-color-dark);
+                --tg-theme-footer-text-color: var(--tg-theme-footer-text-color-dark);
+                --tg-checkbox-toggle-color: var(--tg-checkbox-toggle-color-dark);
+            }
         }
        
         body {
@@ -567,6 +598,82 @@
             }
         }
 
+        // async function loadProducts() {
+        //     try {
+        //         const chatId = await getChatId();
+        //         if (!chatId) {
+        //             console.error('Ошибка: chatId не получен.');
+        //             return;
+        //         }
+
+        //         const [productsResponse, cartResponse] = await Promise.all([
+        //             fetch(`https://magazin-ruslanname.amvera.io/api/products_data/user/${chatId}`),
+        //             fetch(`https://magazin-ruslanname.amvera.io/api/user_carts_data/load?chatId=${chatId}`)
+        //         ]);
+
+        //         if (!productsResponse.ok || !cartResponse.ok) {
+        //             throw new Error('Ошибка при получении данных о продуктах или корзине.');
+        //         }
+
+        //         const products = await productsResponse.json();
+        //         const cartItems = await cartResponse.json();
+
+        //         const productGrid = document.getElementById('productGrid');
+        //         productGrid.innerHTML = '';
+
+        //         products.forEach(product => {
+        //             const productHTML = `
+        //                 <div class="product" id="product${product.id}">
+        //                     <h3>${product.name}</h3>
+        //                     <div class="product-image-wrapper">
+        //                         <img src="https://magazin-ruslanname.amvera.io${product.iconPath}" alt="${product.name}">
+        //                         <input type="checkbox" class="product-checkbox" id="select${product.id}" onclick="toggleSelection('${product.id}')">
+        //                     </div>
+        //                     <p><span id="price${product.id}">${product.price}</span> ₽</p>
+        //                     <p id="quantity${product.id}" data-available="${product.quantity}">В наличии: ${product.quantity}</p>
+        //                     <div id="cart-controls${product.id}" class="cart-controls" style="display:none;">
+        //                         <button onclick="updateCartQuantity('${product.id}', -1)">-</button>
+        //                         <span id="cart-quantity${product.id}">0</span>
+        //                         <button onclick="updateCartQuantity('${product.id}', 1)">+</button>
+        //                     </div>
+        //                 </div>
+        //             `;
+        //             productGrid.insertAdjacentHTML('beforeend', productHTML);
+
+        //             const productElement = document.getElementById(`product${product.id}`);
+        //             if (productElement) {
+        //                 let touchStartX, touchEndX;
+
+        //                 productElement.addEventListener('touchstart', (e) => {
+        //                     touchStartX = e.changedTouches[0].screenX;
+        //                     productElement.style.opacity = '0.7';
+        //                 });
+
+        //                 productElement.addEventListener('touchend', (e) => {
+        //                     touchEndX = e.changedTouches[0].screenX;
+        //                     productElement.style.opacity = '1';
+        //                 });
+        //             }
+        //         });
+
+        //         cartItems.forEach(item => {
+        //             const cartControls = document.getElementById(`cart-controls${item.productId}`);
+        //             const cartQuantity = document.getElementById(`cart-quantity${item.productId}`);
+        //             const selectCheckbox = document.getElementById(`select${item.productId}`);
+
+        //             if (cartControls) {
+        //                 cartControls.style.display = "flex"; 
+        //                 cartQuantity.textContent = item.quantity;
+        //             }
+        //             if (selectCheckbox) selectCheckbox.checked = item.selected;
+        //         });
+
+        //         calculateTotalPrice();
+        //     } catch (error) {
+        //         console.error('Ошибка при загрузке товаров или корзины:', error);
+        //     }
+        // }
+
         async function loadProducts() {
             try {
                 const chatId = await getChatId();
@@ -575,21 +682,16 @@
                     return;
                 }
 
-                const [productsResponse, cartResponse] = await Promise.all([
-                    fetch(`https://magazin-ruslanname.amvera.io/api/products_data/user/${chatId}`),
-                    fetch(`https://magazin-ruslanname.amvera.io/api/user_carts_data/load?chatId=${chatId}`)
-                ]);
-
-                if (!productsResponse.ok || !cartResponse.ok) {
-                    throw new Error('Ошибка при получении данных о продуктах или корзине.');
-                }
-
+                const productsResponse = await fetch(`https://magazin-ruslanname.amvera.io/api/products_data/user/${chatId}`);
                 const products = await productsResponse.json();
+
+                const cartResponse = await fetch(`https://magazin-ruslanname.amvera.io/api/user_carts_data/load?chatId=${chatId}`);
                 const cartItems = await cartResponse.json();
 
                 const productGrid = document.getElementById('productGrid');
+                
                 productGrid.innerHTML = '';
-
+                
                 products.forEach(product => {
                     const productHTML = `
                         <div class="product" id="product${product.id}">
@@ -598,43 +700,37 @@
                                 <img src="https://magazin-ruslanname.amvera.io${product.iconPath}" alt="${product.name}">
                                 <input type="checkbox" class="product-checkbox" id="select${product.id}" onclick="toggleSelection('${product.id}')">
                             </div>
-                            <p><span id="price${product.id}">${product.price}</span> ₽</p>
+                            <p><span id="price${product.id}">${product.price}</span> руб.</p>
                             <p id="quantity${product.id}" data-available="${product.quantity}">В наличии: ${product.quantity}</p>
+                            <button id="add${product.id}" onclick="addToCart('${product.id}')">Добавить</button>
                             <div id="cart-controls${product.id}" class="cart-controls" style="display:none;">
-                                <button onclick="updateCartQuantity('${product.id}', -1)">-</button>
+                                <button onclick="updateCart('${product.id}', -1)">-</button>
                                 <span id="cart-quantity${product.id}">0</span>
-                                <button onclick="updateCartQuantity('${product.id}', 1)">+</button>
+                                <button onclick="updateCart('${product.id}', 1)">+</button>
                             </div>
                         </div>
                     `;
                     productGrid.insertAdjacentHTML('beforeend', productHTML);
-
-                    const productElement = document.getElementById(`product${product.id}`);
-                    if (productElement) {
-                        let touchStartX, touchEndX;
-
-                        productElement.addEventListener('touchstart', (e) => {
-                            touchStartX = e.changedTouches[0].screenX;
-                            productElement.style.opacity = '0.7';
-                        });
-
-                        productElement.addEventListener('touchend', (e) => {
-                            touchEndX = e.changedTouches[0].screenX;
-                            productElement.style.opacity = '1';
-                        });
-                    }
                 });
 
                 cartItems.forEach(item => {
+                    const addButton = document.getElementById(`add${item.productId}`);
                     const cartControls = document.getElementById(`cart-controls${item.productId}`);
                     const cartQuantity = document.getElementById(`cart-quantity${item.productId}`);
                     const selectCheckbox = document.getElementById(`select${item.productId}`);
+
+                    if (addButton) {
+                        addButton.style.display = "none";
+                    }
 
                     if (cartControls) {
                         cartControls.style.display = "flex"; 
                         cartQuantity.textContent = item.quantity;
                     }
-                    if (selectCheckbox) selectCheckbox.checked = item.selected;
+
+                    if (selectCheckbox) {
+                        selectCheckbox.checked = item.selected;
+                    }
                 });
 
                 calculateTotalPrice();

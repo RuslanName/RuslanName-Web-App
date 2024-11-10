@@ -12,7 +12,7 @@
             --tg-theme-text-color-light: #000000;
             --tg-theme-secondary-bg-color-light: #f8f9fa;
             --tg-theme-button-color-light: #0088cc;
-            --tg-theme-footer-bg-color-light: #e0e0e0; /* Светло-серый */
+            --tg-theme-footer-bg-color-light: #f1f1f1;
             --tg-theme-footer-text-color-light: #000000;
             --tg-checkbox-toggle-color-light: #0088cc;
         
@@ -21,12 +21,11 @@
             --tg-theme-text-color-dark: #e0e0e0;
             --tg-theme-secondary-bg-color-dark: #2c2c2c;
             --tg-theme-button-color-dark: #005f99;
-            --tg-theme-footer-bg-color-dark: #003366; /* Темно-синий */
+            --tg-theme-footer-bg-color-dark: #1a1a1a;
             --tg-theme-footer-text-color-dark: #e0e0e0;
             --tg-checkbox-toggle-color-dark: #005f99;
         }
         
-        /* Default Theme (inherits based on color scheme) */
         :root {
             --tg-theme-bg-color: var(--tg-theme-bg-color-light);
             --tg-theme-text-color: var(--tg-theme-text-color-light);
@@ -37,19 +36,6 @@
             --tg-checkbox-toggle-color: var(--tg-checkbox-toggle-color-light);
         }
         
-        /* Dark Theme Media Query */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --tg-theme-bg-color: var(--tg-theme-bg-color-dark);
-                --tg-theme-text-color: var(--tg-theme-text-color-dark);
-                --tg-theme-secondary-bg-color: var(--tg-theme-secondary-bg-color-dark);
-                --tg-theme-button-color: var(--tg-theme-button-color-dark);
-                --tg-theme-footer-bg-color: var(--tg-theme-footer-bg-color-dark);
-                --tg-theme-footer-text-color: var(--tg-theme-footer-text-color-dark);
-                --tg-checkbox-toggle-color: var(--tg-checkbox-toggle-color-dark);
-            }
-        }
-       
         body {
             margin: 0;
             padding: 0;
@@ -108,8 +94,11 @@
         .checkout-footer span {
             margin-left: 10px;
             font-size: 16px;
-            display: flex;
-            flex-direction: column;
+            text-align: center;
+            background-color: var(--tg-theme-bg-color);
+            border: 1px solid #000;
+            border-radius: 5px;
+            padding: 14px;
         }
        
         .checkout-footer button {
@@ -174,14 +163,13 @@
             transform: scale(1.5);
             z-index: 1;
             cursor: pointer;
-            background-color: var(--tg-theme-button-color);
+            background-color: var(--tg-theme-secondary-bg-color);
             border: 2px solid var(--tg-theme-button-color);
             border-radius: 4px;
         }
 
         .product-checkbox:checked {
-            background-color: var(--tg-theme-button-color);
-            border-color: var(--tg-theme-button-color);
+            background-color: var(--tg-checkbox-toggle-color);
         }
        
        .product:hover {
@@ -209,7 +197,7 @@
            margin: 5px 0;
            padding: 0;
            font-size: 1.2em;
-           color: #333333;
+           color: var(--tg-theme-text-color);
        }
        
        .product input[type="checkbox"]:checked {
@@ -219,8 +207,8 @@
        
        .product button {
            padding: 10px 15px;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-button-text-color);
+           background-color: var(--tg-theme-button-color);
+           color: var(--tg-button-text-color);
            border: none;
            border-radius: 5px;
            cursor: pointer;
@@ -244,8 +232,8 @@
            top: 0;
            left: 0;
            width: 100%;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-button-text-color);
+           background-color: var(--tg-theme-footer-bg-color);
+           color: var(--tg-theme-footer-text-color);
            display: flex;
            justify-content: center;
            padding: 10px 0;
@@ -271,270 +259,6 @@
            background-color: #005f99;
            opacity: 0.8;
        }
-
-        .price-total {
-            background-color: var(--tg-theme-bg-color);
-        }
-
-/*         :root {
-            --tg-theme-bg-color: var(--tg-theme-bg-color-light);
-            --tg-theme-text-color: var(--tg-theme-text-color-light);
-            --tg-theme-secondary-bg-color: var(--tg-theme-secondary-bg-color-light);
-            --tg-theme-button-color: var(--tg-theme-button-color-light);
-            --tg-theme-footer-bg-color: var(--tg-theme-footer-bg-color-light);
-            --tg-theme-footer-text-color: var(--tg-theme-footer-text-color-light);
-            --tg-checkbox-toggle-color: var(--tg-checkbox-toggle-color-light);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --tg-theme-bg-color: var(--tg-theme-bg-color-dark);
-                --tg-theme-text-color: var(--tg-theme-text-color-dark);
-                --tg-theme-secondary-bg-color: var(--tg-theme-secondary-bg-color-dark);
-                --tg-theme-button-color: var(--tg-theme-button-color-dark);
-                --tg-theme-footer-bg-color: var(--tg-theme-footer-bg-color-dark);
-                --tg-theme-footer-text-color: var(--tg-theme-footer-text-color-dark);
-                --tg-checkbox-toggle-color: var(--tg-checkbox-toggle-color-dark);
-            }
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background: var(--tg-theme-bg-color);
-            color: var(--tg-theme-text-color);
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            width: 100%;
-            overflow-x: hidden;
-        }
-
-        #total-price {
-            flex: 0 0 auto;
-            text-align: center;
-            border: 1px solid var(--tg-theme-button-color);
-            border-radius: 5px;
-            padding: 15px 20px;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-theme-text-color);
-            margin: 0 5px;
-        }
-        
-        .product-image-wrapper {
-            position: relative;
-            width: 100%;
-        }
-        
-        .product-image-wrapper img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            object-position: center;
-        }
-        
-        .product {
-            position: relative;
-            flex: 0 1 calc(50% - 5px);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            box-sizing: border-box;
-            margin-bottom: 5px;
-            max-width: 100%;
-            transition: transform 0.3s ease;
-        }
-        
-        .product button,
-        .top-footer button,
-        .checkout-footer button {
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-theme-footer-text-color);
-            padding: 15px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 5px 0;
-            width: 100%;
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-
-        .product button {
-            height: 40px;
-        }
-
-        .top-footer button,
-        .checkout-footer button {
-            height: 50px; 
-        }
-        
-        .product-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: space-between;
-            padding: 10px;
-        }
-        
-        .product img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            object-position: center;
-            margin-bottom: 5px;
-        }
-        
-        .product-checkbox:checked {
-            background-color: var(--tg-theme-button-color);
-            border-color: var(--tg-theme-button-color);
-        }
-        
-        .product .cart-controls button:active + img,
-        .product .cart-controls button:focus + img {
-            transform: scale(1.1);
-        }
-        
-        .product h3 {
-            margin: 5px 0;
-            padding: 0;
-            font-size: 1.2em;
-        }
-        
-        .product-checkbox,
-        .product input[type="checkbox"] {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            transform: scale(1.5);
-            z-index: 1;
-            cursor: pointer;
-            background-color: var(--tg-theme-secondary-bg-color);
-            border: 2px solid var(--tg-theme-footer-text-color);
-            color: var(--tg-theme-button-color);
-            border-radius: 4px;
-        }
-        
-        .product input[type="checkbox"]:checked {
-            background-color: var(--tg-theme-button-color);
-            border-color: var(--tg-theme-footer-text-color);
-        }
-        
-        .product:hover {
-            transform: scale(1.02);
-            opacity: 1;
-            transition: transform 0.2s ease, opacity 0.2s ease;
-        }
-        
-        .product:active {
-            transform: none;
-        }
-        
-        #cart {
-            flex-grow: 1;
-            padding-top: 60px;
-            padding-bottom: 60px;
-            overflow-y: auto;
-        }
-        
-        .cart-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 10px;
-        }
-        
-        .cart-controls button {
-            padding: 10px 10px;
-        }
-        
-        .cart-controls span {
-            font-size: 16px;
-            margin: 0 10px;
-        }
-        
-        .cart-item {
-            display: flex;
-            align-items: center;
-        }
-        
-        .quantity-buttons {
-            display: flex;
-            flex-direction: column;
-            margin-left: 10px;
-        }
-        
-        .quantity-buttons button {
-            width: 30px;
-            height: 30px;
-        }
-        
-        .top-footer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: none;
-            z-index: 1000;
-        }
-        
-        .checkout-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            padding: 10px 0;
-            box-shadow: none;
-            z-index: 999;
-        }
-        
-        .checkout-footer span {
-            margin-left: 10px;
-            font-size: 16px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .checkout-footer button,
-        .top-footer button {
-            flex: 1;
-            margin: 0 5px;
-        }
-        
-        .checkout-footer span {
-            margin-left: 10px;
-        }
-        
-        body,
-        .product,
-        .product-grid,
-        .top-footer,
-        .checkout-footer {
-            background-color: var(--tg-theme-secondary-bg-color);
-            color: var(--tg-theme-text-color);
-        }
-        
-        .product button,
-        .top-footer button,
-        .checkout-footer button {
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-theme-footer-text-color);
-        }
-        
-        .product button:hover,
-        .top-footer button:hover,
-        .checkout-footer button:hover {
-            opacity: 0.9;
-            color: var(--tg-theme-footer-bg-color); 
-        } */
    </style>
 </head>
 <body>
@@ -548,7 +272,7 @@
     </div>
     
     <div class="checkout-footer">
-        <span id="total-price" style="flex: 0 0 auto; text-align: center; border: 1px solid #000; border-radius: 5px; padding: 14px;">0 ₽</span>
+        <span id="total-price">0 ₽</span>
         <button onclick="location.href='checkout.html'">Перейти к оформлению</button>
     </div>
 
@@ -844,7 +568,7 @@
         function applyTheme() {
             const isTelegram = typeof Telegram !== "undefined" && Telegram.WebApp;
             const isDarkTheme = isTelegram ? Telegram.WebApp.colorScheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-
+        
             document.documentElement.style.setProperty('--tg-theme-bg-color', isDarkTheme ? 'var(--tg-theme-bg-color-dark)' : 'var(--tg-theme-bg-color-light)');
             document.documentElement.style.setProperty('--tg-theme-text-color', isDarkTheme ? 'var(--tg-theme-text-color-dark)' : 'var(--tg-theme-text-color-light)');
             document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', isDarkTheme ? 'var(--tg-theme-secondary-bg-color-dark)' : 'var(--tg-theme-secondary-bg-color-light)');
@@ -853,7 +577,7 @@
             document.documentElement.style.setProperty('--tg-theme-footer-text-color', isDarkTheme ? 'var(--tg-theme-footer-text-color-dark)' : 'var(--tg-theme-footer-text-color-light)');
             document.documentElement.style.setProperty('--tg-checkbox-toggle-color', isDarkTheme ? 'var(--tg-checkbox-toggle-color-dark)' : 'var(--tg-checkbox-toggle-color-light)');
         }
-
+        
         if (typeof Telegram !== "undefined" && Telegram.WebApp) {
             Telegram.WebApp.onThemeChanged = applyTheme;
             Telegram.WebApp.ready(() => {
@@ -865,3 +589,82 @@
     </script>
 </body>
 </html>
+
+<!-- <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Корзина</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        #main {
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: var(--tg-theme-secondary-bg-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="main">
+    <h1>Корзина</h1>
+    <p>Ваша корзина пока пуста.</p>
+    <div class="button-group">
+        <button onclick="goToShop()">Магазин</button>
+        <button onclick="location.href='orders.html'">Заказы</button>
+    </div>
+</div>
+</body>
+
+<script>
+    function goToShop() {
+        // const isAuthenticated = localStorage.getItem('isAuthenticated');
+        
+        // if (isAuthenticated === 'true') {
+        //     window.location.href = 'shop.html'; // Перенаправляем на страницу магазина
+        // } else {
+        //     window.location.href = 'auth.html'; // Перенаправляем на страницу авторизации
+        // }
+        window.location.href = "index.html"; 
+    }
+</script>
+</html>
+
+ -->

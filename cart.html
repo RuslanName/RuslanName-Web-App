@@ -95,11 +95,19 @@
             transition: transform 0.3s ease;
         }
 
+        @media (max-width: 768px) {
+            .product {
+                transition: transform 0.3s ease;
+            }
+
+            .product.touched {
+                transform: scale(1.1);
+            }
+        }
+
         .product button {
             padding: 10px 15px;
             background-color: var(--tg-theme-button-color);
-            /* color: var(--tg-button-text-color); */
-            /* color: #ffffff; */
             color: var(--tg-button-text-color);
             border: none;
             border-radius: 5px;
@@ -152,8 +160,6 @@
             -moz-appearance: none;
             width: 20px;
             height: 20px;
-            /* border: 2px solid var(--tg-theme-secondary-bg-color); */
-            /* border: 2px solid #1a1a1a; */
             border: 2px solid var(--tg-checkbox-border-color);
             border-radius: 4px;
             background-color: transparent;
@@ -174,10 +180,6 @@
 
         .product.touched {
             transform: scale(1.1);
-        }
-
-        .product button:hover {
-            /* background-color: #005f99; */
         }
 
         .quantity-buttons {
@@ -209,8 +211,6 @@
             margin: 0 5px;
             padding: 15px;
             background-color: var(--tg-theme-button-color);
-            /* color: var(--tg-button-text-color); */
-            /* color: #ffffff; */
             color: var(--tg-button-text-color);
             border: none;
             border-radius: 5px;
@@ -221,7 +221,6 @@
         }
 
         .top-footer button:hover {
-            /* background-color: #005f99; */
             opacity: 0.8;
         }
 
@@ -242,12 +241,7 @@
             margin-left: 10px;
             font-size: 16px;
             text-align: center;
-            /* background-color: var(--tg-theme-secondary-bg-color); */
-            /* background-color: #00FA9A; */
-            /* background-color: #3CB371; */
             background-color: var(--tg-total-price-color);
-            /* color: var(--tg-button-text-color); */
-            /* color: #ffffff; */
             color: var(--tg-button-text-color);
             border: none;
             border-radius: 5px;
@@ -259,8 +253,6 @@
             margin: 0 5px;
             padding: 15px;
             background-color: var(--tg-theme-button-color);
-            /* color: var(--tg-button-text-color); */
-            /* color: #ffffff; */
             color: var(--tg-button-text-color);
             border: none;
             border-radius: 5px;
@@ -271,13 +263,12 @@
         }
 
         .checkout-footer button:hover {
-            /* background-color: #005f99; */
             opacity: 0.8;
         }
    </style>
 </head>
 <body>
-    <!-- <div class="top-footer">
+    <div class="top-footer">
         <button onclick="location.href='index.html'">Магазин</button>
         <button onclick="location.href='orders.html'">Заказы</button>
     </div>
@@ -286,35 +277,6 @@
         <div id="productGrid" class="product-grid"></div>        
     </div>
     
-    <div class="checkout-footer">
-        <span id="total-price">0 ₽</span>
-        <button onclick="location.href='checkout.html'">Перейти к оформлению</button>
-    </div> -->
-
-    <div class="top-footer">
-        <button onclick="location.href='index.html'">Магазин</button>
-        <button onclick="location.href='orders.html'">Заказы</button>
-    </div>
-
-    <div id="cart">
-        <div id="productGrid" class="product-grid">
-            <div class="product" id="product1">
-                <h3>Пример Товара</h3>
-                <div class="product-image-wrapper">
-                    <img src="https://via.placeholder.com/150" alt="Пример Товара">
-                    <input type="checkbox" class="product-checkbox" id="select1" onclick="toggleSelection('1')">
-                </div>
-                <p><span id="price1">1000</span> ₽</p>
-                <p id="quantity1" data-available="10">В наличии: 10</p>
-                <div id="cart-controls1" class="cart-controls" style="display: none;">
-                    <button onclick="updateCartQuantity('1', -1)">-</button>
-                    <span id="cart-quantity1">0</span>
-                    <button onclick="updateCartQuantity('1', 1)">+</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="checkout-footer">
         <span id="total-price">0 ₽</span>
         <button onclick="location.href='checkout.html'">Перейти к оформлению</button>
@@ -364,6 +326,16 @@
             });
 
             document.body.style.userSelect = "none";
+        });
+
+        document.querySelectorAll('.product').forEach(product => {
+            product.addEventListener('touchstart', () => {
+                product.classList.add('touched');
+            });
+
+            product.addEventListener('touchend', () => {
+                product.classList.remove('touched');
+            });
         });
 
         async function getChatId() {

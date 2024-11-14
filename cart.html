@@ -96,9 +96,12 @@
         }
 
         @media (max-width: 768px) {
-            .product.touched {
+            .product {
+                transition: transform 0.3s ease;
+            }
+        
+            .product:active {
                 transform: scale(1.1);
-                transition: transform 0.2s ease;
             }
         }
 
@@ -323,11 +326,15 @@
             });
 
             document.body.style.userSelect = "none";
+            document.body.style.webkitUserSelect = "none";
+            document.body.style.mozUserSelect = "none";
+            document.body.style.msUserSelect = "none";
 
             document.querySelectorAll('.product').forEach(product => {
                 product.addEventListener('touchstart', () => {
                     product.classList.add('touched');
                 });
+
                 product.addEventListener('touchend', () => {
                     product.classList.remove('touched');
                 });

@@ -47,12 +47,12 @@
             min-height: 100vh;
         }
 
-        body {
+/*         body {
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none; 
             -ms-user-select: none; 
-        }
+        } */
 
         .product {
             flex: 0 1 calc(50% - 5px);
@@ -189,7 +189,7 @@
 
     <script th:inline="javascript">
         // var webApp = [[${webApp.url}]];
-        var webApp = "https://magazin-ruslanname.amvera.io"
+        var webApp = "https://magazin-ruslanname.amvera.io";
     </script>
     
     <script>
@@ -294,17 +294,17 @@
                 }
             }, true);
         
-            document.addEventListener('contextmenu', function(event) {
-                event.preventDefault();
-            });
+            // document.addEventListener('contextmenu', function(event) {
+            //     event.preventDefault();
+            // });
         
-            document.addEventListener('copy', function(event) {
-                event.preventDefault();
-            });
+            // document.addEventListener('copy', function(event) {
+            //     event.preventDefault();
+            // });
         
-            document.body.addEventListener("dragstart", function(event) {
-                event.preventDefault();
-            });
+            // document.body.addEventListener("dragstart", function(event) {
+            //     event.preventDefault();
+            // });
         });
 
         async function checkUserRegistration(chatId) {

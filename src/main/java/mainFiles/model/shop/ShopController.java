@@ -9,6 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/shop")
+@PropertySource("application.properties")
 public class ShopController {
 
     @Value("${shop.url}")

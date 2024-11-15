@@ -171,6 +171,7 @@
         .product.touched {
             transform: scale(1.1);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .quantity-buttons {
@@ -313,7 +314,7 @@
                 inactivityTimeout = setTimeout(() => location.reload(), 45000);
             }
 
-            ['mousemove', 'keydown', 'scroll', 'click', 'touchstart', 'touchmove'].forEach(event => {
+            ['mousemove', 'keydown', 'scroll', 'click', 'touchstart'].forEach(event => {
                 document.addEventListener(event, resetInactivityTimer);
             });
 
@@ -330,15 +331,15 @@
 
             document.body.addEventListener("touchstart", (event) => {
                 const product = event.target.closest(".product");
-                if (product && !product.classList.contains("touched")) {
+                if (product) {
                     product.classList.add("touched");
                 }
             });
-
+            
             document.body.addEventListener("touchend", (event) => {
                 const product = event.target.closest(".product");
-                if (product && product.classList.contains("touched")) {
-                    setTimeout(() => product.classList.remove("touched"), 300);
+                if (product) {
+                    product.classList.remove("touched");
                 }
             });
         });

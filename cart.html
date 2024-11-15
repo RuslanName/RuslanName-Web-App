@@ -52,10 +52,17 @@
             min-height: 100vh;
         }
 
+            body {
+                user-select: none;
+                -webkit-user-select: none;
+                -moz-user-select: none; 
+                -ms-user-select: none; 
+            }
+
         #cart {
             background: var(--tg-theme-secondary-bg-color);
             flex-grow: 1;
-            padding-top: 70px;
+            padding-top: 75px;
             padding-bottom: 60px;
             overflow-y: auto;
         }
@@ -108,15 +115,6 @@
             transition: background-color 0.3s ease, transform 0.1s ease;
         }
 
-/*         .product-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: space-between;
-            padding: 10px;
-            background-color: var(--tg-theme-secondary-bg-color);
-        } */
-
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -153,6 +151,12 @@
             object-position: center;
         }
 
+            .product img {
+                pointer-events: none;
+                -webkit-user-drag: none;
+                user-drag: none;
+            }
+
         .product-checkbox, .product input[type="checkbox"] {
             appearance: none; 
             -webkit-appearance: none;
@@ -174,12 +178,12 @@
         }
 
         .product.button-touched {
-            transform: scale(1.05);
+            transform: scale(1.04);
             transition: transform 0.1s ease;
         }
         
         .product.area-touched {
-            transform: scale(1.1);
+            transform: scale(1.08);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
@@ -333,11 +337,6 @@
                 event.preventDefault();
             });
         
-            document.body.style.userSelect = "none";
-            document.body.style.webkitUserSelect = "none";
-            document.body.style.mozUserSelect = "none";
-            document.body.style.msUserSelect = "none";
-        
             document.body.addEventListener("click", (event) => {
                 const button = event.target.closest("button");
                 const product = event.target.closest(".product");
@@ -383,6 +382,18 @@
                 if (product) {
                     product.classList.remove("area-touched");
                 }
+            });
+
+            document.addEventListener('contextmenu', function(event) {
+                event.preventDefault();
+            });
+        
+            document.addEventListener('copy', function(event) {
+                event.preventDefault();
+            });
+        
+            document.body.addEventListener("dragstart", function(event) {
+                event.preventDefault();
             });
         });
 
@@ -557,7 +568,7 @@
             const productElement = document.getElementById(`product${productId}`);
             if (productElement) {
                 if (scale) {
-                    productElement.style.transform = 'scale(1.1)';
+                    productElement.style.transform = 'scale(1.08)';
                     productElement.style.transition = 'transform 0.3s ease';
                 } else {
                     productElement.style.transform = 'scale(1)';

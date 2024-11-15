@@ -95,16 +95,6 @@
             transition: transform 0.3s ease;
         }
 
-        @media (max-width: 768px) {
-            .product {
-                transition: transform 0.3s ease;
-            }
-        
-            .product:active {
-                transform: scale(1.1);
-            }
-        }
-
         .product button {
             padding: 10px 15px;
             background-color: var(--tg-theme-button-color);
@@ -265,6 +255,13 @@
         .checkout-footer button:hover {
             opacity: 0.8;
         }
+
+        @media (hover: none) {
+            .product.touched {
+                transform: scale(1.1);
+                transition: transform 0.3s ease;
+            }
+        }
    </style>
 </head>
 <body>
@@ -285,61 +282,66 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <script>
-        document.addEventListener("DOMContentLoaded", async function() {
-            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-                Telegram.WebApp.ready();
-                console.log("Telegram Web App initialized successfully");
-            } else {
-                console.error("Telegram Web App not available");
-            }
+        document.addEventListener("DOMContentLoaded", async function () { 
+    if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+        Telegram.WebApp.ready();
+        console.log("Telegram Web App initialized successfully");
+    } else {
+        console.error("Telegram Web App not available");
+    }
 
-            const chatId = await getChatId();
-            if (!chatId) {
-                document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
-                document.querySelector("footer").style.display = "none";
-                return;
-            }
+    const chatId = await getChatId();
+    if (!chatId) {
+        document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
+        document.querySelector("footer").style.display = "none";
+        return;
+    }
 
-            const isRegistered = await checkUserRegistration(chatId);
-            if (!isRegistered) {
-                document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
-                document.querySelector("footer").style.display = "none";
-                return;
-            }
+    const isRegistered = await checkUserRegistration(chatId);
+    if (!isRegistered) {
+        document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
+        document.querySelector("footer").style.display = "none";
+        return;
+    }
 
-            loadProducts();
+    loadProducts();
 
-            let inactivityTimeout;
-            function resetInactivityTimer() {
-                clearTimeout(inactivityTimeout);
-                inactivityTimeout = setTimeout(() => location.reload(), 30000);
-            }
+    let inactivityTimeout;
+    function resetInactivityTimer() {
+        clearTimeout(inactivityTimeout);
+        inactivityTimeout = setTimeout(() => location.reload(), 45000);
+    }
 
-            ['mousemove', 'keydown', 'scroll', 'click'].forEach(event => {
-                document.addEventListener(event, resetInactivityTimer);
-            });
+    ['mousemove', 'keydown', 'scroll', 'click', 'touchstart', 'touchmove'].forEach(event => {
+        document.addEventListener(event, resetInactivityTimer);
+    });
 
-            resetInactivityTimer();
+    resetInactivityTimer();
 
-            document.addEventListener("copy", (event) => {
-                event.preventDefault();
-            });
+    document.addEventListener("copy", (event) => {
+        event.preventDefault();
+    });
 
-            document.body.style.userSelect = "none";
-            document.body.style.webkitUserSelect = "none";
-            document.body.style.mozUserSelect = "none";
-            document.body.style.msUserSelect = "none";
+    document.body.style.userSelect = "none";
+    document.body.style.webkitUserSelect = "none";
+    document.body.style.mozUserSelect = "none";
+    document.body.style.msUserSelect = "none";
 
-            document.querySelectorAll('.product').forEach(product => {
-                product.addEventListener('touchstart', () => {
-                    product.classList.add('touched');
-                });
+    const handleTouchStart = (event) => {
+        const product = event.target.closest('.product');
+        if (product) product.classList.add('touched');
+    };
 
-                product.addEventListener('touchend', () => {
-                    product.classList.remove('touched');
-                });
-            });
-        });
+    const handleTouchEnd = (event) => {
+        const product = event.target.closest('.product');
+        if (product) product.classList.remove('touched');
+    };
+
+    document.querySelectorAll('.product').forEach(product => {
+        product.addEventListener('touchstart', handleTouchStart, { passive: true });
+        product.addEventListener('touchend', handleTouchEnd, { passive: true });
+    });
+});
 
         async function getChatId() {
             if (typeof Telegram === 'undefined' || !Telegram.WebApp) {

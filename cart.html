@@ -55,7 +55,7 @@
         #cart {
             background: var(--tg-theme-secondary-bg-color);
             flex-grow: 1;
-            padding-top: 60px;
+            padding-top: 70px;
             padding-bottom: 60px;
             overflow-y: auto;
         }
@@ -108,11 +108,20 @@
             transition: background-color 0.3s ease, transform 0.1s ease;
         }
 
-        .product-grid {
+/*         .product-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             justify-content: space-between;
+            padding: 10px;
+            background-color: var(--tg-theme-secondary-bg-color);
+        } */
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-row-gap: 15px;
+            grid-column-gap: 10px;
             padding: 10px;
             background-color: var(--tg-theme-secondary-bg-color);
         }
@@ -335,7 +344,6 @@
         
                 if (product) {
                     if (button) {
-                        // Animate button interaction
                         product.classList.add("button-touched");
                         setTimeout(() => {
                             product.classList.remove("button-touched");
@@ -346,6 +354,34 @@
                             product.classList.remove("area-touched");
                         }, 300);
                     }
+                }
+            });
+
+            document.body.addEventListener("mousedown", (event) => {
+                const product = event.target.closest(".product");
+                if (product) {
+                    product.classList.add("area-touched");
+                }
+            });
+        
+            document.body.addEventListener("mouseup", (event) => {
+                const product = event.target.closest(".product");
+                if (product) {
+                    product.classList.remove("area-touched");
+                }
+            });
+        
+            document.body.addEventListener("touchstart", (event) => {
+                const product = event.target.closest(".product");
+                if (product) {
+                    product.classList.add("area-touched");
+                }
+            });
+        
+            document.body.addEventListener("touchend", (event) => {
+                const product = event.target.closest(".product");
+                if (product) {
+                    product.classList.remove("area-touched");
                 }
             });
         });

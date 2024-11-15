@@ -168,10 +168,10 @@
             transform: scale(1.05);
         } */
 
-        /* .product.touched {
+        .product.touched {
             transform: scale(1.1);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        } */
+        }
 
         .quantity-buttons {
             display: flex;
@@ -310,7 +310,7 @@
             let inactivityTimeout;
             function resetInactivityTimer() {
                 clearTimeout(inactivityTimeout);
-                inactivityTimeout = setTimeout(() => location.reload(), 30000);
+                inactivityTimeout = setTimeout(() => location.reload(), 45000);
             }
 
             ['mousemove', 'keydown', 'scroll', 'click', 'touchstart', 'touchmove'].forEach(event => {

@@ -263,12 +263,15 @@
         @media (hover: none) {
             .product.touched {
                 transform: scale(1.1);
-                transition: transform 0.3s ease; 
+                transition: transform 0.3s ease-out;
             }
-        
             .product {
-                transition: transform 0.3s ease; 
+                transition: transform 0.3s ease-out;
             }
+        }
+        
+        .product {
+            transition: transform 0.3s ease;
         }
    </style>
 </head>
@@ -317,7 +320,7 @@
             let inactivityTimeout;
             function resetInactivityTimer() {
                 clearTimeout(inactivityTimeout);
-                inactivityTimeout = setTimeout(() => location.reload(), 30000);
+                inactivityTimeout = setTimeout(() => location.reload(), 45000);
             }
         
             ['mousemove', 'keydown', 'scroll', 'click', 'touchstart', 'touchmove'].forEach(event => {
@@ -339,14 +342,17 @@
                 const product = event.target.closest(".product");
                 if (product) {
                     product.classList.add("touched");
-                    product.style.transition = "transform 0.3s ease";
+                    product.style.transition = "transform 0.3s ease-out";
                 }
             });
             
             document.body.addEventListener("touchend", (event) => {
                 const product = event.target.closest(".product");
                 if (product) {
-                    product.classList.remove("touched");
+                    setTimeout(() => {
+                        product.classList.remove("touched");
+                        product.style.transition = "transform 0.3s ease-out";
+                    }, 100);
                 }
             });
             
@@ -354,6 +360,7 @@
                 const product = event.target.closest(".product");
                 if (product) {
                     product.classList.remove("touched");
+                    product.style.transition = "transform 0.3s ease-out";
                 }
             });
         });
@@ -523,18 +530,6 @@
             });
 
             totalPriceElement.innerText = `${totalPrice} ₽`;
-        }
-
-        function scaleProduct(productId, scale) {
-            const productElement = document.getElementById(`product${productId}`);
-            if (productElement) {
-                if (scale) {
-                    productElement.style.transform = 'scale(1.1)';
-                    productElement.style.transition = 'transform 0.3s ease';
-                } else {
-                    productElement.style.transform = 'scale(1)';
-                }
-            }
         }
 
         function applyTheme() {

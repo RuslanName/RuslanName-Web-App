@@ -281,8 +281,7 @@
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
-    <script>
-        document.addEventListener("DOMContentLoaded", async function () { 
+    <script> document.addEventListener("DOMContentLoaded", async function () {
     if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
         Telegram.WebApp.ready();
         console.log("Telegram Web App initialized successfully");
@@ -304,12 +303,12 @@
         return;
     }
 
-    loadProducts();
+    await loadProducts();
 
     let inactivityTimeout;
     function resetInactivityTimer() {
         clearTimeout(inactivityTimeout);
-        inactivityTimeout = setTimeout(() => location.reload(), 45000);
+        inactivityTimeout = setTimeout(() => location.reload(), 30000);
     }
 
     ['mousemove', 'keydown', 'scroll', 'click', 'touchstart', 'touchmove'].forEach(event => {
@@ -327,19 +326,15 @@
     document.body.style.mozUserSelect = "none";
     document.body.style.msUserSelect = "none";
 
-    const handleTouchStart = (event) => {
-        const product = event.target.closest('.product');
-        if (product) product.classList.add('touched');
-    };
+    // Делегирование событий touch для .product
+    document.body.addEventListener("touchstart", (event) => {
+        const product = event.target.closest(".product");
+        if (product) product.classList.add("touched");
+    });
 
-    const handleTouchEnd = (event) => {
-        const product = event.target.closest('.product');
-        if (product) product.classList.remove('touched');
-    };
-
-    document.querySelectorAll('.product').forEach(product => {
-        product.addEventListener('touchstart', handleTouchStart, { passive: true });
-        product.addEventListener('touchend', handleTouchEnd, { passive: true });
+    document.body.addEventListener("touchend", (event) => {
+        const product = event.target.closest(".product");
+        if (product) product.classList.remove("touched");
     });
 });
 

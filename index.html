@@ -7,15 +7,32 @@
     <title>Магазин</title>
     <style>
         :root {
-            --tg-theme-bg-color: #ffffff !important;
-            --tg-theme-text-color: #000000 !important;
-            --tg-theme-secondary-bg-color: #ffffff !important;
-            --tg-theme-button-color: #0088cc !important;
-            --tg-theme-button-hover-color: #005f99 !important;
-            --tg-button-text-color: #ffffff !important;
-            --tg-theme-footer-bg-color: #ffffff !important;
-            --tg-theme-footer-text-color: #000000 !important;
-            --tg-theme-box-shadow: rgba(0, 0, 0, 0.2) !important;
+            --tg-theme-bg-color-light: #ffffff;
+            --tg-theme-text-color-light: #000000;
+            --tg-theme-secondary-bg-color-light: #f8f9fa;
+            --tg-theme-button-color-light: #0088cc;
+            --tg-theme-footer-bg-color-light: #f1f1f1;
+            --tg-theme-footer-text-color-light: #000000;
+        
+            --tg-theme-bg-color-dark: #1a1a1a;
+            --tg-theme-text-color-dark: #e0e0e0;
+            --tg-theme-secondary-bg-color-dark: #2c2c2c;
+            --tg-theme-button-color-dark: #005f99;
+            --tg-theme-footer-bg-color-dark: #1a1a1a;
+            --tg-theme-footer-text-color-dark: #e0e0e0;
+        }
+
+        :root {
+            --tg-button-text-color: #ffffff;
+        }
+        
+        :root {
+            --tg-theme-bg-color: var(--tg-theme-bg-color-light);
+            --tg-theme-text-color: var(--tg-theme-text-color-light);
+            --tg-theme-secondary-bg-color: var(--tg-theme-secondary-bg-color-light);
+            --tg-theme-button-color: var(--tg-theme-button-color-light);
+            --tg-theme-footer-bg-color: var(--tg-theme-footer-bg-color-light);
+            --tg-theme-footer-text-color: var(--tg-theme-footer-text-color-light);
         }
 
         body {
@@ -32,10 +49,10 @@
 
         .product {
             flex: 0 1 calc(50% - 5px);
-            background-color: var(--tg-theme-secondary-bg-color);
+            background-color: varvar(--tg-theme-bg-color);
             padding: 10px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px var(--tg-theme-box-shadow);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
             box-sizing: border-box;
             margin-bottom: 5px;
@@ -73,6 +90,17 @@
             margin-bottom: 5px;
         }
 
+        .product h3 {
+            margin: 5px 0;
+            padding: 0;
+            font-size: 1.2em;
+            color: var(--tg-theme-text-color);
+        }
+
+        .product:hover {
+            transform: scale(1.05);
+        }
+
         .cart-controls {
             display: flex;
             justify-content: center;
@@ -92,21 +120,6 @@
         .cart-item {
             display: flex;
             align-items: center;
-        }
-
-        .product h3 {
-            margin: 5px 0;
-            padding: 0;
-            font-size: 1.2em;
-            color: var(--tg-theme-text-color);
-        }
-
-        .product button:hover {
-            background-color: var(--tg-theme-button-hover-color);
-        }
-
-        .product:hover {
-            transform: scale(1.05);
         }
 
         .quantity-buttons {
@@ -132,8 +145,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--tg-theme-footer-bg-color);
-            color: var(--tg-theme-footer-text-color);
+            background-color: var(--tg-theme-bg-color);
             justify-content: center;
             padding: 10px 0;
             box-shadow: none;
@@ -156,7 +168,6 @@
         }
 
         footer button:hover {
-            background-color: var(--tg-theme-button-hover-color);
             opacity: 0.8;
         }
     </style>

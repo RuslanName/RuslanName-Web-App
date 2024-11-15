@@ -194,11 +194,6 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .product:hover {
-            transform: scale(1.08);
-            transition: transform 0.2s ease;
-        }
-
         .quantity-buttons {
             display: flex;
             flex-direction: column;
@@ -389,12 +384,19 @@
                 }
             });
         
-            document.body.addEventListener("mouseleave", (event) => {
-                const product = event.target.closest(".product");
-                if (product && !event.buttons) {
-                    product.classList.remove("area-touched");
+            document.body.addEventListener("mouseenter", (event) => {
+                if (event.target.closest(".product") && !event.pointerType === "touch") {
+                    const product = event.target.closest(".product");
+                    product.classList.add("button-touched");
                 }
-            });
+            }, true);
+            
+            document.body.addEventListener("mouseleave", (event) => {
+                if (event.target.closest(".product") && !event.pointerType === "touch") {
+                    const product = event.target.closest(".product");
+                    product.classList.remove("button-touched");
+                }
+            }, true);
         
             document.addEventListener('contextmenu', function(event) {
                 event.preventDefault();

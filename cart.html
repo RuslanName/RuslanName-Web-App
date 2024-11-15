@@ -164,13 +164,14 @@
             background-color: var(--tg-theme-button-color);
         }
         
-        .product:hover {
+        /* .product:hover {
             transform: scale(1.05);
-        }
+        } */
 
-        .product.touched {
+        /* .product.touched {
             transform: scale(1.1);
-        }
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        } */
 
         .quantity-buttons {
             display: flex;
@@ -256,22 +257,11 @@
             opacity: 0.8;
         }
 
-        .product {
-            transform: scale(1); 
-        }
-        
         @media (hover: none) {
             .product.touched {
                 transform: scale(1.1);
-                transition: transform 0.3s ease-out;
+                transition: transform 0.3s ease;
             }
-            .product {
-                transition: transform 0.3s ease-out;
-            }
-        }
-        
-        .product {
-            transition: transform 0.3s ease;
         }
    </style>
 </head>
@@ -300,67 +290,55 @@
             } else {
                 console.error("Telegram Web App not available");
             }
-        
+
             const chatId = await getChatId();
             if (!chatId) {
                 document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
                 document.querySelector("footer").style.display = "none";
                 return;
             }
-        
+
             const isRegistered = await checkUserRegistration(chatId);
             if (!isRegistered) {
                 document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
                 document.querySelector("footer").style.display = "none";
                 return;
             }
-        
+
             await loadProducts();
-        
+
             let inactivityTimeout;
             function resetInactivityTimer() {
                 clearTimeout(inactivityTimeout);
-                inactivityTimeout = setTimeout(() => location.reload(), 45000);
+                inactivityTimeout = setTimeout(() => location.reload(), 30000);
             }
-        
+
             ['mousemove', 'keydown', 'scroll', 'click', 'touchstart', 'touchmove'].forEach(event => {
                 document.addEventListener(event, resetInactivityTimer);
             });
-        
+
             resetInactivityTimer();
-        
+
             document.addEventListener("copy", (event) => {
                 event.preventDefault();
             });
-        
+
             document.body.style.userSelect = "none";
             document.body.style.webkitUserSelect = "none";
             document.body.style.mozUserSelect = "none";
             document.body.style.msUserSelect = "none";
-        
+
             document.body.addEventListener("touchstart", (event) => {
                 const product = event.target.closest(".product");
-                if (product) {
+                if (product && !product.classList.contains("touched")) {
                     product.classList.add("touched");
-                    product.style.transition = "transform 0.3s ease-out";
                 }
             });
-            
+
             document.body.addEventListener("touchend", (event) => {
                 const product = event.target.closest(".product");
-                if (product) {
-                    setTimeout(() => {
-                        product.classList.remove("touched");
-                        product.style.transition = "transform 0.3s ease-out";
-                    }, 100);
-                }
-            });
-            
-            document.body.addEventListener("touchcancel", (event) => {
-                const product = event.target.closest(".product");
-                if (product) {
-                    product.classList.remove("touched");
-                    product.style.transition = "transform 0.3s ease-out";
+                if (product && product.classList.contains("touched")) {
+                    setTimeout(() => product.classList.remove("touched"), 300);
                 }
             });
         });
@@ -530,6 +508,18 @@
             });
 
             totalPriceElement.innerText = `${totalPrice} ₽`;
+        }
+
+        function scaleProduct(productId, scale) {
+            const productElement = document.getElementById(`product${productId}`);
+            if (productElement) {
+                if (scale) {
+                    productElement.style.transform = 'scale(1.1)';
+                    productElement.style.transition = 'transform 0.3s ease';
+                } else {
+                    productElement.style.transform = 'scale(1)';
+                }
+            }
         }
 
         function applyTheme() {

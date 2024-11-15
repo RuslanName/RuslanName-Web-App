@@ -188,7 +188,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <script th:inline="javascript">
-        var shopUrl = [[${shop.url}]];
+        var webApp = [[${webApp.url}]];
     </script>
     
     <script>
@@ -308,7 +308,7 @@
 
         async function checkUserRegistration(chatId) {
             try {
-                const response = await fetch(`${shopUrl}/api/check_user?chatId=${chatId}`);
+                const response = await fetch(`${webApp}/api/check_user?chatId=${chatId}`);
                 const data = await response.json();
                 return data.isRegistered;
             } catch (error) {
@@ -339,7 +339,7 @@
         
         async function loadProducts() {
             try {
-                const response = await fetch('${shopUrl}/api/products_data');
+                const response = await fetch('${webApp}/api/products_data');
                 const products = await response.json();
 
                 const productGrid = document.getElementById('productGrid');
@@ -351,7 +351,7 @@
                         const productHTML = `
                             <div class="product" id="product${product.id}">
                                 <h3>${product.name}</h3>
-                                <img src="${shopUrl}${product.iconPath}" alt="${product.name}">
+                                <img src="${webApp}${product.iconPath}" alt="${product.name}">
                                 <p><span id="price${product.id}">${product.price}</span> руб.</p>
                                 <p id="quantity${product.id}">В наличии: ${product.quantity}</p>
                                 <button id="add${product.id}" onclick="addCartQuantity('${product.id}')">Добавить</button>
@@ -381,7 +381,7 @@
             }
 
             try {
-                const response = await fetch(`${shopUrl}/api/user_carts_data/load?chatId=${chatId}`);
+                const response = await fetch(`${webApp}/api/user_carts_data/load?chatId=${chatId}`);
                 const cartItems = await response.json();
 
                 cartItems.forEach(item => {
@@ -429,7 +429,7 @@
             };
 
             try {
-                const response = await fetch('${shopUrl}/api/user_carts_data/update', {
+                const response = await fetch('${webApp}/api/user_carts_data/update', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: new URLSearchParams(data)
@@ -479,7 +479,7 @@
             };
 
             try {
-                const response = await fetch('${shopUrl}/api/user_carts_data/update', {
+                const response = await fetch('${webApp}/api/user_carts_data/update', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: new URLSearchParams(data)

@@ -340,12 +340,16 @@
         
         async function loadProducts() {
             try {
-                const response = await fetch('${webApp}/api/products_data');
+                const response = await fetch(`${webApp}/api/products_data`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+        
                 const products = await response.json();
-
+        
                 const productGrid = document.getElementById('productGrid');
                 productGrid.innerHTML = '';
-
+        
                 products
                     .filter(product => product.visibility)
                     .forEach(product => {
@@ -365,9 +369,9 @@
                         `;
                         productGrid.insertAdjacentHTML('beforeend', productHTML);
                     });
-
+        
                 loadUserCart();
-
+        
             } catch (error) {
                 console.error('Ошибка при загрузке товаров:', error);
             }

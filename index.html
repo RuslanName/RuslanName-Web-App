@@ -47,12 +47,12 @@
             min-height: 100vh;
         }
 
-/*         body {
+        body {
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none; 
             -ms-user-select: none; 
-        } */
+        }
 
         .product {
             flex: 0 1 calc(50% - 5px);
@@ -81,10 +81,10 @@
         }
 
         .product-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-row-gap: 15px;
+            grid-column-gap: 10px;
             padding: 10px;
             background-color: var(--tg-theme-secondary-bg-color);
         }
@@ -102,6 +102,27 @@
             padding: 0;
             font-size: 1.2em;
             color: var(--tg-theme-text-color);
+        }
+
+         .product.button-touched {
+            transform: scale(1.04);
+            transition: transform 0.1s ease;
+        }
+        
+        .product.area-touched {
+            transform: scale(1.08);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .product.touched {
+            transform: scale(1);
+            box-shadow: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product button:hover {
+            opacity: 0.8;
         }
 
         .quantity-buttons {
@@ -137,9 +158,10 @@
         }
 
         #shop {
-            background: var(--tg-theme-secondary-bg-color);
+            background: var(--tg-theme-bg-color);
             flex-grow: 1;
-            padding-bottom: 60px;
+            padding-top: 10px;
+            padding-bottom: 75px;
             overflow-y: auto;
         }
 
@@ -294,17 +316,17 @@
                 }
             }, true);
         
-            // document.addEventListener('contextmenu', function(event) {
-            //     event.preventDefault();
-            // });
+            document.addEventListener('contextmenu', function(event) {
+                event.preventDefault();
+            });
         
-            // document.addEventListener('copy', function(event) {
-            //     event.preventDefault();
-            // });
+            document.addEventListener('copy', function(event) {
+                event.preventDefault();
+            });
         
-            // document.body.addEventListener("dragstart", function(event) {
-            //     event.preventDefault();
-            // });
+            document.body.addEventListener("dragstart", function(event) {
+                event.preventDefault();
+            });
         });
 
         async function checkUserRegistration(chatId) {

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Магазин</title>
+    <style>
+        :root {
+            --tg-theme-bg-color-light: #ffffff;
+            --tg-theme-text-color-light: #000000;
+            --tg-theme-secondary-bg-color-light: #f8f9fa;
+            --tg-theme-button-color-light: #0088cc;
+            --tg-theme-footer-bg-color-light: #f1f1f1;
+            --tg-theme-footer-text-color-light: #000000;
+        
+            --tg-theme-bg-color-dark: #1a1a1a;
+            --tg-theme-text-color-dark: #e0e0e0;
+            --tg-theme-secondary-bg-color-dark: #2c2c2c;
+            --tg-theme-button-color-dark: #005f99;
+            --tg-theme-footer-bg-color-dark: #1a1a1a;
+            --tg-theme-footer-text-color-dark: #e0e0e0;
+        }
+
+        :root {
+            --tg-button-text-color: #ffffff;
+        }
+        
+        :root {
+            --tg-theme-bg-color: var(--tg-theme-bg-color-light);
+            --tg-theme-text-color: var(--tg-theme-text-color-light);
+            --tg-theme-secondary-bg-color: var(--tg-theme-secondary-bg-color-light);
+            --tg-theme-button-color: var(--tg-theme-button-color-light);
+            --tg-theme-footer-bg-color: var(--tg-theme-footer-bg-color-light);
+            --tg-theme-footer-text-color: var(--tg-theme-footer-text-color-light);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        body {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none; 
+            -ms-user-select: none; 
+        }
+
+        .product {
+            position: relative;
+            flex: 0 1 calc(50% - 5px);
+            background-color: var(--tg-theme-bg-color);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+            max-width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product button {
+            padding: 10px 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 0;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-row-gap: 15px;
+            grid-column-gap: 10px;
+            padding: 10px;
+            background-color: var(--tg-theme-secondary-bg-color);
+        }
+
+        .product h3 {
+            margin: 5px 0;
+            padding: 0;
+            font-size: 1.2em;
+            color: var(--tg-theme-text-color);
+        }
+
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+            margin-bottom: 5px;
+        }
+
+        .product-image-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .product-image-wrapper img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .product img {
+            pointer-events: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
+
+         .product.button-touched {
+            transform: scale(1.04);
+            transition: transform 0.1s ease;
+        }
+        
+        .product.area-touched {
+            transform: scale(1.08);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .product.touched {
+            transform: scale(1);
+            box-shadow: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product button:hover {
+            opacity: 0.8;
+        }
+
+        .quantity-buttons {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+
+        .quantity-buttons button {
+            width: 30px;
+            height: 30px;
+        }
+
+        .cart-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .cart-controls button {
+            padding: 10px 10px;
+        }
+
+        .cart-controls span {
+            font-size: 16px;
+            margin: 0 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+        }
+
+        #shop {
+            background: var(--tg-theme-secondary-bg-color);
+            flex-grow: 1;
+            padding-top: 10px;
+            padding-bottom: 75px;
+            overflow-y: auto;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0; 
+            width: 100%;
+            background-color: var(--tg-theme-bg-color);
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            box-shadow: none;
+            z-index: 1000;
+        }
+
+        footer button {
+            flex: 1;
+            margin: 0 5px;
+            padding: 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        footer button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+<!-- <div id="shop">
+        <div id="productGrid" class="product-grid"></div>
+    </div> -->
+
+    <div id="shop">
+        <div id="productGrid" class="product-grid">
+            <div class="product" id="product1">
+                <h3>Пример товара 1</h3>
+                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Пример товара 1">
+                <p><span id="price1">1000</span> руб.</p>
+                <p id="quantity1">В наличии: 10</p>
+                <button id="add1" onclick="addToCart('1')">Добавить</button>
+                <div id="cart-controls1" class="cart-controls" style="display:none;">
+                    <button onclick="updateCart('1', -1)">-</button>
+                    <span id="cart-quantity1">0</span>
+                    <button onclick="updateCart('1', 1)">+</button>
+                </div>
+            </div>
+            
+            <div class="product" id="product2">
+                <h3>Пример товара 2</h3>
+                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Пример товара 2">
+                <p><span id="price2">1500</span> руб.</p>
+                <p id="quantity2">В наличии: 8</p>
+                <button id="add2" onclick="addToCart('2')">Добавить</button>
+                <div id="cart-controls2" class="cart-controls" style="display:none;">
+                    <button onclick="updateCart('2', -1)">-</button>
+                    <span id="cart-quantity2">0</span>
+                    <button onclick="updateCart('2', 1)">+</button>
+                </div>
+            </div>
+            
+            <div class="product" id="product3">
+                <h3>Пример товара 3</h3>
+                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Пример товара 3">
+                <p><span id="price3">2000</span> руб.</p>
+                <p id="quantity3">В наличии: 5</p>
+                <button id="add3" onclick="addToCart('3')">Добавить</button>
+                <div id="cart-controls3" class="cart-controls" style="display:none;">
+                    <button onclick="updateCart('3', -1)">-</button>
+                    <span id="cart-quantity3">0</span>
+                    <button onclick="updateCart('3', 1)">+</button>
+                </div>
+            </div>
+        
+            <div class="product" id="product4">
+                <h3>Пример товара 4</h3>
+                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Пример товара 4">
+                <p><span id="price4">2500</span> руб.</p>
+                <p id="quantity4">В наличии: 3</p>
+                <button id="add4" onclick="addToCart('4')">Добавить</button>
+                <div id="cart-controls4" class="cart-controls" style="display:none;">
+                    <button onclick="updateCart('4', -1)">-</button>
+                    <span id="cart-quantity4">0</span>
+                    <button onclick="updateCart('4', 1)">+</button>
+                </div>
+            </div>
+        
+            <div class="product" id="product5">
+                <h3>Пример товара 5</h3>
+                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Пример товара 5">
+                <p><span id="price5">3000</span> руб.</p>
+                <p id="quantity5">В наличии: 6</p>
+                <button id="add5" onclick="addToCart('5')">Добавить</button>
+                <div id="cart-controls5" class="cart-controls" style="display:none;">
+                    <button onclick="updateCart('5', -1)">-</button>
+                    <span id="cart-quantity5">0</span>
+                    <button onclick="updateCart('5', 1)">+</button>
+                </div>
+            </div>
+        
+            <div class="product" id="product6">
+                <h3>Пример товара 6</h3>
+                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Пример товара 6">
+                <p><span id="price6">3500</span> руб.</p>
+                <p id="quantity6">В наличии: 7</p>
+                <button id="add6" onclick="addToCart('6')">Добавить</button>
+                <div id="cart-controls6" class="cart-controls" style="display:none;">
+                    <button onclick="updateCart('6', -1)">-</button>
+                    <span id="cart-quantity6">0</span>
+                    <button onclick="updateCart('6', 1)">+</button>
+                </div>
+            </div>
+        
+            <div class="product" id="product7">
+                <h3>Пример товара 7</h3>
+                <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png" alt="Пример товара 7">
+                <p><span id="price7">4000</span> руб.</p>
+                <p id="quantity7">В наличии: 4</p>
+                <button id="add7" onclick="addToCart('7')">Добавить</button>
+                <div id="cart-controls7" class="cart-controls" style="display:none;">
+                    <button onclick="updateCart('7', -1)">-</button>
+                    <span id="cart-quantity7">0</span>
+                    <button onclick="updateCart('7', 1)">+</button>
+                </div>
+            </div>
+        </div>        
+    </div>  
+
+    <footer>
+        <button onclick="location.href='cart.html'">Корзина</button>
+        <button onclick="location.href='orders.html'">Заказы</button>
+    </footer>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <script th:inline="javascript">
+        // var webApp = [[${webApp.url}]];
+        var webApp = "https://magazin-ruslanname.amvera.io";
+    </script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", async function() {
+            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+                Telegram.WebApp.ready();
+                console.log("Telegram Web App initialized successfully");
+            } else {
+                console.error("Telegram Web App not available");
+            }
+
+            // const chatId = await getChatId();
+            // if (!chatId) {
+            //     document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
+            //     document.querySelector("footer").style.display = "none";
+            //     return;
+            // }
+
+            // const isRegistered = await checkUserRegistration(chatId);
+            // if (!isRegistered) {
+            //     document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
+            //     document.querySelector("footer").style.display = "none";
+            //     return;
+            // }
+
+            loadProducts();
+
+            let inactivityTimeout;
+            function resetInactivityTimer() {
+                clearTimeout(inactivityTimeout);
+                inactivityTimeout = setTimeout(() => location.reload(), 45000);
+            }
+        
+            ['mousemove', 'keydown', 'scroll', 'click', 'touchstart'].forEach(event => {
+                document.addEventListener(event, resetInactivityTimer);
+            });
+        
+            resetInactivityTimer();
+        
+            document.addEventListener("copy", (event) => {
+                event.preventDefault();
+            });
+        
+            document.body.addEventListener("click", (event) => {
+                const button = event.target.closest("button");
+                const product = event.target.closest(".product");
+        
+                if (product) {
+                    if (button) {
+                        product.classList.add("button-touched");
+                        setTimeout(() => {
+                            product.classList.remove("button-touched");
+                        }, 100);
+                    } else {
+                        product.classList.add("area-touched");
+                        setTimeout(() => {
+                            product.classList.remove("area-touched");
+                        }, 300);
+                    }
+                }
+            });
+        
+            document.body.addEventListener("mousedown", (event) => {
+                const product = event.target.closest(".product");
+                if (product) {
+                    product.classList.add("area-touched");
+                }
+            });
+        
+            document.body.addEventListener("mouseup", (event) => {
+                const product = event.target.closest(".product");
+                if (product) {
+                    product.classList.remove("area-touched");
+                }
+            });
+        
+            document.body.addEventListener("touchstart", (event) => {
+                const product = event.target.closest(".product");
+                if (product) {
+                    product.classList.add("area-touched");
+                }
+            });
+        
+            document.body.addEventListener("touchend", (event) => {
+                const product = event.target.closest(".product");
+                if (product) {
+                    product.classList.remove("area-touched");
+                }
+            });
+        
+            document.body.addEventListener("mouseenter", (event) => {
+                if (event.target.closest(".product") && !event.pointerType === "touch") {
+                    const product = event.target.closest(".product");
+                    product.classList.add("button-touched");
+                }
+            }, true);
+            
+            document.body.addEventListener("mouseleave", (event) => {
+                if (event.target.closest(".product") && !event.pointerType === "touch") {
+                    const product = event.target.closest(".product");
+                    product.classList.remove("button-touched");
+                }
+            }, true);
+        
+            document.addEventListener('contextmenu', function(event) {
+                event.preventDefault();
+            });
+        
+            document.addEventListener('copy', function(event) {
+                event.preventDefault();
+            });
+        
+            document.body.addEventListener("dragstart", function(event) {
+                event.preventDefault();
+            });
+        });
+
+        async function checkUserRegistration(chatId) {
+            try {
+                const response = await fetch(`${webApp}/api/check_user?chatId=${chatId}`);
+                const data = await response.json();
+                return data.isRegistered;
+            } catch (error) {
+                console.error('Ошибка при проверке регистрации пользователя:', error);
+                return false;
+            }
+        }
+        
+        async function getChatId() {
+            if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
+                console.error('Ошибка: Telegram WebApp не инициализирован.');
+                return null;
+            }
+        
+            try {
+                Telegram.WebApp.ready();
+                if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
+                    return Telegram.WebApp.initDataUnsafe.user.id;
+                } else {
+                    console.error('Ошибка: не удалось получить данные о пользователе через Telegram WebApp.');
+                    return null;
+                }
+            } catch (error) {
+                console.error('Ошибка при инициализации WebApp:', error);
+                return null;
+            }
+        }
+        
+        async function loadProducts() {
+            try {
+                const response = await fetch(`${webApp}/api/products_data`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+        
+                const products = await response.json();
+        
+                const productGrid = document.getElementById('productGrid');
+                productGrid.innerHTML = '';
+        
+                products
+                    .filter(product => product.visibility)
+                    .forEach(product => {
+                        const productHTML = `
+                            <div class="product" id="product${product.id}">
+                                <h3>${product.name}</h3>
+                                <img src="${webApp}${product.iconPath}" alt="${product.name}">
+                                <p><span id="price${product.id}">${product.price}</span> руб.</p>
+                                <p id="quantity${product.id}">В наличии: ${product.quantity}</p>
+                                <button id="add${product.id}" onclick="addCartQuantity('${product.id}')">Добавить</button>
+                                <div id="cart-controls${product.id}" class="cart-controls" style="display:none;">
+                                    <button onclick="updateCartQuantity('${product.id}', -1)">-</button>
+                                    <span id="cart-quantity${product.id}">0</span>
+                                    <button onclick="updateCartQuantity('${product.id}', 1)">+</button>
+                                </div>
+                            </div>
+                        `;
+                        productGrid.insertAdjacentHTML('beforeend', productHTML);
+                    });
+        
+                loadUserCart();
+        
+            } catch (error) {
+                console.error('Ошибка при загрузке товаров:', error);
+            }
+        }
+
+        async function loadUserCart() {
+            const chatId = await getChatId();
+            
+            if (!chatId) {
+                console.error('Ошибка: chatId не получен.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${webApp}/api/user_carts_data/load?chatId=${chatId}`);
+                const cartItems = await response.json();
+
+                cartItems.forEach(item => {
+                    const productElement = document.getElementById(`product${item.productId}`);
+                    const cartControls = document.getElementById(`cart-controls${item.productId}`);
+                    const cartQuantity = document.getElementById(`cart-quantity${item.productId}`);
+
+                    if (productElement) {
+                        document.getElementById(`add${item.productId}`).style.display = "none";
+                        cartControls.style.display = "flex";
+                        cartQuantity.textContent = item.quantity;
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Ошибка при загрузке корзины:', error);
+            }
+        }
+        
+        async function addCartQuantity(productId) {
+            console.log('Добавление товара в корзину, productId:', productId);
+
+            const addButton = document.getElementById(`add${productId}`);
+            const cartControls = document.getElementById(`cart-controls${productId}`);
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
+            const availableQuantity = +quantity.innerText.split(': ')[1];
+
+            if (availableQuantity <= 0) {
+                console.error('Товар недоступен, количество:', availableQuantity);
+                return;
+            }
+
+            addButton.style.display = 'none';
+            cartControls.style.display = 'flex';
+            cartQuantity.innerText = 1;
+
+            const chatId = await getChatId();
+            if (!chatId) return;
+
+            const data = {
+                chatId: chatId,
+                productId: productId,
+                quantity: 1
+            };
+
+            try {
+                const response = await fetch('${webApp}/api/user_carts_data/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(data)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Ошибка при добавлении товара в корзину:', response.status, errorText);
+                }
+            } catch (error) {
+                console.error('Ошибка при отправке данных:', error);
+            }
+        }
+
+        async function updateCartQuantity(productId, delta) {
+            console.log('Обновление корзины, productId:', productId, 'delta:', delta);
+
+            const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const quantity = document.getElementById(`quantity${productId}`);
+            const currentQuantity = +cartQuantity.innerText;
+            const availableQuantity = +quantity.innerText.split(': ')[1];
+            const newQuantity = currentQuantity + delta;
+
+            if (newQuantity < 0) {
+                console.error('Количество товара не может быть отрицательным');
+                return;
+            }
+
+            if (newQuantity === 0) {
+                document.getElementById(`add${productId}`).style.display = 'block';
+                document.getElementById(`cart-controls${productId}`).style.display = 'none';
+                console.log('Товар удален из корзины');
+            } else if (newQuantity > availableQuantity) {
+                console.error('Недостаточно товара, доступно:', availableQuantity, 'запрашиваемое количество:', newQuantity);
+                return;
+            } else {
+                cartQuantity.innerText = newQuantity;
+            }
+
+            const chatId = await getChatId();
+            if (!chatId) return;
+
+            const data = {
+                chatId: chatId,
+                productId: productId,
+                quantity: delta
+            };
+
+            try {
+                const response = await fetch('${webApp}/api/user_carts_data/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(data)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Ошибка при обновлении корзины, статус:', response.status, errorText);
+                }
+            } catch (error) {
+                console.error('Ошибка при отправке данных:', error);
+            }
+        }
+
+        function applyTheme() {
+            const isTelegram = typeof Telegram !== "undefined" && Telegram.WebApp;
+            const isDarkTheme = isTelegram ? Telegram.WebApp.colorScheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+            document.documentElement.style.setProperty('--tg-theme-bg-color', isDarkTheme ? 'var(--tg-theme-bg-color-dark)' : 'var(--tg-theme-bg-color-light)');
+            document.documentElement.style.setProperty('--tg-theme-text-color', isDarkTheme ? 'var(--tg-theme-text-color-dark)' : 'var(--tg-theme-text-color-light)');
+            document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', isDarkTheme ? 'var(--tg-theme-secondary-bg-color-dark)' : 'var(--tg-theme-secondary-bg-color-light)');
+            document.documentElement.style.setProperty('--tg-theme-button-color', isDarkTheme ? 'var(--tg-theme-button-color-dark)' : 'var(--tg-theme-button-color-light)');
+            document.documentElement.style.setProperty('--tg-theme-footer-bg-color', isDarkTheme ? 'var(--tg-theme-footer-bg-color-dark)' : 'var(--tg-theme-footer-bg-color-light)');
+            document.documentElement.style.setProperty('--tg-theme-footer-text-color', isDarkTheme ? 'var(--tg-theme-footer-text-color-dark)' : 'var(--tg-theme-footer-text-color-light)');
+        }
+        
+        if (typeof Telegram !== "undefined" && Telegram.WebApp) {
+            Telegram.WebApp.onThemeChanged = applyTheme;
+            Telegram.WebApp.ready(() => {
+                applyTheme();
+            });
+        } else {
+            document.addEventListener('DOMContentLoaded', applyTheme);
+        }
+    </script>
+</body>
+</html>
+<body>

@@ -10,7 +10,6 @@ import java.util.List;
 
 @Service
 public class WebService {
-
     @Autowired
     private UserCartsRepository userCartsRepository;
 
@@ -20,6 +19,14 @@ public class WebService {
     @Getter
     @Value("${web.url}")
     private String webURL;
+
+    @Getter
+    @Value("${app.allow.editing}")
+    private boolean allowEditing;
+
+    @Getter
+    @Value("${app.require.telegram.user}")
+    private boolean requireTelegramUser;
 
     public void updateProductQuantity(long chatId, int productId, int quantityChange) {
         mainFiles.tables.userCarts.UserCart existingCart = userCartsRepository.findByChatIdAndProductId(chatId, productId);

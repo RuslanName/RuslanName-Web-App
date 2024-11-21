@@ -34,6 +34,7 @@ public class User {
                 ", lastName = \"" + lastName + "\"" +
                 ", userData = \"" + userData + "\"" +
                 ", registeredAt = \"" + registeredAt + "\"" +
+                ", accessRights = \"" + accessRights + "\"" +
                 "}";
     }
 }

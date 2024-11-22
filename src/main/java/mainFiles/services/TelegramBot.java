@@ -902,7 +902,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return "<b><u>%s</u></b>".formatted(text);
     }
 
-    private void sendMessage(long chatId, Object text) {
+    public void sendMessage(long chatId, Object text) {
         SendMessage message = new SendMessage();
         message.enableHtml(true);
         message.setChatId(String.valueOf(chatId));

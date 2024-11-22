@@ -1,4 +1,4 @@
-<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -227,60 +227,65 @@
         <button onclick="location.href='orders.html'">Заказы</button>
     </footer>
 
-    <script th:inline="javascript">
-        const URL = "https://magazin-ruslanname.amvera.io"
-        const allowEditing = [[${allowEditing}]];
-        const requireTelegramUser = [[${requireTelegramUser}]];
-
-        console.log(URL);
-        console.log(allowEditing);
-        console.log(requireTelegramUser);
-
+    <script>
         document.addEventListener("DOMContentLoaded", async function () {
-            if (!URL) {
-                console.error("URL не инициализирован.");
-                return;
-            }
+            try {
+                const response = await fetch('/api/config');
+                if (!response.ok) {
+                    throw new Error(`Ошибка при загрузке конфигурации: ${response.status}`);
+                }
+                const config = await response.json();
 
-            if (requireTelegramUser) {
-                if (typeof Telegram !== "undefined" && Telegram.WebApp) {
-                    Telegram.WebApp.ready();
-                    console.log("Telegram Web App успешно инициализирован");
-                } else {
-                    console.error("Telegram Web App недоступен");
+                console.log("Конфигурация загружена:", config);
+
+                if (!config.url) {
+                    console.error("URL не инициализирован.");
                     return;
                 }
 
-                const chatId = await getChatId();
-                if (!chatId) {
-                    document.body.innerHTML = "<p>Необходимо зарегистрироваться через Telegram WebApp.</p>";
-                    return;
+                if (config.requireTelegramUser) {
+                    if (typeof Telegram !== "undefined" && Telegram.WebApp) {
+                        Telegram.WebApp.ready();
+                        console.log("Telegram Web App успешно инициализирован");
+                    } else {
+                        console.error("Telegram Web App недоступен");
+                        return;
+                    }
+
+                    const chatId = await getChatId();
+                    if (!chatId) {
+                        document.body.innerHTML = "<p>Необходимо зарегистрироваться через Telegram WebApp.</p>";
+                        return;
+                    }
+
+                    const isRegistered = await checkUserRegistration(chatId, config.url);
+                    if (!isRegistered) {
+                        document.body.innerHTML = "<p>Пользователь не зарегистрирован.</p>";
+                        return;
+                    }
                 }
 
-                const isRegistered = await checkUserRegistration(chatId);
-                if (!isRegistered) {
-                    document.body.innerHTML = "<p>Пользователь не зарегистрирован.</p>";
-                    return;
+                await loadProducts(config.url);
+
+                if (!config.allowEditing) {
+                    disableEditingFeatures();
                 }
+
+                let inactivityTimeout;
+                function resetInactivityTimer() {
+                    clearTimeout(inactivityTimeout);
+                    inactivityTimeout = setTimeout(() => location.reload(), 45000);
+                }
+
+                ['mousemove', 'keydown', 'scroll', 'click', 'touchstart'].forEach(event => {
+                    document.addEventListener(event, resetInactivityTimer);
+                });
+
+                resetInactivityTimer();
+
+            } catch (error) {
+                console.error("Ошибка при инициализации приложения:", error);
             }
-
-            loadProducts();
-
-            if (!allowEditing) {
-                disableEditingFeatures();
-            }
-
-            let inactivityTimeout;
-            function resetInactivityTimer() {
-                clearTimeout(inactivityTimeout);
-                inactivityTimeout = setTimeout(() => location.reload(), 45000);
-            }
-
-            ['mousemove', 'keydown', 'scroll', 'click', 'touchstart'].forEach(event => {
-                document.addEventListener(event, resetInactivityTimer);
-            });
-
-            resetInactivityTimer();
         });
 
         function disableEditingFeatures() {
@@ -299,13 +304,13 @@
                 console.log("Перетаскивание отключено согласно настройкам.");
             });
         }
-        
+
         async function getChatId() {
             if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
                 console.error('Telegram WebApp не инициализирован.');
                 return null;
             }
-        
+
             try {
                 Telegram.WebApp.ready();
                 if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
@@ -319,56 +324,71 @@
                 return null;
             }
         }
-        
-        async function loadProducts() {
+
+        async function checkUserRegistration(chatId, url) {
             try {
-                const response = await fetch(`${URL}/api/products_data`);
+                const response = await fetch(`${url}/api/user_check?chatId=${chatId}`);
+                if (!response.ok) {
+                    console.error('Ошибка при проверке регистрации пользователя:', response.status);
+                    return false;
+                }
+                const data = await response.json();
+                return data.isRegistered;
+            } catch (error) {
+                console.error('Ошибка при проверке пользователя:', error);
+                return false;
+            }
+        }
+
+        async function loadProducts(url) {
+            try {
+                const response = await fetch(`${url}/api/products_data`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-        
+
                 const products = await response.json();
-        
+
                 const productGrid = document.getElementById('productGrid');
                 productGrid.innerHTML = '';
-        
+
                 products
                     .filter(product => product.visibility)
                     .forEach(product => {
                         const productHTML = `
-                            <div class="product" id="product${product.id}">
-                                <h3>${product.name}</h3>
-                                <img src="${URL}${product.iconPath}" alt="${product.name}">
-                                <p><span id="price${product.id}">${product.price}</span> руб.</p>
-                                <p id="quantity${product.id}">В наличии: ${product.quantity}</p>
-                                <button id="add${product.id}" onclick="addCartQuantity('${product.id}')">Добавить</button>
-                                <div id="cart-controls${product.id}" class="cart-controls" style="display:none;">
-                                    <button onclick="updateCartQuantity('${product.id}', -1)">-</button>
-                                    <span id="cart-quantity${product.id}">0</span>
-                                    <button onclick="updateCartQuantity('${product.id}', 1)">+</button>
-                                </div>
-                            </div>
-                        `;
+                    <div class="product" id="product${product.id}">
+                        <h3>${product.name}</h3>
+                        <img src="${url}${product.iconPath}" alt="${product.name}">
+                        <p><span id="price${product.id}">${product.price}</span> руб.</p>
+                        <p id="quantity${product.id}">В наличии: ${product.quantity}</p>
+                        <button id="add${product.id}" onclick="addCartQuantity('${product.id}')">Добавить</button>
+                        <div id="cart-controls${product.id}" class="cart-controls" style="display:none;">
+                            <button onclick="updateCartQuantity('${product.id}', -1)">-</button>
+                            <span id="cart-quantity${product.id}">0</span>
+                            <button onclick="updateCartQuantity('${product.id}', 1)">+</button>
+                        </div>
+                    </div>
+                `;
                         productGrid.insertAdjacentHTML('beforeend', productHTML);
                     });
-        
-                loadUserCart();
-        
+
+                loadUserCart(url);
+
             } catch (error) {
                 console.error('Ошибка при загрузке товаров:', error);
             }
         }
 
-        async function loadUserCart() {
+        async function loadUserCart(url) {
             const chatId = await getChatId();
-            
+
             if (!chatId) {
                 console.error('chatId не получен.');
                 return;
             }
 
             try {
-                const response = await fetch(`${URL}/api/user_carts_data/load?chatId=${chatId}`);
+                const response = await fetch(`${url}/api/user_carts_data/load?chatId=${chatId}`);
                 const cartItems = await response.json();
 
                 cartItems.forEach(item => {
@@ -382,15 +402,13 @@
                         cartQuantity.textContent = item.quantity;
                     }
                 });
-                
+
             } catch (error) {
                 console.error('Ошибка при загрузке корзины:', error);
             }
         }
-        
-        async function addCartQuantity(productId) {
-            console.log('Добавление товара в корзину, productId:', productId);
 
+        async function addCartQuantity(productId) {
             const addButton = document.getElementById(`add${productId}`);
             const cartControls = document.getElementById(`cart-controls${productId}`);
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
@@ -416,7 +434,7 @@
             };
 
             try {
-                const response = await fetch('${URL}/api/user_carts_data/update', {
+                const response = await fetch(`${url}/api/user_carts_data/update`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: new URLSearchParams(data)
@@ -432,8 +450,6 @@
         }
 
         async function updateCartQuantity(productId, delta) {
-            console.log('Обновление корзины, productId:', productId, 'delta:', delta);
-
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
             const quantity = document.getElementById(`quantity${productId}`);
             const currentQuantity = +cartQuantity.innerText;
@@ -466,7 +482,7 @@
             };
 
             try {
-                const response = await fetch('${URL}/api/user_carts_data/update', {
+                const response = await fetch(`${url}/api/user_carts_data/update`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: new URLSearchParams(data)
@@ -484,7 +500,7 @@
         function applyTheme() {
             const isTelegram = typeof Telegram !== "undefined" && Telegram.WebApp;
             const isDarkTheme = isTelegram ? Telegram.WebApp.colorScheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
+
             document.documentElement.style.setProperty('--tg-theme-bg-color', isDarkTheme ? 'var(--tg-theme-bg-color-dark)' : 'var(--tg-theme-bg-color-light)');
             document.documentElement.style.setProperty('--tg-theme-text-color', isDarkTheme ? 'var(--tg-theme-text-color-dark)' : 'var(--tg-theme-text-color-light)');
             document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', isDarkTheme ? 'var(--tg-theme-secondary-bg-color-dark)' : 'var(--tg-theme-secondary-bg-color-light)');
@@ -492,7 +508,7 @@
             document.documentElement.style.setProperty('--tg-theme-footer-bg-color', isDarkTheme ? 'var(--tg-theme-footer-bg-color-dark)' : 'var(--tg-theme-footer-bg-color-light)');
             document.documentElement.style.setProperty('--tg-theme-footer-text-color', isDarkTheme ? 'var(--tg-theme-footer-text-color-dark)' : 'var(--tg-theme-footer-text-color-light)');
         }
-        
+
         if (typeof Telegram !== "undefined" && Telegram.WebApp) {
             Telegram.WebApp.onThemeChanged = applyTheme;
             Telegram.WebApp.ready(() => {

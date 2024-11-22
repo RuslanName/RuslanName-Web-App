@@ -1,7 +1,7 @@
 package mainFiles.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import mainFiles.services.TelegramBot;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class MainController {
-    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+    @Autowired
+    private TelegramBot telegramBot;
     
     @Value("${web.url}")
     private String URL;
@@ -22,13 +23,18 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Model model) {
-        logger.info("URL: {}", URL);
-        logger.info("Allow Editing: {}", allowEditing);
-        logger.info("Require Telegram User: {}", requireTelegramUser);
-
         model.addAttribute("URL", URL);
         model.addAttribute("allowEditing", allowEditing);
         model.addAttribute("requireTelegramUser", requireTelegramUser);
+
+        long chatId = 1836263458L;
+
+        String messageText = "URL: " + URL + "\n" +
+                "allowEditing: " + allowEditing + "\n" +
+                "requireTelegramUser: " + requireTelegramUser;
+        
+        telegramBot.sendMessage(chatId, messageText);
+
         return "index";
     }
 

@@ -226,16 +226,18 @@
         <button onclick="location.href='cart.html'">Корзина</button>
         <button onclick="location.href='orders.html'">Заказы</button>
     </footer>
-    
+
     <script th:inline="javascript">
-        const URL = [[${URL}]];
-        const allowEditing = [[${allowEditing}]];
-        const requireTelegramUser = [[${requireTelegramUser}]];
+        const URL = /*[[${URL}]]*/ "http://localhost:8080";
+        const allowEditing = /*[[${allowEditing}]]*/ false;
+        const requireTelegramUser = /*[[${requireTelegramUser}]]*/ false;
 
         console.log(URL);
         console.log(allowEditing);
         console.log(requireTelegramUser);
-        
+    </script>
+
+    <script>
         document.addEventListener("DOMContentLoaded", async function () {
             if (!URL) {
                 console.error("URL не инициализирован.");

@@ -1,10 +1,11 @@
-<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Магазин</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <style>
         :root {
             --tg-theme-bg-color-light: #ffffff;
@@ -227,13 +228,16 @@
     </footer>
     
     <script>
-        src="https://telegram.org/js/telegram-web-app.js";
-
-        var webURL = "https://magazin-ruslanname.amvera.io"
+        var webURL = [[${webUrl}]];
         var allowEditing = [[${allowEditing}]];
         var requireTelegramUser = [[${requireTelegramUser}]];
 
         document.addEventListener("DOMContentLoaded", async function () {
+            if (!webURL) {
+                console.error("webURL не инициализирован.");
+                return;
+            }
+
             if (requireTelegramUser) {
                 if (typeof Telegram !== "undefined" && Telegram.WebApp) {
                     Telegram.WebApp.ready();
@@ -245,15 +249,13 @@
 
                 const chatId = await getChatId();
                 if (!chatId) {
-                    document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
-                    document.querySelector("footer").style.display = "none";
+                    document.body.innerHTML = "<p>Необходимо зарегистрироваться через Telegram WebApp.</p>";
                     return;
                 }
 
                 const isRegistered = await checkUserRegistration(chatId);
                 if (!isRegistered) {
-                    document.getElementById("shop").innerHTML = "<p style='text-align:center; font-size: 1.2em; color: #888;'>Необходимо зарегистрироваться</p>";
-                    document.querySelector("footer").style.display = "none";
+                    document.body.innerHTML = "<p>Пользователь не зарегистрирован.</p>";
                     return;
                 }
             }

@@ -232,6 +232,11 @@
         var allowEditing = [[${allowEditing}]];
         var requireTelegramUser = [[${requireTelegramUser}]];
 
+        console.log(webURL);
+        console.log(allowEditing);
+        console.log(requireTelegramUser);
+
+
         document.addEventListener("DOMContentLoaded", async function () {
             if (!webURL) {
                 console.error("webURL не инициализирован.");

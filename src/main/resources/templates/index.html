@@ -228,9 +228,9 @@
     </footer>
 
     <script th:inline="javascript">
-        const URL = /*[[${URL}]]*/ "http://localhost:8080";
-        const allowEditing = /*[[${allowEditing}]]*/ false;
-        const requireTelegramUser = /*[[${requireTelegramUser}]]*/ false;
+        const URL = [[${URL}]];
+        const allowEditing = [[${allowEditing}]];
+        const requireTelegramUser = [[${requireTelegramUser}]];
 
         console.log(URL);
         console.log(allowEditing);

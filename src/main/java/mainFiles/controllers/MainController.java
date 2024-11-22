@@ -19,10 +19,12 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Model model) {
+        System.out.println("URL: " + URL);
+        System.out.println("allowEditing: " + allowEditing);
+        System.out.println("requireTelegramUser: " + requireTelegramUser);
         model.addAttribute("URL", URL);
         model.addAttribute("allowEditing", allowEditing);
         model.addAttribute("requireTelegramUser", requireTelegramUser);
         return "index";
     }
 }
-

@@ -26,7 +26,7 @@ public class WebService {
     private boolean allowEditing;
 
     @Getter
-    @Value("${web.require.telegram.auth")
+    @Value("${web.require.telegram.auth}")
     private boolean requireTelegramUser;
 
     public void updateProductQuantity(long chatId, int productId, int quantityChange) {

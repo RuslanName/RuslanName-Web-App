@@ -19,7 +19,7 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("webUrl", URL);
+        model.addAttribute("URL", URL);
         model.addAttribute("allowEditing", allowEditing);
         model.addAttribute("requireTelegramUser", requireTelegramUser);
         return "index";

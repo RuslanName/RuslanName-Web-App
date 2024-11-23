@@ -424,24 +424,33 @@
 
                 const productGrid = document.getElementById('productGrid');
                 productGrid.innerHTML = '';
+                
+                const userCart = {};
+                cartItems.forEach(item => {
+                    userCart[item.productId] = item.quantity;
+                });
 
                 products.forEach(product => {
+                    if (!userCart[product.id]) {
+                        return;
+                    }
+                    
                     const productHTML = `
-                <div class="product" id="product${product.id}">
-                    <h3>${product.name}</h3>
-                    <div class="product-image-wrapper">
-                        <img src="${url}${product.iconPath}" alt="${product.name}">
-                        <input type="checkbox" id="select${product.id}" onclick="toggleSelection('${product.id}', '${url}')">
-                    </div>
-                    <p><span id="price${product.id}">${product.price}</span> ₽</p>
-                    <p id="quantity${product.id}" data-available="${product.quantity}">В наличие: ${product.quantity}</p>
-                    <div id="cart-controls${product.id}" class="cart-controls" style="display: none;">
-                        <button onclick="updateCartQuantity('${product.id}', -1, '${url}')">-</button>
-                        <span id="cart-quantity${product.id}">0</span>
-                        <button onclick="updateCartQuantity('${product.id}', 1, '${url}')">+</button>
-                    </div>
-                </div>
-            `;
+                        <div class="product" id="product${product.id}">
+                            <h3>${product.name}</h3>
+                            <div class="product-image-wrapper">
+                                <img src="${url}${product.iconPath}" alt="${product.name}">
+                                <input type="checkbox" id="select${product.id}" onclick="toggleSelection('${product.id}', '${url}')">
+                            </div>
+                            <p><span id="price${product.id}">${product.price}</span> ₽</p>
+                            <p id="quantity${product.id}" data-available="${product.quantity}">В наличие: ${product.quantity}</p>
+                            <div id="cart-controls${product.id}" class="cart-controls" style="display: none;">
+                                <button onclick="updateCartQuantity('${product.id}', -1, '${url}')">-</button>
+                                <span id="cart-quantity${product.id}">0</span>
+                                <button onclick="updateCartQuantity('${product.id}', 1, '${url}')">+</button>
+                            </div>
+                        </div>
+                    `;
                     productGrid.insertAdjacentHTML('beforeend', productHTML);
                 });
 

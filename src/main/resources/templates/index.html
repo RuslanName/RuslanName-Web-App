@@ -245,7 +245,9 @@
                 if (config.requireTelegramUser) {
                     if (typeof Telegram !== "undefined" && Telegram.WebApp) {
                         Telegram.WebApp.ready();
-                    } else {
+                    } 
+                    
+                    else {
                         console.error("Telegram Web App is not available.");
                         return;
                     }
@@ -311,7 +313,9 @@
                 Telegram.WebApp.ready();
                 if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
                     return Telegram.WebApp.initDataUnsafe.user.id;
-                } else {
+                } 
+                
+                else {
                     console.error("Failed to retrieve user data from Telegram WebApp.");
                     return null;
                 }
@@ -503,7 +507,9 @@
             Telegram.WebApp.ready(() => {
                 applyTheme();
             });
-        } else {
+        } 
+        
+        else {
             document.addEventListener('DOMContentLoaded', applyTheme);
         }
     </script>

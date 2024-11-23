@@ -317,7 +317,9 @@
                 if (config.requireTelegramUser) {
                     if (typeof Telegram !== "undefined" && Telegram.WebApp) {
                         Telegram.WebApp.ready();
-                    } else {
+                    } 
+                    
+                    else {
                         console.error("Telegram Web App is not available.");
                         return;
                     }
@@ -408,7 +410,7 @@
             }
         }
 
-                async function loadProducts(url) {
+        async function loadProducts(url) {
             try {
                 const chatId = await getChatId();
                 if (!chatId) {
@@ -427,19 +429,19 @@
 
                 products.forEach(product => {
                     const productHTML = `
-                <div class="product" id="product${product.id}">
-                    <h3>${product.name}</h3>
-                    <img src="${url}${product.iconPath}" alt="${product.name}">
-                    <p><span id="price${product.id}">${product.price}</span> ₽</p>
-                    <p id="quantity${product.id}" data-available="${product.quantity}">Available: ${product.quantity}</p>
-                    <input type="checkbox" id="select${product.id}" onclick="toggleSelection('${product.id}', '${url}')">
-                    <div id="cart-controls${product.id}" class="cart-controls" style="display: none;">
-                        <button onclick="updateCartQuantity('${product.id}', -1, '${url}')">-</button>
-                        <span id="cart-quantity${product.id}">0</span>
-                        <button onclick="updateCartQuantity('${product.id}', 1, '${url}')">+</button>
-                    </div>
-                </div>
-            `;
+                        <div class="product" id="product${product.id}">
+                            <h3>${product.name}</h3>
+                            <img src="${url}${product.iconPath}" alt="${product.name}">
+                            <p><span id="price${product.id}">${product.price}</span> ₽</p>
+                            <p id="quantity${product.id}" data-available="${product.quantity}">В наличие: ${product.quantity}</p>
+                            <input type="checkbox" id="select${product.id}" onclick="toggleSelection('${product.id}', '${url}')">
+                            <div id="cart-controls${product.id}" class="cart-controls" style="display: none;">
+                                <button onclick="updateCartQuantity('${product.id}', -1, '${url}')">-</button>
+                                <span id="cart-quantity${product.id}">0</span>
+                                <button onclick="updateCartQuantity('${product.id}', 1, '${url}')">+</button>
+                            </div>
+                        </div>
+                    `;
                     productGrid.insertAdjacentHTML('beforeend', productHTML);
                 });
 
@@ -466,51 +468,44 @@
 
         async function updateCartQuantity(productId, delta, url) {
             const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+            const productElement = document.getElementById(`product${productId}`);
             const quantityElement = document.getElementById(`quantity${productId}`);
             const currentQuantity = parseInt(cartQuantity.innerText);
             const availableQuantity = parseInt(quantityElement.getAttribute('data-available'));
             const newQuantity = currentQuantity + delta;
-
+        
             if (newQuantity < 0 || newQuantity > availableQuantity) {
                 console.error("Invalid quantity change.");
                 return;
             }
-
+        
+            if (newQuantity === 0) {
+                productElement.remove();
+            } 
+            
+            else {
+                cartQuantity.innerText = newQuantity;
+            }
+        
+            const chatId = await getChatId();
+            if (!chatId) return;
+        
+            const data = { chatId, productId, quantity: delta };
+        
             try {
-                const productResponse = await fetch(`${url}/api/products_data/${productId}`);
-                if (!productResponse.ok) {
-                    document.getElementById(`product${productId}`).remove();
-                    return;
+                const response = await fetch(`${url}/api/user_carts_data/update`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(data)
+                });
+        
+                if (!response.ok) {
+                    console.error("Failed to update cart:", response.status);
                 }
-
-                if (newQuantity === 0) {
-                    document.getElementById(`cart-controls${productId}`).style.display = 'none';
-                } else {
-                    cartQuantity.innerText = newQuantity;
-                }
-
-                const chatId = await getChatId();
-                if (!chatId) return;
-
-                const data = { chatId, productId, quantity: delta };
-
-                try {
-                    const response = await fetch(`${url}/api/user_carts_data/update`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams(data)
-                    });
-
-                    if (!response.ok) {
-                        console.error("Failed to update cart:", response.status);
-                    }
-
-                    calculateTotalPrice();
-                } catch (error) {
-                    console.error("Error updating cart:", error);
-                }
+        
+                calculateTotalPrice();
             } catch (error) {
-                console.error("Error fetching product information:", error);
+                console.error("Error updating cart:", error);
             }
         }
 
@@ -555,7 +550,9 @@
             const totalPriceElement = document.getElementById('total-price');
             if (totalPriceElement) {
                 totalPriceElement.innerText = `${totalPrice} ₽`;
-            } else {
+            } 
+            
+            else {
                 console.error("Total price element not found.");
             }
         }
@@ -578,7 +575,9 @@
             Telegram.WebApp.ready(() => {
                 applyTheme();
             });
-        } else {
+        } 
+        
+        else {
             document.addEventListener('DOMContentLoaded', applyTheme);
         }
     </script>

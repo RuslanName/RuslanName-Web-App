@@ -283,25 +283,12 @@
                 });
 
                 resetInactivityTimer();
+                setupProductInteractions();
 
             } catch (error) {
                 console.error("Initialization failed:", error);
             }
         });
-
-        function disableEditingFeatures() {
-            document.addEventListener("copy", (event) => {
-                event.preventDefault();
-            });
-
-            document.addEventListener("contextmenu", (event) => {
-                event.preventDefault();
-            });
-
-            document.body.addEventListener("dragstart", (event) => {
-                event.preventDefault();
-            });
-        }
 
         async function getChatId() {
             if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
@@ -488,6 +475,83 @@
             } catch (error) {
                 console.error("Error updating cart:", error);
             }
+        }
+
+        function setupProductInteractions() {
+            document.body.addEventListener("click", (event) => {
+                const button = event.target.closest("button");
+                const product = event.target.closest(".product");
+        
+                if (product) {
+                    if (button) {
+                        product.classList.add("button-touched");
+                        setTimeout(() => {
+                            product.classList.remove("button-touched");
+                        }, 100);
+                    } else {
+                        product.classList.add("area-touched");
+                        setTimeout(() => {
+                            product.classList.remove("area-touched");
+                        }, 300);
+                    }
+                }
+            });
+        
+            document.body.addEventListener("mousedown", (event) => {
+                const product = event.target.closest(".product");
+                if (product) {
+                    product.classList.add("area-touched");
+                }
+            });
+        
+            document.body.addEventListener("mouseup", (event) => {
+                const product = event.target.closest(".product");
+                if (product) {
+                    product.classList.remove("area-touched");
+                }
+            });
+        
+            document.body.addEventListener("touchstart", (event) => {
+                const product = event.target.closest(".product");
+                if (product) {
+                    product.classList.add("area-touched");
+                }
+            });
+        
+            document.body.addEventListener("touchend", (event) => {
+                const product = event.target.closest(".product");
+                if (product) {
+                    product.classList.remove("area-touched");
+                }
+            });
+        
+            document.body.addEventListener("mouseenter", (event) => {
+                if (event.target.closest(".product") && event.pointerType !== "touch") {
+                    const product = event.target.closest(".product");
+                    product.classList.add("button-touched");
+                }
+            }, true);
+        
+            document.body.addEventListener("mouseleave", (event) => {
+                if (event.target.closest(".product") && event.pointerType !== "touch") {
+                    const product = event.target.closest(".product");
+                    product.classList.remove("button-touched");
+                }
+            }, true);
+        }
+
+        function disableEditingFeatures() {
+            document.addEventListener("copy", (event) => {
+                event.preventDefault();
+            });
+
+            document.addEventListener("contextmenu", (event) => {
+                event.preventDefault();
+            });
+
+            document.body.addEventListener("dragstart", (event) => {
+                event.preventDefault();
+            });
         }
 
         function applyTheme() {

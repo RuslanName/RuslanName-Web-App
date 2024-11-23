@@ -427,7 +427,16 @@
                 const productGrid = document.getElementById('productGrid');
                 productGrid.innerHTML = '';
 
+                const userCart = {};
+                cartItems.forEach(item => {
+                    userCart[item.productId] = item.quantity;
+                });
+
                 products.forEach(product => {
+                    if (!userCart[product.id]) {
+                        return;
+                    }
+                    
                     const productHTML = `
                         <div class="product" id="product${product.id}">
                             <h3>${product.name}</h3>

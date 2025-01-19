@@ -29,7 +29,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", async function () {
-        const config = await response.json();
+        const config = await fetch('/api/config').then(response => response.json());
 
         await loadProducts(config.url);
         await loadPickupPoints(config.url);

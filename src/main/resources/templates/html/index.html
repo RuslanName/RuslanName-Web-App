@@ -24,19 +24,9 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", async function () {
-        try {
-            console.log("Fetching configuration...");
-            const response = await fetch('/api/config');
-            const config = await response.json();
-            
-            console.log("Configuration fetched:", config);
-    
-            console.log("Loading products...");
-            await loadProducts(config.url);
-            console.log("Products loaded successfully.");
-        } catch (error) {
-            console.error("Error during initialization:", error);
-        }
+        const config = await fetch('/api/config').then(response => response.json());
+
+        await loadProducts(config.url);
     });
 
     async function loadProducts(url) {

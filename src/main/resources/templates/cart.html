@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Корзина</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="icon" href="data:,">
+    <style>
+        :root {
+            --tg-theme-bg-color-light: #ffffff;
+            --tg-theme-text-color-light: #000000;
+            --tg-theme-secondary-bg-color-light: #f8f9fa;
+            --tg-theme-button-color-light: #0088cc;
+            --tg-theme-footer-bg-color-light: #f1f1f1;
+            --tg-theme-footer-text-color-light: #000000;
+            --tg-checkbox-toggle-color-light: #0088cc;
+
+            --tg-theme-bg-color-dark: #1a1a1a;
+            --tg-theme-text-color-dark: #e0e0e0;
+            --tg-theme-secondary-bg-color-dark: #2c2c2c;
+            --tg-theme-button-color-dark: #005f99;
+            --tg-theme-footer-bg-color-dark: #1a1a1a;
+            --tg-theme-footer-text-color-dark: #e0e0e0;
+            --tg-checkbox-toggle-color-dark: #005f99;
+        }
+
+        :root {
+            --tg-button-text-color: #ffffff;
+            --tg-total-price-color: #3CB371;
+            --tg-checkbox-border-color: #1a1a1a;
+        }
+
+        :root {
+            --tg-theme-bg-color: var(--tg-theme-bg-color-light);
+            --tg-theme-text-color: var(--tg-theme-text-color-light);
+            --tg-theme-secondary-bg-color: var(--tg-theme-secondary-bg-color-light);
+            --tg-theme-button-color: var(--tg-theme-button-color-light);
+            --tg-theme-footer-bg-color: var(--tg-theme-footer-bg-color-light);
+            --tg-theme-footer-text-color: var(--tg-theme-footer-text-color-light);
+            --tg-checkbox-toggle-color: var(--tg-checkbox-toggle-color-light);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        body {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        #cart {
+            background: var(--tg-theme-secondary-bg-color);
+            flex-grow: 1;
+            padding-top: 80px;
+            padding-bottom: 60px;
+            overflow-y: auto;
+        }
+
+        .cart-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .cart-controls button {
+            padding: 10px 10px;
+        }
+
+        .cart-controls span {
+            font-size: 16px;
+            margin: 0 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .product {
+            position: relative;
+            flex: 0 1 calc(50% - 5px);
+            background-color: var(--tg-theme-bg-color);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+            max-width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product button {
+            padding: 10px 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 0;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-row-gap: 15px;
+            grid-column-gap: 10px;
+            padding: 10px;
+            background-color: var(--tg-theme-secondary-bg-color);
+        }
+
+        .product h3 {
+            margin: 5px 0;
+            padding: 0;
+            font-size: 1.2em;
+            color: var(--tg-theme-text-color);
+        }
+
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+            margin-bottom: 5px;
+        }
+
+        .product-image-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .product-image-wrapper img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .product img {
+            pointer-events: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
+
+        .product-checkbox, .product input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--tg-checkbox-border-color);
+            border-radius: 4px;
+            background-color: transparent;
+            cursor: pointer;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            z-index: 1;
+        }
+
+        .product-checkbox:checked, .product input[type="checkbox"]:checked {
+            background-color: var(--tg-theme-button-color);
+        }
+
+        .product.button-touched {
+            transform: scale(1.04);
+            transition: transform 0.1s ease;
+        }
+
+        .product.area-touched {
+            transform: scale(1.08);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product.touched {
+            transform: scale(1);
+            box-shadow: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product button:hover {
+            opacity: 0.8;
+        }
+
+        .quantity-buttons {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+
+        .quantity-buttons button {
+            width: 30px;
+            height: 30px;
+        }
+
+        .top-footer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--tg-theme-bg-color);
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            box-shadow: none;
+            z-index: 1000;
+        }
+
+        .top-footer button {
+            flex: 1;
+            margin: 0 5px;
+            padding: 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .top-footer button:hover {
+            opacity: 0.8;
+        }
+
+        .checkout-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--tg-theme-bg-color);
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            box-shadow: none;
+            z-index: 1000;
+        }
+
+        .checkout-footer span {
+            margin-left: 10px;
+            font-size: 16px;
+            text-align: center;
+            background-color: var(--tg-total-price-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            padding: 14px;
+        }
+
+        .checkout-footer button {
+            flex-grow: 1;
+            margin: 0 5px;
+            padding: 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkout-footer button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+<div class="top-footer">
+    <button onclick="location.href='index.html'">Магазин</button>
+    <button onclick="location.href='orders.html'">Заказы</button>
+</div>
+
+<div id="cart">
+    <div id="productGrid" class="product-grid"></div>
+</div>
+
+<div class="checkout-footer">
+    <span id="total-price">0 ₽</span>
+    <button onclick="location.href='checkout.html'">Перейти к оформлению</button>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        try {
+            const response = await fetch('/api/config');
+            if (!response.ok) {
+                throw new Error(`Failed to load configuration: ${response.status}`);
+            }
+            const config = await response.json();
+
+            if (!config.url) {
+                console.error("URL is not initialized.");
+                return;
+            }
+
+            if (config.requireTelegramUser) {
+                if (typeof Telegram !== "undefined" && Telegram.WebApp) {
+                    Telegram.WebApp.ready();
+                }
+
+                else {
+                    console.error("Telegram Web App is not available.");
+                    return;
+                }
+
+                const chatId = await getChatId();
+                if (!chatId) {
+                    document.body.innerHTML = "<p>Telegram WebApp user is required.</p>";
+                    return;
+                }
+
+                const isRegistered = await checkUserRegistration(chatId, config.url);
+                if (!isRegistered) {
+                    document.body.innerHTML = "<p>User is not registered.</p>";
+                    return;
+                }
+            }
+
+            await loadProducts(config.url);
+
+            if (!config.allowEditing) {
+                disableEditingFeatures();
+            }
+
+            let inactivityTimeout;
+
+            function resetInactivityTimer() {
+                clearTimeout(inactivityTimeout);
+                inactivityTimeout = setTimeout(() => location.reload(), 45000);
+            }
+
+            ['mousemove', 'keydown', 'scroll', 'click', 'touchstart'].forEach(event => {
+                document.addEventListener(event, resetInactivityTimer);
+            });
+
+            resetInactivityTimer();
+            setupProductInteractions();
+
+        } catch (error) {
+            console.error("Initialization failed:", error);
+        }
+    });
+
+    async function getChatId() {
+        if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
+            console.error("Telegram WebApp is not initialized.");
+            return null;
+        }
+
+        try {
+            Telegram.WebApp.ready();
+            if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
+                return Telegram.WebApp.initDataUnsafe.user.id;
+            } else {
+                console.error("Failed to retrieve user data from Telegram WebApp.");
+                return null;
+            }
+        } catch (error) {
+            console.error("Error initializing Telegram WebApp:", error);
+            return null;
+        }
+    }
+
+    async function checkUserRegistration(chatId, url) {
+        try {
+            const response = await fetch(`${url}/api/user_check?chatId=${chatId}`);
+            if (!response.ok) {
+                console.error("Failed to check user registration:", response.status);
+                return false;
+            }
+            const data = await response.json();
+            return data.isRegistered;
+        } catch (error) {
+            console.error("Error during user registration check:", error);
+            return false;
+        }
+    }
+
+    async function loadProducts(url) {
+        try {
+            const chatId = await getChatId();
+            if (!chatId) {
+                console.error("Failed to get chat ID.");
+                return;
+            }
+
+            const productsResponse = await fetch(`${url}/api/products_data`);
+            const products = await productsResponse.json();
+
+            const cartResponse = await fetch(`${url}/api/user_carts_data/load?chatId=${chatId}`);
+            const cartItems = await cartResponse.json();
+
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = '';
+
+            const userCart = {};
+            cartItems.forEach(item => {
+                userCart[item.productId] = item.quantity;
+            });
+
+            products.forEach(product => {
+                if (!userCart[product.id]) {
+                    return;
+                }
+
+                const productHTML = `
+                        <div class="product" id="product${product.id}">
+                            <h3>${product.name}</h3>
+                            <div class="product-image-wrapper">
+                                <img src="${url}${product.iconPath}" alt="${product.name}">
+                                <input type="checkbox" id="select${product.id}" onclick="toggleSelection('${product.id}', '${url}')">
+                            </div>
+                            <p><span id="price${product.id}">${product.price}</span> ₽</p>
+                            <p id="quantity${product.id}" data-available="${product.quantity}">В наличие: ${product.quantity}</p>
+                            <div id="cart-controls${product.id}" class="cart-controls" style="display: none;">
+                                <button onclick="updateCartQuantity('${product.id}', -1, '${url}')">-</button>
+                                <span id="cart-quantity${product.id}">0</span>
+                                <button onclick="updateCartQuantity('${product.id}', 1, '${url}')">+</button>
+                            </div>
+                        </div>
+                    `;
+                productGrid.insertAdjacentHTML('beforeend', productHTML);
+            });
+
+            cartItems.forEach(item => {
+                const cartControls = document.getElementById(`cart-controls${item.productId}`);
+                const cartQuantity = document.getElementById(`cart-quantity${item.productId}`);
+                const selectCheckbox = document.getElementById(`select${item.productId}`);
+
+                if (cartControls) {
+                    cartControls.style.display = 'flex';
+                    cartQuantity.innerText = item.quantity;
+                }
+
+                if (selectCheckbox) {
+                    selectCheckbox.checked = item.selected;
+                }
+            });
+
+            calculateTotalPrice();
+        } catch (error) {
+            console.error("Error loading products or cart:", error);
+        }
+    }
+
+    async function updateCartQuantity(productId, delta, url) {
+        const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+        const productElement = document.getElementById(`product${productId}`);
+        const quantityElement = document.getElementById(`quantity${productId}`);
+        const currentQuantity = parseInt(cartQuantity.innerText);
+        const availableQuantity = parseInt(quantityElement.getAttribute('data-available'));
+        const newQuantity = currentQuantity + delta;
+
+        if (newQuantity < 0 || newQuantity > availableQuantity) {
+            console.error("Invalid quantity change.");
+            return;
+        }
+
+        if (newQuantity === 0) {
+            productElement.remove();
+        }
+
+        else {
+            cartQuantity.innerText = newQuantity;
+        }
+
+        const chatId = await getChatId();
+        if (!chatId) return;
+
+        const data = { chatId, productId, quantity: delta };
+
+        try {
+            const response = await fetch(`${url}/api/user_carts_data/update`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(data)
+            });
+
+            if (!response.ok) {
+                console.error("Failed to update cart:", response.status);
+            }
+
+            calculateTotalPrice();
+        } catch (error) {
+            console.error("Error updating cart:", error);
+        }
+    }
+
+    async function toggleSelection(productId, url) {
+        const selectCheckbox = document.getElementById(`select${productId}`);
+        const isSelected = selectCheckbox.checked;
+        const chatId = await getChatId();
+        if (!chatId) return;
+
+        const data = { chatId, productId, selected: isSelected };
+
+        try {
+            const response = await fetch(`${url}/api/user_carts_data/update_selection`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(data)
+            });
+
+            if (!response.ok) {
+                console.error("Failed to update selection status:", response.status);
+            }
+
+            calculateTotalPrice();
+        } catch (error) {
+            console.error("Error updating selection:", error);
+        }
+    }
+
+    function calculateTotalPrice() {
+        let totalPrice = 0;
+        document.querySelectorAll('.product').forEach(product => {
+            const productId = product.id.replace('product', '');
+            const cartQuantity = parseInt(document.getElementById(`cart-quantity${productId}`).innerText) || 0;
+            const price = parseFloat(document.getElementById(`price${productId}`).innerText) || 0;
+            const selectCheckbox = document.getElementById(`select${productId}`);
+
+            if (selectCheckbox && selectCheckbox.checked) {
+                totalPrice += cartQuantity * price;
+            }
+        });
+
+        const totalPriceElement = document.getElementById('total-price');
+        if (totalPriceElement) {
+            totalPriceElement.innerText = `${totalPrice} ₽`;
+        }
+
+        else {
+            console.error("Total price element not found.");
+        }
+    }
+
+    function setupProductInteractions() {
+        document.body.addEventListener("click", (event) => {
+            const button = event.target.closest("button");
+            const product = event.target.closest(".product");
+
+            if (product) {
+                if (button) {
+                    product.classList.add("button-touched");
+                    setTimeout(() => {
+                        product.classList.remove("button-touched");
+                    }, 100);
+                } else {
+                    product.classList.add("area-touched");
+                    setTimeout(() => {
+                        product.classList.remove("area-touched");
+                    }, 300);
+                }
+            }
+        });
+
+        document.body.addEventListener("mousedown", (event) => {
+            const product = event.target.closest(".product");
+            if (product) {
+                product.classList.add("area-touched");
+            }
+        });
+
+        document.body.addEventListener("mouseup", (event) => {
+            const product = event.target.closest(".product");
+            if (product) {
+                product.classList.remove("area-touched");
+            }
+        });
+
+        document.body.addEventListener("touchstart", (event) => {
+            const product = event.target.closest(".product");
+            if (product) {
+                product.classList.add("area-touched");
+            }
+        });
+
+        document.body.addEventListener("touchend", (event) => {
+            const product = event.target.closest(".product");
+            if (product) {
+                product.classList.remove("area-touched");
+            }
+        });
+
+        document.body.addEventListener("mouseenter", (event) => {
+            if (event.target.closest(".product") && event.pointerType !== "touch") {
+                const product = event.target.closest(".product");
+                product.classList.add("button-touched");
+            }
+        }, true);
+
+        document.body.addEventListener("mouseleave", (event) => {
+            if (event.target.closest(".product") && event.pointerType !== "touch") {
+                const product = event.target.closest(".product");
+                product.classList.remove("button-touched");
+            }
+        }, true);
+    }
+
+    function disableEditingFeatures() {
+        document.addEventListener("copy", (event) => {
+            event.preventDefault();
+        });
+
+        document.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+        });
+
+        document.body.addEventListener("dragstart", (event) => {
+            event.preventDefault();
+        });
+    }
+
+    function applyTheme() {
+        const isTelegram = typeof Telegram !== "undefined" && Telegram.WebApp;
+        const isDarkTheme = isTelegram ? Telegram.WebApp.colorScheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        document.documentElement.style.setProperty('--tg-theme-bg-color', isDarkTheme ? 'var(--tg-theme-bg-color-dark)' : 'var(--tg-theme-bg-color-light)');
+        document.documentElement.style.setProperty('--tg-theme-text-color', isDarkTheme ? 'var(--tg-theme-text-color-dark)' : 'var(--tg-theme-text-color-light)');
+        document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', isDarkTheme ? 'var(--tg-theme-secondary-bg-color-dark)' : 'var(--tg-theme-secondary-bg-color-light)');
+        document.documentElement.style.setProperty('--tg-theme-button-color', isDarkTheme ? 'var(--tg-theme-button-color-dark)' : 'var(--tg-theme-button-color-light)');
+        document.documentElement.style.setProperty('--tg-theme-footer-bg-color', isDarkTheme ? 'var(--tg-theme-footer-bg-color-dark)' : 'var(--tg-theme-footer-bg-color-light)');
+        document.documentElement.style.setProperty('--tg-theme-footer-text-color', isDarkTheme ? 'var(--tg-theme-footer-text-color-dark)' : 'var(--tg-theme-footer-text-color-light)');
+        document.documentElement.style.setProperty('--tg-checkbox-toggle-color', isDarkTheme ? 'var(--tg-checkbox-toggle-color-dark)' : 'var(--tg-checkbox-toggle-color-light)');
+    }
+
+    if (typeof Telegram !== "undefined" && Telegram.WebApp) {
+        Telegram.WebApp.onThemeChanged = applyTheme;
+        Telegram.WebApp.ready(() => {
+            applyTheme();
+        });
+    }
+
+    else {
+        document.addEventListener('DOMContentLoaded', applyTheme);
+    }
+</script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Корзина</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        #main {
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: var(--tg-theme-secondary-bg-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="main">
+    <h1>Корзина</h1>
+    <p>Ваша корзина пока пуста.</p>
+    <div class="button-group">
+        <button onclick="goToShop()">Магазин</button>
+        <button onclick="location.href='orders.html'">Заказы</button>
+    </div>
+</div>
+</body>
+
+<script>
+    function goToShop() {
+        // const isAuthenticated = localStorage.getItem('isAuthenticated');
+        
+        // if (isAuthenticated === 'true') {
+        //     window.location.href = 'shop.html'; // Перенаправляем на страницу магазина
+        // } else {
+        //     window.location.href = 'auth.html'; // Перенаправляем на страницу авторизации
+        // }
+        window.location.href = "index.html"; 
+    }
+</script>
+</html>
+
+ -->

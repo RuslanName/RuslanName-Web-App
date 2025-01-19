@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Оформление заказа</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+<!--<div id="cart">-->
+<!--    <div id="productGrid" class="product-grid"></div>-->
+<!--</div>-->
+
+<div id="order">
+    <div id="productGrid" class="product-grid">
+        <!-- Пример товара 1 -->
+        <div class="product" id="product1">
+            <h3>Товар 1</h3>
+            <div class="product-image-wrapper">
+                <img src="https://via.placeholder.com/200" alt="Товар 1">
+            </div>
+            <p>Количество: <span>2</span></p>
+        </div>
+
+        <!-- Пример товара 2 -->
+        <div class="product" id="product2">
+            <h3>Товар 2</h3>
+            <div class="product-image-wrapper">
+                <img src="https://via.placeholder.com/200" alt="Товар 2">
+            </div>
+            <p>Количество: <span>1</span></p>
+        </div>
+
+        <!-- Пример товара 3 -->
+        <div class="product" id="product3">
+            <h3>Товар 3</h3>
+            <div class="product-image-wrapper">
+                <img src="https://via.placeholder.com/200" alt="Товар 3">
+            </div>
+            <p>Количество: <span>3</span></p>
+        </div>
+
+        <!-- Пример товара 4 -->
+        <div class="product" id="product4">
+            <h3>Товар 4</h3>
+            <div class="product-image-wrapper">
+                <img src="https://via.placeholder.com/200" alt="Товар 3">
+            </div>
+            <p>Количество: <span>3</span></p>
+        </div>
+
+        <!-- Пример товара 5 -->
+        <div class="product" id="product5">
+            <h3>Товар 5</h3>
+            <div class="product-image-wrapper">
+                <img src="https://via.placeholder.com/200" alt="Товар 3">
+            </div>
+            <p>Количество: <span>3</span></p>
+        </div>
+    </div>
+</div>
+
+<div class="order-registration-footer">
+    <span id="total-price">0 ₽</span>
+    <button onclick="location.href='cart.html'">Отменить</button>
+    <button onclick="exitMiniApp()">Оплатить</button>
+    <div class="order-registration-footer-select-wrapper">
+        <span class="order-registration-footer-select">Выберите пункт выдачи...</span>
+        <ul class="dropdown-options"></ul>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        const config = await response.json();
+
+        await loadProducts(config.url);
+        await loadPickupPoints(config.url);
+    });
+
+    function exitMiniApp() {
+        window.Telegram.WebApp.close();
+    }
+
+    async function loadProducts(url) {
+        try {
+            const chatId = await getChatId();
+            if (!chatId) {
+                console.error("Failed to get chat ID.");
+                return;
+            }
+
+            const cartResponse = await fetch(`${url}/api/user_carts_data/load?chatId=${chatId}`);
+            const cartItems = await cartResponse.json();
+
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = '';
+
+            cartItems.forEach(item => {
+                if (!item.selected) {
+                    return;
+                }
+
+                const productHTML = `
+                <div class="product" id="product${item.productId}">
+                    <h3>${item.name}</h3>
+                    <div class="product-image-wrapper">
+                        <img src="${url}${item.iconPath}" alt="${item.name}">
+                    </div>
+                    <p>Количество: <span>${item.quantity}</span></p>
+                </div>
+            `;
+                productGrid.insertAdjacentHTML('beforeend', productHTML);
+            });
+
+            calculateTotalPrice();
+        } catch (error) {
+            console.error("Error loading products or cart:", error);
+        }
+    }
+
+    function calculateTotalPrice() {
+        let totalPrice = 0;
+
+        document.querySelectorAll('.product').forEach(product => {
+            const price = parseFloat(product.querySelector('p span').innerText) || 0;
+            const quantity = parseInt(product.querySelector('p:nth-child(3) span').innerText) || 0;
+            totalPrice += price * quantity;
+        });
+
+        const totalPriceElement = document.getElementById('total-price');
+        if (totalPriceElement) {
+            totalPriceElement.innerText = `${totalPrice} ₽`;
+        } else {
+            console.error("Total price element not found.");
+        }
+    }
+
+    async function loadPickupPoints(url) {
+        try {
+            const response = await fetch(`${url}/api/pickup_points`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch pickup points");
+            }
+
+            const pickupPoints = await response.json();
+            const dropdown = document.querySelector(".dropdown-options");
+            dropdown.innerHTML = "";
+
+            pickupPoints.forEach(point => {
+                const li = document.createElement("li");
+                li.textContent = point.name;
+                li.addEventListener("click", () => selectPickupPoint(point.name));
+                dropdown.appendChild(li);
+            });
+        } catch (error) {
+            console.error("Error loading pickup points:", error);
+        }
+    }
+
+    function selectPickupPoint(name) {
+        const selectedElement = document.querySelector(".order-registration-footer-select");
+        selectedElement.textContent = name;
+        console.log("Selected pickup point:", name);
+    }
+</script>
+</body>
+</html>
+<body>

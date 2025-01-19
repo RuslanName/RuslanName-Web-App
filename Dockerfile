@@ -12,7 +12,7 @@ COPY --from=build /app/src/main/resources/templates/html/index.html /usr/share/n
 COPY --from=build /app/src/main/resources/templates/html/cart.html /usr/share/nginx/html/
 COPY --from=build /app/src/main/resources/templates/html/order.html /usr/share/nginx/html/
 COPY --from=build /app/src/main/resources/templates/html/orderHistory.html /usr/share/nginx/html/
-COPY --from=build /app/src/main/resources/templates/html/orderResitration.html /usr/share/nginx/html/
+COPY --from=build /app/src/main/resources/templates/html/orderRegistration.html /usr/share/nginx/html/
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisord.conf
 RUN mkdir -p /data/product_icons && chmod -R 755 /data

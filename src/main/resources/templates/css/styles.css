@@ -38,7 +38,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background: var(--tg-theme-bg-color);
+    background: var(--tg-theme-secondary-bg-color);
     color: var(--tg-theme-text-color);
     font-family: Arial, sans-serif;
     display: flex;
@@ -60,7 +60,7 @@ body {
     padding-bottom: 65px;
 }
 
-#order {
+#order-registration {
     padding-top: 10px;
     padding-bottom: 120px;
 }

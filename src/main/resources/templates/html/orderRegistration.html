@@ -39,7 +39,7 @@
         window.Telegram.WebApp.close();
     }
 
-    async function loadProducts(url) {
+        async function loadProducts(url) {
         try {
             const chatId = await getChatId();
             if (!chatId) {
@@ -47,27 +47,37 @@
                 return;
             }
 
+            const productsResponse = await fetch(`${url}/api/products_data`);
+            const products = await productsResponse.json();
+
             const cartResponse = await fetch(`${url}/api/user_carts_data/load?chatId=${chatId}`);
             const cartItems = await cartResponse.json();
 
             const productGrid = document.getElementById('productGrid');
             productGrid.innerHTML = '';
 
+            const userCart = {};
             cartItems.forEach(item => {
-                if (!item.selected) {
-                    return;
-                }
+                userCart[item.productId] = item.quantity;
+            });
 
-                const productHTML = `
-                <div class="product" id="product${item.productId}">
-                    <h3>${item.name}</h3>
-                    <div class="product-image-wrapper">
-                        <img src="${url}${item.iconPath}" alt="${item.name}">
+            products.forEach(product => {
+                if (userCart[product.id] && userCart[product.id] > 0) {
+                    const cartItem = cartItems.find(item => item.productId === product.id);
+
+                    if (cartItem && cartItem.selected && cartItem.quantity > 0) {
+                        const productHTML = `
+                    <div class="product" id="product${product.id}">
+                        <h3>${product.name}</h3>
+                        <div class="product-image-wrapper">
+                            <img src="${url}${product.iconPath}" alt="${product.name}">
+                        </div>
+                        <p>Количество: <span>${cartItem.quantity}</span></p>
                     </div>
-                    <p>Количество: <span>${item.quantity}</span></p>
-                </div>
-            `;
-                productGrid.insertAdjacentHTML('beforeend', productHTML);
+                    `;
+                        productGrid.insertAdjacentHTML('beforeend', productHTML);
+                    }
+                }
             });
 
             calculateTotalPrice();

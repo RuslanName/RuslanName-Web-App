@@ -449,24 +449,31 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
 
                 else if (text.equals(PICKUP_POINTS_INFO_KEYBOARD) && checkAccessRights(chatId, AccessRights.ADMINISTRATOR)) {
-                    var pickupPoints = pickupPointsRepository.findAll();
 
                     String sendText = "";
 
-                    sendText += boldAndUnderline("ПУНКТЫ ВЫДАЧИ") + "\n\n";
+                    if (productsRepository.existsById(1)) {
+                        var pickupPoints = pickupPointsRepository.findAll();
 
-                    sendText += "Зарегестрировано: " + pickupPointsRepository.count() + " штук \n\n";
+                        sendText += boldAndUnderline("ПУНКТЫ ВЫДАЧИ") + "\n\n";
 
-                    sendText += boldAndItalic("Сегодня, неделя, месяц") + "\n";
-                    sendText += "Количество полученных заказов: " + "\n";
-                    sendText += "Количество отданных заказов: " + "\n";
-                    sendText += "Количество покупателей: " + "\n\n";
+                        sendText += "Зарегестрировано: " + pickupPointsRepository.count() + " штук \n\n";
 
-                    for (PickupPoint pickupPoint : pickupPoints) {
-                        sendText += pickupPoint.getId() + ".  " + pickupPoint.getName() + "\n";
+                        sendText += boldAndItalic("Сегодня, неделя, месяц") + "\n";
+                        sendText += "Количество полученных заказов: " + "\n";
+                        sendText += "Количество отданных заказов: " + "\n";
+                        sendText += "Количество покупателей: " + "\n\n";
+
+                        for (PickupPoint pickupPoint : pickupPoints) {
+                            sendText += pickupPoint.getId() + ".  " + pickupPoint.getName() + "\n";
+                        }
+
+                        sendMessage(chatId, sendText);
                     }
 
-                    sendMessage(chatId, sendText);
+                    else {
+                        sendMessage(chatId, "Пункты выдачи отсутствуют");
+                    }
                 }
 
                 else if (text.equals(PICKUP_POINTS_ADD_POINT_KEYBOARD) && checkAccessRights(chatId, AccessRights.ADMINISTRATOR)) {
@@ -507,12 +514,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                 else if (differentStatesRepository.existsById(chatId)) {
                     if (differentStatesRepository.findById(chatId).get().getState() == ActionType.REGISTRATION.getCode()) {
                         registration(message, text);
-                    }
-
+                    } 
+                    
                     else if (differentStatesRepository.findById(chatId).get().getState() == ActionType.ACCESS_RIGHTS_GIVE.getCode()) {
                         givingAccessRights(chatId, text);
-                    }
-
+                    } 
+                    
                     else if (differentStatesRepository.findById(chatId).get().getState() == ActionType.PRODUCT.getCode()) {
                         if (checkProductId(chatId, text)) {
                             SendMessage sendMessage = new SendMessage();
@@ -535,32 +542,32 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                             executeFunction(sendMessage);
                         }
-                    }
-
+                    } 
+                    
                     else if (differentStatesRepository.findById(chatId).get().getState() == ActionType.PRODUCT_ADD.getCode()) {
                         try {
                             addingProduct(message);
                         } catch (TelegramApiException | MalformedURLException e) {
                             throw new RuntimeException(e);
                         }
-                    }
-
+                    } 
+                    
                     else if (differentStatesRepository.findById(chatId).get().getState() == ActionType.PRODUCT_UPDATE_NAME.getCode()) {
                         updateNameProductDatabase(chatId, text);
-                    }
-
+                    } 
+                    
                     else if (differentStatesRepository.findById(chatId).get().getState() == ActionType.PRODUCT_UPDATE_PRICE.getCode()) {
                         updatingPriceProduct(chatId, text);
-                    }
-
+                    } 
+                    
                     else if (differentStatesRepository.findById(chatId).get().getState() == ActionType.PRODUCT_ADD_QUANTITY.getCode()) {
                         addingQuantityProduct(chatId, text);
-                    }
-
+                    } 
+                    
                     else if (differentStatesRepository.findById(chatId).get().getState() == ActionType.PRODUCT_UPDATE_QUANTITY.getCode()) {
                         updatingQuantityProduct(chatId, text);
-                    }
-
+                    } 
+                    
                     else if (differentStatesRepository.findById(chatId).get().getState() == ActionType.USER.getCode()) {
                         if (checkUserId(chatId, text)) {
                             SendMessage sendMessage = new SendMessage();
@@ -579,8 +586,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                             if ((checkAccessRights(chatId, AccessRights.OWNER) && !checkAccessRights(user.getChatId(), AccessRights.OWNER)) ||
                                     (checkAccessRights(chatId, AccessRights.ADMINISTRATOR) && !checkAccessRights(user.getChatId(), AccessRights.ADMINISTRATOR))) {
                                 keyboardRows.add(createKeyboardRow(USER_ORDER_STATUS_KEYBOARD, USER_UPDATE_BLOCK_KEYBOARD));
-                            }
-
+                            } 
+                            
                             else {
                                 keyboardRows.add(createKeyboardRow(USER_ORDER_STATUS_KEYBOARD));
                             }
@@ -592,8 +599,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                             executeFunction(sendMessage);
                         }
-                    }
-
+                    } 
+                    
                     else if (differentStatesRepository.findById(chatId).get().getState() == ActionType.PICKUP_POINT.getCode()) {
                         if (checkPickupPointId(chatId, text)) {
                             SendMessage sendMessage = new SendMessage();
@@ -614,19 +621,19 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                             executeFunction(sendMessage);
                         }
+                    } 
+                    
+                    else if (differentStatesRepository.findById(chatId).get().getState() == ActionType.PICKUP_POINT_ADD.getCode()) {
+                        addPickupPointDatabase(chatId, text);
+                    } 
+                    
+                    else if (differentStatesRepository.findById(chatId).get().getState() == ActionType.PICKUP_POINT_UPDATE_LOCATION.getCode()) {
+                        updateLocationPickupPointDatabase(chatId, text);
+                    } 
+                    
+                    else {
+                        // Обработка, если ни одно условие не совпало
                     }
-                }
-
-                else if (differentStatesRepository.findById(chatId).get().getState() == ActionType.PICKUP_POINT_ADD.getCode()) {
-                    addPickupPointDatabase(message);
-                }
-
-                else if (differentStatesRepository.findById(chatId).get().getState() == ActionType.PICKUP_POINT_UPDATE_LOCATION.getCode()) {
-                    updateLocationPickupPointDatabase(chatId, text);
-                }
-
-                else {
-                    // Обработка, если ни одно условие не совпало
                 }
             }
 
@@ -998,14 +1005,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         resetActionTypeState(chatId, ActionType.USER);
     }
 
-    private void addPickupPointDatabase(Message message) {
-        long chatId = message.getChatId();
-
+    private void addPickupPointDatabase(Long chatId, String text) {
         PickupPoint pickupPoint = new PickupPoint();
 
-        pickupPoint.setId(databaseService.getNextId("pickup_points_data_data"));
+        pickupPoint.setId(databaseService.getNextId("pickup_points_data"));
 
-        pickupPoint.setName(message.getText());
+        pickupPoint.setName(text);
         pickupPoint.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
 
         pickupPointsRepository.save(pickupPoint);
@@ -1201,7 +1206,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         else {
-            sendMessage(chatId, "Пункты выдвчи отсутствуют");
+            sendMessage(chatId, "Пункты выдачи отсутствуют");
         }
     }
 

@@ -2,7 +2,7 @@
 FROM docker.io/library/maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
 COPY . /app
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 
 # Финальный образ
 FROM nginx:alpine

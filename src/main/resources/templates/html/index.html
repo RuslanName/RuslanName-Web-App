@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Магазин</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<script src="../js/scripts.js"></script>
+
+<body>
+<div id="index">
+    <div id="productGrid" class="product-grid"></div>
+    <div id="noProductsMessage" class="no-products" style="display: none;">🛒 Товаров пока нет в наличии</div>
+</div>
+
+<div class="footer">
+    <button onclick="location.href='cart.html'">Корзина</button>
+    <button onclick="location.href='order.html'">Заказы</button>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        try {
+            const config = await fetchConfig();
+            if (!config || !config.url) return;
+
+            await loadProducts(config.url);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    });
+
+    async function loadProducts(url) {
+        try {
+            const configResponse = await fetch(`${url}/api/config`);
+            const config = await configResponse.json();
+            const productIconsPath = config.productIconsPath;
+
+            const response = await fetch(`${url}/api/products_data`);
+            const products = await response.json();
+
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = '';
+
+            const visibleProducts = products.filter(product => product.visibility);
+
+            if (visibleProducts.length === 0) {
+                noProductsMessage.style.display = 'block';
+                return;
+            }
+
+            else {
+                noProductsMessage.style.display = 'none';
+            }
+
+            products
+                .filter(product => product.visibility)
+                .forEach(product => {
+                    const productHTML = `
+                    <div class="product" id="product${product.id}">
+                        <h3>${product.name}</h3>
+                        <img src="${productIconsPath}${product.iconPath}" alt="${product.name}">
+                        <p class="product-price" id="price${product.id}">${product.price} ₽</p>
+                        <p class="product-quantity" id="quantity${product.id}">В наличие: ${product.quantity}</p>
+                        <button id="add${product.id}" onclick="addCart('${product.id}', '${url}')">Добавить</button>
+                        <div id="cart-controls${product.id}" class="cart-controls" style="display:none;">
+                            <button onclick="updateCart('${product.id}', -1, '${url}')">-</button>
+                            <span id="cart-quantity${product.id}">0</span>
+                            <button onclick="updateCart('${product.id}', 1, '${url}')">+</button>
+                        </div>
+                    </div>
+                `;
+                    productGrid.insertAdjacentHTML('beforeend', productHTML);
+                });
+
+            loadUserCart(url);
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async function loadUserCart(url) {
+        const chatId = await getChatId();
+
+        try {
+            const response = await fetch(`${url}/api/users_data/${chatId}/cart`);
+            const data = await response.json();
+            const cartItems = data.cart;
+
+            cartItems.forEach(item => {
+                const productId = item.productId;
+
+                const productElement = document.getElementById(`product${productId}`);
+                const cartControls = document.getElementById(`cart-controls${productId}`);
+                const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+
+                if (productElement) {
+                    document.getElementById(`add${productId}`).style.display = "none";
+                    cartControls.style.display = "flex";
+                    cartQuantity.textContent = item.quantity;
+                }
+            });
+
+        } catch (error) {
+            console.error("Ошибка загрузки корзины:", error);
+        }
+    }
+
+    async function addCart(productId, url) {
+        const addButton = document.getElementById(`add${productId}`);
+        const cartControls = document.getElementById(`cart-controls${productId}`);
+        const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+        const quantity = document.getElementById(`quantity${productId}`);
+        const availableQuantity = +quantity.innerText.split(': ')[1];
+
+        if (availableQuantity <= 0) {
+            return;
+        }
+
+        addButton.style.display = 'none';
+        cartControls.style.display = 'flex';
+        cartQuantity.innerText = 1;
+
+        const chatId = await getChatId();
+
+        const data = {
+            productId: productId,
+            quantity: 1
+        };
+
+        try {
+            const response = await fetch(`${url}/api/users_data/${chatId}/cart/add`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed:" + response.status);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async function updateCart(productId, delta, url) {
+        const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+        const quantity = document.getElementById(`quantity${productId}`);
+
+        const currentQuantity = +cartQuantity.innerText;
+        const availableQuantity = +quantity.innerText.split(': ')[1];
+
+        const newQuantity = currentQuantity + delta;
+
+        if (newQuantity < 0 || newQuantity > availableQuantity) {
+            return;
+        }
+
+        const chatId = await getChatId();
+
+        const data = {
+            id: productId,
+            quantity: newQuantity
+        };
+
+        try {
+            const response = await fetch(`${url}/api/users_data/${chatId}/cart/update`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed: " + response.status);
+            }
+
+            if (newQuantity === 0) {
+                document.getElementById(`add${productId}`).style.display = 'block';
+                document.getElementById(`cart-controls${productId}`).style.display = 'none';
+            } else {
+                cartQuantity.innerText = newQuantity;
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+</script>
+</body>
+</html>
+<body>

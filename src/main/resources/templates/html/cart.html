@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Корзина</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<script src="../js/scripts.js"></script>
+
+<body>
+<div class="top-footer">
+    <button onclick="location.href='index.html'">Магазин</button>
+    <button onclick="location.href='order.html'">Заказы</button>
+</div>
+
+<div id="cart">
+    <div id="productGrid" class="product-grid"></div>
+    <div id="noProductsMessage" class="no-products" style="display: none;">🛒 Корзина пуста</div>
+</div>
+
+<div class="footer">
+    <span id="total-price">0 ₽</span>
+    <button onclick="orderRegistrationAction()" disabled>Перейти к оформлению</button>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        try {
+            const config = await fetchConfig();
+            if (!config || !config.url) return;
+
+            await loadProducts(config.url);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    });
+
+    async function loadProducts(url) {
+        try {
+            const chatId = await getChatId();
+
+            const configResponse = await fetch(`${url}/api/config`);
+            const configData = await configResponse.json();
+            const productIconsPath = configData.productIconsPath;
+
+            const response = await fetch(`${url}/api/users_data/${chatId}/cart`);
+            const data = await response.json();
+
+            const cartItems = data.cart;
+            const productsData = data.products;
+
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = '';
+
+            const userCart = {};
+            cartItems.forEach(item => {
+                userCart[item.productId] = item.quantity;
+            });
+
+            let hasVisibleProducts = false;
+
+            Object.keys(productsData).forEach(productId => {
+                const product = productsData[productId];
+
+                if (!product.visibility) {
+                    return;
+                }
+
+                hasVisibleProducts = true;
+
+                const productHTML = `
+            <div class="product" id="product${productId}"
+                 data-price="${product.price}"
+                 data-cart-quantity="${userCart[productId] || 0}">
+                <h3>${product.name}</h3>
+                <div class="product-image-wrapper">
+                    <img src="${productIconsPath}${product.iconPath}" alt="${product.name}">
+                    <input type="checkbox" id="select${productId}" class="product-checkbox"
+                           onclick="toggleSelection('${productId}', '${url}')">
+                </div>
+                <p class="product-price" id="price${productId}">${product.price} ₽</p>
+                <p class="product-quantity" id="quantity${productId}">В наличии: ${product.quantity}</p>
+                <div id="cart-controls${productId}" class="cart-controls" style="display: none;">
+                    <button onclick="updateCart('${productId}', -1, '${url}')">-</button>
+                    <span id="cart-quantity${productId}">${userCart[productId] || 0}</span>
+                    <button onclick="updateCart('${productId}', 1, '${url}')">+</button>
+                </div>
+            </div>
+        `;
+                productGrid.insertAdjacentHTML('beforeend', productHTML);
+            });
+
+            if (!hasVisibleProducts) {
+                noProductsMessage.style.display = 'block';
+                return;
+            }
+
+            else {
+                noProductsMessage.style.display = 'none';
+            }
+
+            cartItems.forEach(item => {
+                const cartControls = document.getElementById(`cart-controls${item.productId}`);
+                const cartQuantity = document.getElementById(`cart-quantity${item.productId}`);
+                const selectCheckbox = document.getElementById(`select${item.productId}`);
+
+                if (cartControls) {
+                    cartControls.style.display = 'flex';
+                    cartQuantity.innerText = item.quantity;
+                }
+
+                if (selectCheckbox) {
+                    selectCheckbox.checked = item.selected;
+                }
+            });
+
+            calculateTotalPrice();
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async function updateCart(productId, delta, url) {
+        const cartQuantity = document.getElementById(`cart-quantity${productId}`);
+        const productElement = document.getElementById(`product${productId}`);
+        const quantityElement = document.getElementById(`quantity${productId}`);
+
+        if (!cartQuantity || !productElement || !quantityElement) return;
+
+        const currentQuantity = parseInt(cartQuantity.innerText);
+        const availableQuantity = parseInt(quantityElement.getAttribute('data-available'));
+        const newQuantity = currentQuantity + delta;
+
+        if (newQuantity < 0 || newQuantity > availableQuantity) return;
+
+        const chatId = await getChatId();
+
+        const data = { id: productId, quantity: newQuantity };
+
+        try {
+            const response = await fetch(`${url}/api/users_data/${chatId}/cart/update`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) throw new Error("Failed: " + response.status);
+
+            if (newQuantity === 0) {
+                productElement.remove();
+            }
+
+            else {
+                cartQuantity.innerText = newQuantity;
+                productElement.dataset.cartQuantity = newQuantity;
+            }
+
+            calculateTotalPrice();
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    function calculateTotalPrice() {
+        let totalPrice = 0;
+
+        document.querySelectorAll('.product').forEach(product => {
+            const selectCheckbox = product.querySelector('.product-checkbox');
+            if (selectCheckbox && selectCheckbox.checked) {
+                const cartQuantity = parseInt(product.dataset.cartQuantity) || 0;
+                const price = parseFloat(product.dataset.price) || 0;
+                totalPrice += cartQuantity * price;
+            }
+        });
+
+        const totalPriceElement = document.getElementById('total-price');
+
+        if (totalPriceElement) {
+            totalPriceElement.innerText = `${totalPrice} ₽`;
+        }
+
+        const checkoutButton = document.querySelector('button[onclick="orderRegistrationAction()"]');
+
+        if (checkoutButton) {
+            checkoutButton.disabled = totalPrice === 0;
+        }
+    }
+
+    async function toggleSelection(productId, url) {
+        const selectCheckbox = document.getElementById(`select${productId}`);
+        const isSelected = selectCheckbox.checked;
+        const chatId = await getChatId();
+
+        const data = {
+            id: productId,
+            selected: isSelected
+        };
+
+        try {
+            const response = await fetch(`${url}/api/users_data/${chatId}/cart/update`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed: " + response.status);
+            }
+
+            calculateTotalPrice();
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async function activateBot(action) {
+        const chatId = await getChatId();
+
+        const data = {
+            chatId: chatId,
+            action: action,
+        };
+
+        try {
+            const response = await fetch('/api/activate_bot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed:" + response.status);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async function orderRegistrationAction() {
+        await activateBot(1);
+        location.href = 'orderRegistration.html';
+    }
+</script>
+</body>
+</html>

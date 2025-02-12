@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Корзина</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<script src="../js/scripts.js"></script>
+
+<body>
+<div id="order">
+    <div id="orderGrid" class="order-grid"></div>
+    <div id="noOrdersMessage" class="no-orders" style="display: none;">📭 У вас пока нет заказов</div>
+</div>
+
+<div class="footer">
+    <button onclick="location.href='index.html'">Магазин</button>
+    <button onclick="location.href='orderHistory.html'">История заказов</button>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        try {
+            const config = await fetchConfig();
+            if (!config || !config.url) return;
+
+            await loadOrders(config.url);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    });
+
+    async function loadOrders(url) {
+        try {
+            const chatId = await getChatId();
+
+            const response = await fetch(`${url}/api/users_data/${chatId}/orders`);
+            const data = await response.json();
+
+            const orders = data.orders;
+            const products = data.products;
+            const pickupPoints = data.pickupPoints;
+
+            const productGrid = document.getElementById('orderGrid');
+            productGrid.innerHTML = '';
+
+            if (!orders || orders.length === 0) {
+                noOrdersMessage.style.display = 'block';
+                return;
+            }
+
+            else {
+                noOrdersMessage.style.display = 'none';
+            }
+
+            orders.forEach(order => {
+                const product = products[order.productId];
+                const pickupPoint = pickupPoints[order.pickupPointId];
+
+                if (!product) return;
+                if (!pickupPoint) return;
+
+                const productHTML = `
+                <div class="order" id="order${order.id}">
+                    <h3>Заказ №${order.id} - ${product.name}</h3>
+                    <p>Кол-во: ${order.quantity}</p>
+                    <p>Цена: ${order.price} ₽</p>
+                    <p>Пункт выдачи: ${pickupPoint.name}</p>
+                    <p>Доставка: ${order.deliveryDate}</p>
+                    <p class="order-status" style="background-color: ${order.statusColor};">
+                        ${order.statusName}
+                    </p>
+                    ${order.cancelButton ? `
+                        <button class="order-cancel" onclick="cancelOrder(${order.id}, '${url}')">Отменить заказ</button>`
+                    : ''}
+                </div>
+            `;
+
+                productGrid.insertAdjacentHTML('beforeend', productHTML);
+            });
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async function cancelOrder(orderId, url) {
+        const chatId = await getChatId();
+
+        const data = { orderId: orderId };
+
+        try {
+            const response = await fetch(`${url}/api/users_data/${chatId}/orders/cancel`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed: " + response.status);
+            }
+
+            document.getElementById(`order${orderId}`).remove();
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Оформление заказа</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<script src="../js/scripts.js"></script>
+
+<body>
+<div id="order-registration">
+    <div id="productGrid" class="product-grid"></div>
+</div>
+
+<div class="order-registration-footer">
+    <span id="total-price">0 ₽</span>
+    <button onclick="cancelAction()">Отменить</button>
+    <button onclick="payAction()" disabled>Оплатить</button>
+    <div class="order-registration-footer-select-wrapper">
+        <span class="order-registration-footer-select">Выберите пункт выдачи...</span>
+        <ul class="dropdown-options"></ul>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        try {
+            const config = await fetchConfig();
+            if (!config || !config.url) return;
+
+            await loadCart(config.url);
+            await loadPickupPoints(config.url);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    });
+
+    function exitMiniApp() {
+        window.Telegram.WebApp.close();
+    }
+
+    async function loadCart(url) {
+        try {
+            const chatId = await getChatId();
+
+            const configResponse = await fetch(`${url}/api/config`);
+            const configData = await configResponse.json();
+            const productIconsPath = configData.productIconsPath;
+
+            const response = await fetch(`${url}/api/users_data/${chatId}/cart`);
+            const data = await response.json();
+
+            const cartItems = data.cart;
+            const products = data.products;
+
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = '';
+
+            const userCart = {};
+            cartItems.forEach(item => {
+                userCart[item.productId] = item;
+            });
+
+            Object.keys(products).forEach(productId => {
+                const product = products[productId];
+
+                if (userCart[productId] && userCart[productId].selected && userCart[productId].quantity > 0) {
+                    const cartItem = userCart[productId];
+
+                    const productHTML = `
+                <div class="product" id="product${productId}" data-price="${product.price}">
+                    <h3>${product.name}</h3>
+                    <div class="product-image-wrapper">
+                        <img src="${productIconsPath}${product.iconPath}" alt="${product.name}">
+                    </div>
+                    <p class="cart-quantity" id="quantity${productId}">Кол-во: ${cartItem.quantity}</p>
+                </div>
+            `;
+                    productGrid.insertAdjacentHTML('beforeend', productHTML);
+                }
+            });
+
+            calculateTotalPrice();
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    function calculateTotalPrice() {
+        let totalPrice = 0;
+
+        document.querySelectorAll('.product').forEach(product => {
+            const price = parseFloat(product.dataset.price) || 0;
+            const cartQuantityElement = product.querySelector('.cart-quantity');
+
+            if (cartQuantityElement) {
+                const cartQuantity = parseInt(cartQuantityElement.innerText.replace(/\D/g, '')) || 0;
+                totalPrice += cartQuantity * price;
+            }
+        });
+
+        const totalPriceElement = document.getElementById('total-price');
+
+        if (totalPriceElement) {
+            totalPriceElement.innerText = `${totalPrice} ₽`;
+        }
+    }
+
+    async function loadPickupPoints(url) {
+        const chatId = await getChatId();
+
+        try {
+            const response = await fetch(`${url}/api/pickup_points_data`);
+
+            if (!response.ok) {
+                throw new Error("Failed: " + response.status);
+            }
+
+            const pickupPoints = await response.json();
+
+            const userResponse = await fetch(`${url}/api/users_data/${chatId}`);
+
+            if (!userResponse.ok) {
+                throw new Error("Failed: " + userResponse.status);
+            }
+
+            const userData = await userResponse.json();
+            const defaultPickupPointId = userData.defaultPickupPointId;
+
+            const dropdown = document.querySelector(".dropdown-options");
+            dropdown.innerHTML = "";
+
+            pickupPoints.forEach(point => {
+                const displayText = `${point.name} - ${point.deliveryDate}`;
+
+                const li = document.createElement("li");
+                li.textContent = displayText;
+
+                if (point.id === defaultPickupPointId) {
+                    li.classList.add('selected');
+                    selectPickupPoint(displayText, point.id, chatId, url);
+                }
+
+                li.addEventListener("click", () => selectPickupPoint(displayText, point.id, chatId, url));
+                dropdown.appendChild(li);
+            });
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async function selectPickupPoint(name, pointId, userChatId, url) {
+        const selectedElement = document.querySelector(".order-registration-footer-select");
+        selectedElement.textContent = name;
+
+        const payButton = document.querySelector('button[onclick="payAction()"]');
+        payButton.disabled = true;
+
+        try {
+            const response = await fetch(`${url}/api/users_data/${userChatId}/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    defaultPickupPointId: pointId
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed: " + response.status);
+            }
+
+            payButton.disabled = false;
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async function activateBot(action) {
+        const chatId = await getChatId();
+
+        const data = {
+            chatId: chatId,
+            action: action,
+        };
+
+        try {
+            const response = await fetch('/api/activate_bot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed:" + response.status);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function cancelAction() {
+        await activateBot(3);
+        window.location.href = 'cart.html';
+    }
+
+    async function payAction() {
+        await activateBot(2);
+        exitMiniApp();
+    }
+</script>
+</body>
+</html>
+<body>

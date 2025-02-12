@@ -19,12 +19,6 @@ COPY --from=build /build/src/main/resources/templates/html/ /usr/share/nginx/htm
 COPY --from=build /build/src/main/resources/templates/css/ /usr/share/nginx/html/css/
 COPY --from=build /build/src/main/resources/templates/js/ /usr/share/nginx/html/js/
 
-# Копирование изображений
-COPY --from=build /build/src/main/resources/static/images/product_icons/ /data/product_icons/
-
-# Копирование базы данных в контейнер
-COPY src/main/resources/database.sqlite /data/database.sqlite
-
 # Копирование конфигураций
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.ini /etc/supervisord.ini

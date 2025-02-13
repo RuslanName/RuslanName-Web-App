@@ -15,7 +15,7 @@ COPY --from=build /build/target/TelegramWebApp-1.0.0-RELEASE.jar /app/TelegramWe
 RUN mkdir -p /data/product_icons && chmod -R 755 /data
 
 # Установка порта
-EXPOSE 80
+EXPOSE 8080 8081
 
 # Запуск Java-приложения
 CMD ["java", "-jar", "/app/TelegramWebApp.jar"]

@@ -28,7 +28,7 @@ RUN chmod -R 755 /usr/share/nginx/html
 RUN mkdir -p /data/product_icons && chmod -R 755 /data
 
 # Установка портов
-EXPOSE 8080 8081
+EXPOSE 80
 
 # Запуск supervisord
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.ini"]

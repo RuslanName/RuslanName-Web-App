@@ -20,6 +20,8 @@ EXPOSE 80
 # Запуск Java-приложения
 CMD ["java", "-jar", "/app/TelegramWebApp.jar"]
 
+
+
 # # Сборка Java-приложения
 # FROM docker.io/library/maven:3.8.5-openjdk-17 AS build
 # WORKDIR /build
